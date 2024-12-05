@@ -26,7 +26,8 @@
           <th>Descripción</th>
         </tr>
       </thead>
-      <tbody id="tablaCursos">
+      <tbody>
+        <tr id="tablaCursos"></tr>
       </tbody>
     </table>
   </div>
