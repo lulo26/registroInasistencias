@@ -177,3 +177,4 @@ function formatMoney($cantidad){
     $cantidad = number_format($cantidad,2,SPD,SPM);
     return $cantidad;
 }
+

@@ -1,23 +1,17 @@
 <?php
 
-const BASE_URL = "http://localhost/inasistencias";
+const BASE_URL = "http://localhost/registroInasistencias";
 
 
 $modo = "LOCAL"; //LOCAL || REMOTO
 
-/* --REMOTO */
+/* --LOCAL */
 const DB_HOST = "localhost";
 const DB_NAME = "inasistencias";
 const DB_USER = "root";
 const DB_PASSWORD = ""; 
 const DB_PORT = 3306;
 
-/* --LOCAL  
-const DB_HOST = "localhost";
-const DB_NAME = "caninofeliz";
-const DB_USER = "root";
-const DB_PASSWORD = ""; 
-*/
 
 const DB_CHARSET = "utf8";
 //Zona horaria

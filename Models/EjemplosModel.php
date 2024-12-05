@@ -16,7 +16,7 @@ class EjemplosModel extends Mysql{
     }
 
     // ejemplo insertar
-    public function ejemploInsertat(int $variable){
+    public function ejemploInsertar(int $variable){
 
         $this->variable = $variable;
 
