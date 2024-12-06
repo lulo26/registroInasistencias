@@ -16,8 +16,6 @@ function listCursos(){
     })
 } 
 
-
-
 window.addEventListener("DOMContentLoaded", e =>{
    listCursos();
 })

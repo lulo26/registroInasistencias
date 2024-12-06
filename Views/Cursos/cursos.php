@@ -15,7 +15,7 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Tabla cursos</h5>
-    <table class="table datatable">
+    <table class="table">
       <thead>
         <tr>
           <th>
@@ -26,8 +26,7 @@
           <th>Descripción</th>
         </tr>
       </thead>
-      <tbody>
-        <tr id="tablaCursos"></tr>
+      <tbody id="tablaCursos">
       </tbody>
     </table>
   </div>
