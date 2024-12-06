@@ -10,4 +10,23 @@ class CursosModel extends Mysql{
         $request = $this->select_all($sql);
         return $request;
     }
+
+    public function insertarCursos(string $nombre, string $tipo, string $descripcion){
+        $this->nombre = $nombre;
+        $this->tipo = $tipo;
+        $this->descripcion = $descripcion;
+
+        $sql = "SELECT * FROM cursos";
+        $request = $this->select_all($sql);
+
+        if (!empty($request)){
+            $query = "INSERT INTO cursos (nombre_curso, tipo_curso, descripcion_curso) VALUES (?,?,?)";
+            $arrData = array($this->nombre, $this->tipo, $this->descripcion);
+            $request_insert = $this->insert($query, $arrData);
+            $return = $request_insert;
+        } else {
+            $return = "empty";
+        }
+        return $return;
+    }
 }

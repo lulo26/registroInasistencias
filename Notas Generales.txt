@@ -1,3 +1,3 @@
 Toda la paginación está estructurada
 
-
+se puede settear el archivo .js desde los controllers <$data['page_functions_js']> y los views lo cargarán automáticamente

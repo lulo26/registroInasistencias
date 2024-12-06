@@ -19,21 +19,21 @@
 
   <li class="nav-item">
     <a class="nav-link collapsed" href="<?=base_url()?>/aprendices">
-      <i class="bi bi-question-circle"></i>
+      <i class="bx bxs-book-reader"></i>
       <span>Aprendices</span>
     </a>
   </li><!-- End F.A.Q Page Nav -->
 
   <li class="nav-item">
     <a class="nav-link collapsed" href="<?=base_url()?>/fichas">
-      <i class="bi bi-envelope"></i>
+      <i class="bi bi-clipboard-data"></i>
       <span>Fichas</span>
     </a>
   </li><!-- End Contact Page Nav -->
 
   <li class="nav-item">
     <a class="nav-link collapsed" href="<?=base_url()?>/cursos">
-      <i class="bi bi-card-list"></i>
+      <i class="bi bi-book"></i>
       <span>Cursos</span>
     </a>
   </li><!-- End Register Page Nav -->

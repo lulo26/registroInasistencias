@@ -13,18 +13,30 @@
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+  <script>const base_url = "<?= base_url() ?>";</script>
+
+  <!-- Jquery -->
+  <script src="<?= media()?>/vendor/jquery/jquery.min.js"></script>
+
   <!-- Vendor JS Files -->
-  <script src="<?= media() ?>/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="<?= media() ?>/vendor/js/bootstrap.bundle.min.js"></script>
-  <script src="<?= media() ?>/vendor/chart.js/chart.umd.js"></script>
-  <script src="<?= media() ?>/vendor/echarts/echarts.min.js"></script>
-  <script src="<?= media() ?>/vendor/quill/quill.min.js"></script>
-  <script src="<?= media() ?>/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="<?= media() ?>/vendor/tinymce/tinymce.min.js"></script>
-  <script src="<?= media() ?>/vendor/php-email-form/validate.js"></script>
+  <script src="<?= media()?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="<?= media()?>/vendor/quill/quill.min.js"></script>
+  <script src="<?= media()?>/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="<?= media()?>/vendor/tinymce/tinymce.min.js"></script>
+
+  <!-- Charts -->
+  <script src="<?= media()?>/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="<?= media()?>/vendor/chart.js/chart.umd.js"></script>
+  <script src="<?= media()?>/vendor/echarts/echarts.min.js"></script>
+
+  <!-- Sweet alerts -->
+  <script src="<?=media()?>/vendor/sweetAlert2/sweetalert2.all.min.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="<?= media() ?>/js/main.js"></script>
+  <script src="<?= media()?>/js/main.js"></script>
+
+  <!-- Script seteado de cada Controller -->
+  <script src="<?= media(); ?>/js/<?= $data['page_functions_js'] ?>"></script>
 
 </body>
 
