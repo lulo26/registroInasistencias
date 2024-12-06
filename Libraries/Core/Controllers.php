@@ -7,7 +7,6 @@ class Controllers{
     }
 
     public function loadModel(){
-        //ejemplo: HomeModel
         $model = get_class($this)."Model";
         $routClass = "Models/".$model.".php";
         if (file_exists($routClass)) {
