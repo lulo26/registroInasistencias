@@ -1,4 +1,9 @@
-console.log("hello world");
+const btnCurso = document.querySelector("#btnCurso")
+frmCursos = document.querySelector("#frmCursos")
+
+btnCurso.addEventListener('click', ()=>{
+    $('#crearCursoModal').modal('show')
+})
 
 function listCursos(){
     fetch(base_url + "/cursos/getCursos")
@@ -19,11 +24,25 @@ window.addEventListener("DOMContentLoaded", e =>{
    listCursos();
 })
 
-const btnCurso = document.querySelector("#btnCurso")
-
-btnCurso.addEventListener('click', ()=>{
-    $('#crearCursoModal').modal('show')
-})
-
-
-
+frmCursos.addEventListener("submit", (e) => {
+    e.preventDefault();
+    frmData = new FormData(frmCursos);
+    console.log(frmData);
+    fetch(base_url + "/cursos/setCursos", {
+      method: "POST",
+      body: frmData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Swal.fire({
+          title: data.status ? "Correcto" : "Error",
+          text: data.msg,
+          icon: data.status ? "success" : "error",
+        });
+        if (data.status) {
+            frmCursos.reset();
+          $("#crearCursoModal").modal("hide");
+          tablaMascotas.api().ajax.reload(function () {});
+        }
+      });
+  });

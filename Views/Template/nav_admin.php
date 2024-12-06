@@ -26,7 +26,7 @@
 
   <li class="nav-item">
     <a class="nav-link collapsed" href="<?=base_url()?>/fichas">
-      <i class="bi bi-clipboard-data"></i>
+      <i class="bi bi-clipboard"></i>
       <span>Fichas</span>
     </a>
   </li><!-- End Contact Page Nav -->

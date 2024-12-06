@@ -32,5 +32,36 @@ class Cursos extends Controllers{
         die();
     } 
 
+    public function setCursos(){
+        $nombreCurso = strClean($_POST['nombreCurso']);
+        $tipoCurso = strClean($_POST['tipoCurso']);
+        $descripcionCurso = strClean($_POST['descripcionCurso']);
+        $idCurso = strClean($_POST['idCurso'])
+        
+        $arrPost = ['nombreCurso','tipoCurso','descripcionCurso'];
+        // falta cambiar esta información !!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (check_post($arrPost)) {
+            if ($idCurso == 0 || $idCurso == ""){
+                $requestModel = $this->model->insertarCurso($idCliente, $nombreMascota, $razaMascota, $edadMascota, $comentarioMascota);
+                $option = 1;
+            } else {
+                $requestModel = $this->model->editarCruso($idMascotas ,$idCliente ,$nombreMascota, $razaMascota, $edadMascota, $comentarioMascota);
+                $option = 2;
+            }
+           // echo($option);
+            if($requestModel > 0) {
+                if($option === 1){
+                $arrRespuesta = array('status' => true, 'msg' => 'Datos guardados correctamente.');
+            }
+            }else{
+                $arrRespuesta = array('status' => true, 'msg' => 'Datos actualizados correctamente.');
+                }
+        }else{
+            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
+        }
+        echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
 
 }
