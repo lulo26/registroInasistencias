@@ -11,21 +11,22 @@ class CursosModel extends Mysql{
         return $request;
     }
 
-    public function insertarCursos(string $nombre, string $tipo, string $descripcion){
+    public function insertarCurso(string $nombre, string $tipo, string $descripcion){
+        $return = "";
         $this->nombre = $nombre;
         $this->tipo = $tipo;
         $this->descripcion = $descripcion;
 
-        $sql = "SELECT * FROM cursos";
+        $sql = "SELECT * FROM cursos WHERE nombre_curso = '{$this->nombre}'";
         $request = $this->select_all($sql);
 
-        if (!empty($request)){
+        if (empty($request)){
             $query = "INSERT INTO cursos (nombre_curso, tipo_curso, descripcion_curso) VALUES (?,?,?)";
             $arrData = array($this->nombre, $this->tipo, $this->descripcion);
             $request_insert = $this->insert($query, $arrData);
             $return = $request_insert;
         } else {
-            $return = "empty";
+            $return = 'exists';
         }
         return $return;
     }

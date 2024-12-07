@@ -6,6 +6,7 @@ btnCurso.addEventListener('click', ()=>{
 })
 
 function listCursos(){
+  document.getElementById("tablaCursos").innerHTML = "";
     fetch(base_url + "/cursos/getCursos")
     .then((data) => data.json())
     .then((data) => {  
@@ -42,7 +43,7 @@ frmCursos.addEventListener("submit", (e) => {
         if (data.status) {
             frmCursos.reset();
           $("#crearCursoModal").modal("hide");
-          tablaMascotas.api().ajax.reload(function () {});
+          listCursos();
         }
       });
   });

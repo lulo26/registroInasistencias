@@ -11,6 +11,7 @@
                     </div>
                     <form class="row g-3" id="frmCursos">
                     <div class="modal-body">
+                    <input type="hidden" name="idcurso" value="0">
                 <div class="col-md-12">
                   <label for="inputName5" class="form-label">Nombre del curso</label>
                   <input type="text" class="form-control" name="nombreCurso">

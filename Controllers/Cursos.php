@@ -36,25 +36,28 @@ class Cursos extends Controllers{
         $nombreCurso = strClean($_POST['nombreCurso']);
         $tipoCurso = strClean($_POST['tipoCurso']);
         $descripcionCurso = strClean($_POST['descripcionCurso']);
-        $idCurso = strClean($_POST['idCurso'])
+        $idcurso = strClean($_POST['idcurso']);
         
         $arrPost = ['nombreCurso','tipoCurso','descripcionCurso'];
-        // falta cambiar esta información !!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (check_post($arrPost)) {
-            if ($idCurso == 0 || $idCurso == ""){
-                $requestModel = $this->model->insertarCurso($idCliente, $nombreMascota, $razaMascota, $edadMascota, $comentarioMascota);
+            if ($idcurso == 0 || $idcurso == ""){
+                $requestModel = $this->model->insertarCurso($nombreCurso, $tipoCurso, $descripcionCurso);
                 $option = 1;
             } else {
-                $requestModel = $this->model->editarCruso($idMascotas ,$idCliente ,$nombreMascota, $razaMascota, $edadMascota, $comentarioMascota);
+                $requestModel = $this->model->editarCruso($nombreCurso, $tipoCurso, $descripcionCurso, $idcurso);
                 $option = 2;
             }
            // echo($option);
             if($requestModel > 0) {
                 if($option === 1){
-                $arrRespuesta = array('status' => true, 'msg' => 'Datos guardados correctamente.');
+                $arrRespuesta = array('status' => true, 'msg' => 'curso agregado correctamente.');
             }
-            }else{
-                $arrRespuesta = array('status' => true, 'msg' => 'Datos actualizados correctamente.');
+            }elseif ($requestModel === 'exists'){
+                $arrRespuesta = array('status' => false, 'msg' => 'Este curso ya existe');
+            }
+            
+            else{
+                $arrRespuesta = array('status' => true, 'msg' => 'curso actualizado correctamente.');
                 }
         }else{
             $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
@@ -62,6 +65,4 @@ class Cursos extends Controllers{
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();
     }
-
-
 }
