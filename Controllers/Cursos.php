@@ -32,6 +32,24 @@ class Cursos extends Controllers{
         die();
     } 
 
+    public function getCursoByID($idcurso){
+
+        $intIdCurso = intval(strClean($idcurso));
+
+        if($intIdCurso > 0){
+    
+            $arrData = $this->model->selectCursoID($intIdCurso);
+            if(empty($arrData)){
+                $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados');
+            }else{
+                $arrResponse = array('status' => true, 'data' => $arrData);
+            }
+        }
+
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
     public function setCursos(){
         $nombreCurso = strClean($_POST['nombreCurso']);
         $tipoCurso = strClean($_POST['tipoCurso']);
@@ -44,10 +62,10 @@ class Cursos extends Controllers{
                 $requestModel = $this->model->insertarCurso($nombreCurso, $tipoCurso, $descripcionCurso);
                 $option = 1;
             } else {
-                $requestModel = $this->model->editarCruso($nombreCurso, $tipoCurso, $descripcionCurso, $idcurso);
+                $requestModel = $this->model->editarCurso($nombreCurso, $tipoCurso, $descripcionCurso, $idcurso);
                 $option = 2;
+                
             }
-           // echo($option);
             if($requestModel > 0) {
                 if($option === 1){
                 $arrRespuesta = array('status' => true, 'msg' => 'curso agregado correctamente.');
@@ -63,6 +81,22 @@ class Cursos extends Controllers{
             $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
         }
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function eliminarCurso(){
+        if ($_POST) {
+            $idcurso = intval($_POST['idcurso']);
+            $requestDelete = $this->model->eliminarCurso($idcurso);
+            if($requestDelete == 'empty'){
+                $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el curso.');
+            }else{
+                $arrResponse = array('status' => true, 'msg' => 'se ha eliminado el curso.');
+            }
+            echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        }else{
+            print_r($_POST);
+        }
         die();
     }
 }
