@@ -18,12 +18,14 @@ USE `inasistencias` ;
 -- Table `inasistencias`.`aprendices`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `inasistencias`.`aprendices` (
-  `idusuario` INT NOT NULL AUTO_INCREMENT,
+  `idaprendiz` INT NOT NULL AUTO_INCREMENT,
   `nombre_aprendiz` VARCHAR(50) NOT NULL,
   `apellido_aprendiz` VARCHAR(50) NOT NULL,
   `generos_idgenero` INT NOT NULL,
   `numdoc` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`idusuario`),
+  `estado_aprendiz` VARCHAR(50) NOT NULL,
+  `codigo_aprendiz` VARCHAR(80) NOT NULL,
+  PRIMARY KEY (`idaprendiz`),
   UNIQUE INDEX `numdoc_UNIQUE` (`numdoc` ASC) )
 ENGINE = InnoDB;
 
@@ -34,6 +36,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `inasistencias`.`roles` (
   `idrol` INT NOT NULL AUTO_INCREMENT,
   `nombre_rol` VARCHAR(45) NOT NULL,
+  `descripcion_rol` TEXT NULL,
   PRIMARY KEY (`idrol`))
 ENGINE = InnoDB;
 
@@ -45,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `inasistencias`.`cursos` (
   `idcurso` INT NOT NULL AUTO_INCREMENT,
   `nombre_curso` VARCHAR(45) NOT NULL,
   `tipo_curso` VARCHAR(50) NOT NULL,
-  `descripcion_curso` LONGTEXT NULL,
+  `descripcion_curso` TINYTEXT NULL,
   PRIMARY KEY (`idcurso`))
 ENGINE = InnoDB;
 
@@ -75,11 +78,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `inasistencias`.`usuarios` (
   `idusuario` INT NOT NULL AUTO_INCREMENT,
+  `numdoc_usuarios` VARCHAR(45) NOT NULL,
   `nombre_usuario` VARCHAR(45) NOT NULL,
   `password_usuario` VARCHAR(45) NOT NULL,
   `correo_usuario` VARCHAR(45) NOT NULL,
-  `numero_usuario` VARCHAR(45) NOT NULL,
+  `telefono_usuario` VARCHAR(45) NOT NULL,
   `roles_idrol` INT NOT NULL,
+  `codigo_usuarios` VARCHAR(80) NOT NULL,
   PRIMARY KEY (`idusuario`),
   INDEX `fk_usuarios_roles1_idx` (`roles_idrol` ASC) ,
   CONSTRAINT `fk_usuarios_roles1`
@@ -87,6 +92,17 @@ CREATE TABLE IF NOT EXISTS `inasistencias`.`usuarios` (
     REFERENCES `inasistencias`.`roles` (`idrol`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `inasistencias`.`bloques`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `inasistencias`.`bloques` (
+  `idbloque` INT NOT NULL AUTO_INCREMENT,
+  `tipo_bloque` VARCHAR(45) NOT NULL,
+  `hora_bloque` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idbloque`))
 ENGINE = InnoDB;
 
 
@@ -99,9 +115,11 @@ CREATE TABLE IF NOT EXISTS `inasistencias`.`horarios` (
   `Jornada` VARCHAR(45) NOT NULL,
   `fichas_idficha` INT NOT NULL,
   `usuarios_idusuario` INT NOT NULL,
+  `bloques_idbloque` INT NOT NULL,
   PRIMARY KEY (`idhorario`),
   INDEX `fk_horarios_fichas1_idx` (`fichas_idficha` ASC) ,
   INDEX `fk_horarios_usuarios1_idx` (`usuarios_idusuario` ASC) ,
+  INDEX `fk_horarios_bloques1_idx` (`bloques_idbloque` ASC) ,
   CONSTRAINT `fk_horarios_fichas1`
     FOREIGN KEY (`fichas_idficha`)
     REFERENCES `inasistencias`.`fichas` (`idficha`)
@@ -110,6 +128,11 @@ CREATE TABLE IF NOT EXISTS `inasistencias`.`horarios` (
   CONSTRAINT `fk_horarios_usuarios1`
     FOREIGN KEY (`usuarios_idusuario`)
     REFERENCES `inasistencias`.`usuarios` (`idusuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_horarios_bloques1`
+    FOREIGN KEY (`bloques_idbloque`)
+    REFERENCES `inasistencias`.`bloques` (`idbloque`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -121,7 +144,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `inasistencias`.`registro_inasistencias` (
   `idregistro` INT NOT NULL AUTO_INCREMENT,
   `aprendices_idusuario` INT NOT NULL,
-  `fehca_inasistencia` TIMESTAMP NOT NULL,
+  `fecha_inasistencia` TIMESTAMP NOT NULL,
   `registro_idusuario` INT NOT NULL,
   `estado_inasistencia` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idregistro`),
@@ -129,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `inasistencias`.`registro_inasistencias` (
   INDEX `fk_registro_inasistencias_usuarios1_idx` (`registro_idusuario` ASC) ,
   CONSTRAINT `fk_registro_inasistencias_aprendices1`
     FOREIGN KEY (`aprendices_idusuario`)
-    REFERENCES `inasistencias`.`aprendices` (`idusuario`)
+    REFERENCES `inasistencias`.`aprendices` (`idaprendiz`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_registro_inasistencias_usuarios1`
@@ -156,12 +179,38 @@ CREATE TABLE IF NOT EXISTS `inasistencias`.`excusas` (
   INDEX `fk_excusas_registro_inasistencias1_idx` (`registro_inasistencias_idregistro` ASC) ,
   CONSTRAINT `fk_excusas_aprendices1`
     FOREIGN KEY (`aprendices_idusuario`)
-    REFERENCES `inasistencias`.`aprendices` (`idusuario`)
+    REFERENCES `inasistencias`.`aprendices` (`idaprendiz`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_excusas_registro_inasistencias1`
     FOREIGN KEY (`registro_inasistencias_idregistro`)
     REFERENCES `inasistencias`.`registro_inasistencias` (`idregistro`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `inasistencias`.`excepciones`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `inasistencias`.`excepciones` (
+  `idexcepcion` INT NOT NULL AUTO_INCREMENT,
+  `fecha` DATETIME NOT NULL,
+  `motivo_excepcion` TEXT NOT NULL,
+  `usuarios_idusuario` INT NOT NULL,
+  `excepcionescol` VARCHAR(45) NULL,
+  `bloques_idbloque` INT NOT NULL,
+  PRIMARY KEY (`idexcepcion`),
+  INDEX `fk_excepciones_usuarios1_idx` (`usuarios_idusuario` ASC) ,
+  INDEX `fk_excepciones_bloques1_idx` (`bloques_idbloque` ASC) ,
+  CONSTRAINT `fk_excepciones_usuarios1`
+    FOREIGN KEY (`usuarios_idusuario`)
+    REFERENCES `inasistencias`.`usuarios` (`idusuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_excepciones_bloques1`
+    FOREIGN KEY (`bloques_idbloque`)
+    REFERENCES `inasistencias`.`bloques` (`idbloque`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
