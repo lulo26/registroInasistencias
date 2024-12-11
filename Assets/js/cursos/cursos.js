@@ -1,3 +1,6 @@
+console.log("hello world");
+
+
 const btnCurso = document.querySelector("#btnCurso")
 frmCursos = document.querySelector("#frmCursos")
 
@@ -51,6 +54,8 @@ frmCursos.addEventListener("submit", (e) => {
   });
 
   document.addEventListener('click', (e)=>{
+    console.log("click");
+    
     try {
       let selected = e.target.closest("button").getAttribute("data-action-type");
       let idcurso = e.target.closest("button").getAttribute("rel");
