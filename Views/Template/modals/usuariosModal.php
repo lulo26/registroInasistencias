@@ -15,46 +15,48 @@
 
               <input type="hidden" name="idusuario" id="idusuario" value="0">
 
-
-              <div class="form-row">
-                <div class="form-group col-md-6">
+              <div class="form-row mt-1">
+                <div class="form-group col-12">
                   <label for="nombre_usuario">Nombre</label>
                   <input type="text" class="form-control valid validText" id="nombre_usuario" name="nombre_usuario" autocomplete="off" required="">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-12">
                   <label for="numdoc_usuario">Identificacion</label>
                   <input type="number" min="1" class="form-control valid validNumber" id="numdoc_usuario" name="numdoc_usuario" autocomplete="off" required="">
                 </div>
               </div>
 
-              <div class="form-row">
-                <div class="form-group col-md-6">
+              <div class="form-row mt-1">
+                <div class="form-group col-12">
                   <label for="correo_usuario">E-mail</label>
-                  <input type="email" class="form-control valid validEmail" id="correo_usuario" name="correo_usuario" autocomplete="off" required="">
+                  <input type="email" class="form-control valid validEmail" id="correo" name="correo_usuario" autocomplete="off" required="">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-12">
                   <label for="telefono_usuario">Teléfono</label>
-                  <input type="number" min="1" class="form-control valid validNumber" id="telefono_usuario" name="telefono_usuario" autocomplete="off" required="" onkeypress="return controlTag(event);">
+                  <input type="number" min="1" class="form-control valid validNumber" id="telefono_usuario" name="telefono_usuario" autocomplete="off" required=""> 
                 </div>
               </div>
 
-              <div class="form-row">
-                <div class="form-group col-md-6">
+              <div class="form-row mt-1">
+                <div class="form-group col-12">
                   <label for="codigo_usuario">Codigo</label>
-                  <input type="text" class="form-control valid validEmail" id="codigo_usuario" name="codigo_usuario" autocomplete="off">
+                  <input type="text" class="form-control valid validText" id="codigo_usuario" name="codigo_usuario" autocomplete="off">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-12">
                   <label for="password_usuario">Contraseña</label>
-                  <input type="password" class="form-control valid validNumber" id="password_usuario" name="password_usuario" autocomplete="off" required="" onkeypress="return controlTag(event);">
+                  <input type="password" class="form-control valid validPassword" id="password_usuario" name="password_usuario" autocomplete="off" required="">
                 </div>
               </div>
 
               <!-- Hacer select ROL -->
-              <div class="form-row">
-                <div class="form-group col-md-12 mt-3"">
-                  <label for=" roles_idrol">Rol</label>
-                  <input type="number" min="1" class="form-control valid validNumber" id="roles_idrol" name="roles_idrol" autocomplete="off" required="" onkeypress="return controlTag(event);">
-                </div>
+              <div class="form-row mt-1">
+                <label for="roles_idrol" class="form-label">Rol</label>
+                  <select class="form-select" aria-label="Default select example" name="roles_idrol" id="roles_idrol">
+                    <option selected>Seleccione el rol</option>
+                    <option value="aprendiz">aprendiz</option>
+                    <option value="instructor">instructor</option>
+                    <option value="coordinador">complementario</option>
+                  </select>
               </div>
 
             </div>

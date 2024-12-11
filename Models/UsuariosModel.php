@@ -9,7 +9,7 @@ class UsuariosModel extends Mysql
 
     public function selectUsuarios()
     {
-        $sql = "SELECT idsuario, numdoc_usuario, nombre_usuario, correo_usuario, telefono_usuario, roles.nombre_rol AS nombre_rol, codigo_usuario 
+        $sql = "SELECT idusuario, numdoc_usuario, nombre_usuario, correo_usuario, telefono_usuario, roles.nombre_rol AS nombre_rol, codigo_usuario 
                 FROM usuarios
                 INNER JOIN roles ON roles.idrol = usuarios.roles_idrol";
         $request = $this->select_all($sql);
@@ -22,6 +22,24 @@ class UsuariosModel extends Mysql
         $request = $this->select_all($sql);
         return $request;
     }
+
+    /* public function validarCorreoUsuario(string $correo)
+    {
+        $return = "";
+
+        $this->correo = $correo_usuario;
+
+        $sql = "SELECT correo_usuario FROM usuarios WHERE correo_usuario = '{$this->nombre}'";
+        $request = $this->select_all($sql);
+
+        if (empty($request)) {
+            $return = "correoExiste";
+        } else {
+            $return = "correoValido";
+        }
+
+        return $return;
+    } */
 
     public function insertarUsuario(string $numdoc_usuario, string $nombre_usuario, string $password_usuario, string $correo_usuario, string $telefono_usuario, int $roles_idrol, string $codigo_usuario)
     {

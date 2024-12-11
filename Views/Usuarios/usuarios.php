@@ -15,11 +15,13 @@ getModal('usuariosModal', $data);
     </nav>
   </div><!-- End Page Title -->
 
-  <button id="btnInsertarUsuario"></button>
-
   <div class="card">
     <div class="card-body">
-      <h5 class="card-title">Tabla usuarios</h5>
+      <h5 class="card-title">Tabla usuarios
+        <button type="button" class="btn btn-primary m-3" id="btnUsuario">
+          <i class="bi bi-plus-circle"></i> Agregar usuario
+        </button>
+      </h5>
       <table class="table datatable">
         <thead>
           <tr>
