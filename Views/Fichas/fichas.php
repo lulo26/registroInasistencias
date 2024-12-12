@@ -31,6 +31,7 @@ getModal('fichasModal', $data);
           <th>Fecha de inicio</th>
           <th>Fecha de fin</th>
           <th>Modalidad</th>
+          <th>Opciones</th>
         </tr>
       </thead>
       <tbody id="tablaFichas">
