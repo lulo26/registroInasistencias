@@ -1,9 +1,9 @@
 const btnUsuario = document.querySelector("#btnUsuario");
-let frmUsuarios = document.querySelector("#frmUsuarios");
+frmUsuarios = document.querySelector("#frmUsuarios");
 
-document.addEventListener('load', (e) => {
+/* document.addEventListener('load', (e) => {
 
-})
+}) */
 
 btnUsuario.addEventListener("click", () => {
    document.getElementById("UsuarioModalLabel").innerHTML = "Agregar Usuario";
@@ -32,19 +32,59 @@ function listUsuarios() {
       });
 }
 
+function listRoles() {
+   fetch(base_url + "/usuarios/getRoles")
+      .then((data) => data.json())
+      .then((data) => {
+         console.log(data);
+         data.forEach((rol) => {
+            console.log(rol.nombre_rol);
+            document.getElementById("roles_idrol").innerHTML += `<option value='${rol.idrol}'>${rol.nombre_rol}</option>`;
+         });
+      });
+}
+
 window.addEventListener("DOMContentLoaded", (e) => {
    listUsuarios();
+   listRoles();
 });
 
 frmUsuarios.addEventListener("submit", (e) => {
    e.preventDefault();
+   console.log(frmUsuarios)
+   /* let numdoc = document.getElementById("numdoc_usuario");
+   let nombre = document.getElementById("nombre_usuario");
+   let password = document.getElementById("password_usuario");
+   let correo = document.getElementById("correo_usuario");
+   let telefono = document.getElementById("telefono_usuario");
+   let idrol = document.getElementById("roles_idrol");
+   let codigo = document.getElementById("codigo_usuario");
+   let idusuario = document.getElementById("idusuario"); */
    frmData = new FormData(frmUsuarios);
+   /* frmData.append('numdoc_usuario', numdoc.value);
+   frmData.append('nombre_usuario', nombre.value);
+   frmData.append('password_usuario', password.value);
+   frmData.append('correo_usuario', correo.value);
+   frmData.append('telefono_usuario', telefono.value);
+   frmData.append('roles_idrol', idrol.value);
+   frmData.append('codigo_usuario', codigo.value);
+   frmData.append('idusuario', idusuario.value);
+   console.log("Nombre: " + numdoc.value);
+   console.log(nombre.value);
+   console.log(password.value);
+   console.log(correo.value);
+   console.log(telefono.value);
+   console.log(idrol.value);
+   console.log(codigo.value);
+   console.log(idusuario.value) */
+
    console.log(frmData);
-   fetch(base_url + "/usuarios/setUsuario", {
+
+   fetch(base_url + "/usuarios/setUsuarios", {
       method: "POST",
       body: frmData,
    })
-      .then((res) => res.json())
+      .then((data) => data.json())
       .then((data) => {
          Swal.fire({
             title: data.status ? "Correcto" : "Error",
@@ -108,15 +148,23 @@ document.addEventListener("click", (e) => {
 
                document.querySelector("#numdoc_usuario").value = usuario.numdoc_usuario;
                document.querySelector("#nombre_usuario").value = usuario.nombre_usuario;
-               /* document.querySelector("#password_usuario").value = usuario.password_usuario; */
-               document.querySelector("#correo").value = usuario.correo_usuario;
+               document.querySelector("#password_usuario").value = usuario.password_usuario;
+               document.querySelector("#correo_usuario").value = usuario.correo_usuario;
                document.querySelector("#telefono_usuario").value = usuario.telefono_usuario;
-               /*  document.querySelector(
-                   "#roles_idrol"
-                ).innerHTML = `<option selected hidden value="${curso.tipo_curso}">${curso.tipo_curso}</option>
+               fetch(base_url + `/usuario/getRolByID/${idusuario}`, {
+                  method: "GET",
+               })
+                  .then((res) => res.json())
+                  .then((res) => {
+
+                     document.querySelector(
+                        "#roles_idrol"
+                     ).innerHTML = `<option selected hidden value="${usuario.roles_idrol}">${curso.tipo_curso}</option>
                           <option value="${usuario.roles_idrol}">${usuario.rol_nombre}</option>
-                          <option value="tecnologo">tecnologo</option>`; */
-               /* document.querySelector("#codigo_usuario").value = usuario.codigo_usuario; */
+                          <option value="tecnologo">tecnologo</option>`;
+
+                  })
+               document.querySelector("#codigo_usuario").value = usuario.codigo_usuario;
                document.querySelector("#idusuario").value = usuario.idusuario;
             });
          listCursos();

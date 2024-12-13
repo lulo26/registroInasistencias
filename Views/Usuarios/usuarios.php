@@ -45,4 +45,3 @@ getModal('usuariosModal', $data);
   </div>
 
   <?php footer_admin($data) ?>
-  <script src="<?= media() ?>/js/usuarios/usuarios.js"></script>
