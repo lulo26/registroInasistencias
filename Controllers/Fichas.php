@@ -56,7 +56,7 @@ class Fichas extends Controllers{
         $fechaIni = strClean($_POST['fechaIni']);
         $fechaFin = strClean($_POST['fechaFin']);
         $modalidad = strClean($_POST['modalidad']);
-        $idficha = strClean($_POST['idficha']);
+        $idficha = intval(strClean($_POST['idficha']));
 
         $arrPost = ['numFicha','curso','fechaIni', 'fechaFin', 'modalidad'];
         if (check_post($arrPost)) {
@@ -66,7 +66,6 @@ class Fichas extends Controllers{
             } else {
                 $requestModel = $this->model->editarFicha($numFicha, $curso, $fechaIni, $fechaFin, $modalidad, $idficha);
                 $option = 2;
-                
             }
             if($requestModel > 0) {
                 if($option === 1){

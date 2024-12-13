@@ -131,7 +131,7 @@ frmFichas.addEventListener("submit", (e) => {
             document.querySelector("#modalidad").innerHTML = `<option selected hidden value="${ficha.modalidad}">${ficha.modalidad}</option>
                     <option value="presencial">Presencial</option>
                     <option value="virtual">Virtual</option>`
-            document.querySelector("#idficha").value = curso.idficha;
+            document.querySelector("#idficha").value = ficha.idficha;
               });
               listFichas();
       }
