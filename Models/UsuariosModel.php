@@ -11,7 +11,8 @@ class UsuariosModel extends Mysql
     {
         $sql = "SELECT idusuario, numdoc_usuario, nombre_usuario, correo_usuario, telefono_usuario, roles.nombre_rol AS nombre_rol, codigo_usuario 
                 FROM usuarios
-                INNER JOIN roles ON roles.idrol = usuarios.roles_idrol";
+                INNER JOIN roles ON roles.idrol = usuarios.roles_idrol
+                ORDER BY idusuario ASC";
         $request = $this->select_all($sql);
         return $request;
     }
@@ -23,23 +24,13 @@ class UsuariosModel extends Mysql
         return $request;
     }
 
-    /* public function validarCorreoUsuario(string $correo)
+    public function selectRoles()
     {
-        $return = "";
-
-        $this->correo = $correo_usuario;
-
-        $sql = "SELECT correo_usuario FROM usuarios WHERE correo_usuario = '{$this->nombre}'";
+        $sql = "SELECT idrol, nombre_rol
+                FROM roles";
         $request = $this->select_all($sql);
-
-        if (empty($request)) {
-            $return = "correoExiste";
-        } else {
-            $return = "correoValido";
-        }
-
-        return $return;
-    } */
+        return $request;
+    }
 
     public function insertarUsuario(string $numdoc_usuario, string $nombre_usuario, string $password_usuario, string $correo_usuario, string $telefono_usuario, int $roles_idrol, string $codigo_usuario)
     {
@@ -110,6 +101,74 @@ class UsuariosModel extends Mysql
         } else {
             $return = "empty";
         }
+        return $return;
+    }
+
+    /* ------------------------ VALIDACIONES -------------------------- */
+
+    public function validarIdentificacion(int $numdoc)
+    {
+        $return = "";
+
+        $this->numdoc = $numdoc;
+
+        $sql = "SELECT numdoc_usuario FROM usuarios WHERE numdoc_usuario = '{$this->numdoc}'";
+        $request = $this->select($sql);
+
+        if (empty($request)) {
+            $return = "numdocValido";
+        } else {
+            $return = "numdocExiste";
+        }
+
+        return $return;
+    }
+
+    public function validarEmail(string $correo, int $id = null)
+    {
+        $return = "";
+
+        $this->correo = $correo;
+        $this->id = $id;
+
+        if ($id !== null) {
+            $sql = "SELECT correo_usuario FROM usuarios WHERE correo_usuario = '{$this->correo}' AND idusuario != '{$id}'";
+        } else {
+            $sql = "SELECT correo_usuario FROM usuarios WHERE correo_usuario = '{$this->correo}'";
+        }
+
+        $request = $this->select($sql);
+
+        if (empty($request)) {
+            $return = "correoValido";
+        } else {
+            $return = "correoExiste";
+        }
+
+        return $return;
+    }
+
+    public function validarCodigo(string $codigo, int $id = null)
+    {
+        $return = "";
+
+        $this->codigo = $codigo;
+        $this->id = $id;
+
+        if ($id !== null) {
+            $sql = "SELECT codigo_usuario FROM usuarios WHERE codigo_usuario = '{$this->codigo}' AND idusuario != '{$id}'";
+        } else {
+            $sql = "SELECT codigo_usuario FROM usuarios WHERE codigo_usuario = '{$this->codigo}'";
+        }
+
+        $request = $this->select($sql);
+
+        if (empty($request)) {
+            $return = "codigoValido";
+        } else {
+            $return = "codigoExiste";
+        }
+
         return $return;
     }
 }
