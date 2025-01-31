@@ -17,9 +17,19 @@ class UsuariosModel extends Mysql
         return $request;
     }
 
+    public function selectRoles()
+    {
+        $sql = "SELECT idrol, nombre_rol, descripcion_rol 
+                FROM roles";
+        $request = $this->select_all($sql);
+        return $request;
+    }
+
     public function selectUsuarioID(int $id)
     {
-        $sql = "SELECT * FROM usuarios WHERE idusuario = {$id}";
+        $sql = "SELECT idusuario, numdoc_usuario, nombre_usuario, correo_usuario, telefono_usuario, roles.nombre_rol AS nombre_rol, roles.idrol, codigo_usuario 
+                FROM usuarios
+                INNER JOIN roles ON roles.idrol = usuarios.roles_idrol WHERE idusuario = {$id}";
         $request = $this->select_all($sql);
         return $request;
     }

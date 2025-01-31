@@ -36,6 +36,7 @@
                   <input type="number" min="1" class="form-control valid validNumber" id="telefono_usuario" name="telefono_usuario" autocomplete="off" required="">
                 </div>
               </div>
+              <!-- </div> -->
 
               <div class="row mt-2">
                 <div class="form-group col-6">
@@ -47,6 +48,11 @@
                   <input type="password" class="form-control valid validPassword" id="password_usuario" name="password_usuario" autocomplete="off" required="">
                 </div>
               </div>
+              <div class="form-group col-12">
+                <label for="telefono_usuario">Teléfono</label>
+                <input type="number" min="1" class="form-control valid validNumber" id="telefono_usuario" name="telefono_usuario" autocomplete="off" required="">
+              </div>
+              <!-- </div> -->
 
               <label for="roles_idrol" class="form-label mt-2">Rol</label>
               <select class="form-select" aria-label="Default select example" name="roles_idrol" id="roles_idrol">
