@@ -1,21 +1,25 @@
 <div class="card">
-  <div class="card-body">
+    <div class="card-body">
 
-    <!-- Vertically centered Modal -->
-    <div class="modal fade" id="crearUsuarioModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title" id="UsuarioModalLabel">Agregar Usuario</h5>
-            <button type="button" class="btn-close bg-white" name="btnEquis" id="btnEquis" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form class="row g-3" id="frmUsuarios">
-            <div class="modal-body" style="margin-bottom: -2%;">
-              <!-- <span>Todos los campos son obligatorios</span> -->
+        <!-- Vertically centered Modal -->
+        <div class="modal fade" id="subirExcusaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="ExcusaModalLabel">Adjuntar Excusa</h5>
+                        <button type="button" class="btn-close bg-white" name="btnEquis" id="btnEquis" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="row g-3" id="frmExcusas" enctype="multipart/form-data">
+                        <div class="modal-body" style="margin-bottom: -2%;">
+                            <!-- <span>Todos los campos son obligatorios</span> -->
 
-              <input type="hidden" name="idusuario" id="idusuario" value="0">
+                            <input type="hidden" name="idusuario" id="idusuario" value="0">
 
-              <div class="row">
+
+                            <label for="file">Seleccionar un archivo PDF:</label>
+                            <input type="file" name="file" id="file" accept="application/pdf" required>
+
+                            <!-- <div class="row">
                 <div class="form-group col-6">
                   <label for="nombre_usuario">Nombre</label>
                   <input type="text" class="form-control valid validText" id="nombre_usuario" name="nombre_usuario" autocomplete="off" required="">
@@ -46,21 +50,18 @@
                   <label for="password_usuario">Contraseña</label>
                   <input type="password" class="form-control valid validPassword" id="password_usuario" name="password_usuario" autocomplete="off" required="">
                 </div>
-              </div>
+              </div> -->
 
-              <label for="roles_idrol" class="form-label mt-2">Rol</label>
-              <select class="form-select" aria-label="Default select example" name="roles_idrol" id="roles_idrol">
-                <!-- Aqui se cargan los roles dinamicamente -->
-              </select>
-            </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" name="btnCerrar" id="btnCerrar" data-bs-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" name="btnCerrar" id="btnCerrar" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </form>
-        </div>
-      </div>
-    </div><!-- End Vertically centered Modal-->
-  </div>
+        </div><!-- End Vertically centered Modal-->
+    </div>
 </div>
