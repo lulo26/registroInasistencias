@@ -11,19 +11,16 @@
                     </div>
                     <form class="row g-3" id="frmFichas">
                     <div class="modal-body">
-                    <input type="hidden" name="idcurso" id="idcurso" value="0" >
+                    <input type="hidden" name="idficha" id="idficha" value="0" >
                     <div class="row"> 
                 <div class="col-md-12">
                   <label for="numFicha" class="form-label">Numero de la ficha</label>
                   <input type="number" class="form-control" name="numFicha" id="numFicha">
                 </div>
                 <div class="col-md-12 mt-3">
-                  <label for="tipoCurso" class="form-label">Curso</label>
-                  <select class="form-select" aria-label="Default select example" name="tipoCurso" id="tipoCurso">
-                    <option selected>Seleccione el curso</option>
-                    <option value="tecnico">tecnico</option>
-                    <option value="tecnologo">tecnologo</option>
-                    <option value="complementario">complementario</option>
+                  <label for="curso" class="form-label">Curso</label>
+                  <select class="form-select" aria-label="Default select example" name="curso" id="curso">
+                    <option selected hidden>Seleccione el curso</option>
                   </select>
                 </div>
             </div>
@@ -37,8 +34,8 @@
                </div>
                <div class="col-md-12 mt-3 mb-4">
                   <label for="tipoCurso" class="form-label">Modalidad</label>
-                  <select class="form-select" aria-label="Default select example" name="tipoCurso" id="tipoCurso">
-                    <option selected>Seleccione la modalidad</option>
+                  <select class="form-select" aria-label="Default select example" name="modalidad" id="modalidad">
+                    <option selected hideen>Seleccione la modalidad</option>
                     <option value="presencial">Presencial</option>
                     <option value="virtual">Virtual</option>
                   </select>
