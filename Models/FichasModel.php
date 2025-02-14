@@ -5,25 +5,19 @@ class FichasModel extends Mysql {
     }
     public function selectFichas()
     {
-        $sql = "SELECT idficha, numero_ficha, numero_ficha, cursos.idcurso AS id_curso, fecha_inicio, fecha_fin, modalidad 
-                FROM fichas
-                INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcursos
-                ORDER BY idficha ASC";
+        $sql = "SELECT idficha, numero_ficha, numero_ficha, cursos.idcurso AS id_curso, fecha_inicio, fecha_fin, modalidad  FROM fichas INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcursos ORDER BY idficha ASC";
         $request = $this->select_all($sql);
         return $request;
     }
     public function selectFichaID(int $id)
     {
-        $sql = "SELECT idficha, numero_ficha, numero_ficha, cursos.idcurso AS id_curso, fecha_inicio, fecha_fin, modalidad 
-                FROM fichas
-                INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcursos WHERE idficha = {$id}";
+        $sql = "SELECT idficha, numero_ficha, numero_ficha, cursos.idcurso AS id_curso, fecha_inicio, fecha_fin, modalidad  FROM fichas INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcursos WHERE idficha = {$id}";
         $request = $this->select_all($sql);
         return $request;
     }
     public function selectCursos()
     {
-        $sql = "SELECT idcurso, nombre_curso, tipo_curso, descripcion_curso
-                FROM cursos";
+        $sql = "SELECT idcurso, nombre_curso, tipo_curso, descripcion_curso FROM cursos";
         $request = $this->select_all($sql);
         return $request;
     }
@@ -35,7 +29,6 @@ class FichasModel extends Mysql {
         $this->fechaInicio = $fecha_inicio;
         $this->fechaFin = $fecha_fin;
         $this->modalidad = $modalidad;
-
         $sql = "SELECT * FROM fichas WHERE numero_ficha = '{$this->numficha}'";
         $request = $this->select_all($sql);
         if (empty($request)) {
@@ -48,29 +41,6 @@ class FichasModel extends Mysql {
         }
         return $return;
     }
-    public function editarFicha(int $numero_ficha, int $cursos_idcurso, date $fecha_inicio, date $fecha_fin, string $modalidad, int $idficha)
-    {
-        $return = "";
-        $this->numficha = $numero_ficha;
-        $this->idCurso = $cursos_idcurso;
-        $this->fechaInicio = $fecha_inicio;
-        $this->fechaFin = $fecha_fin;
-        $this->modalidad = $modalidad;
-        $this->id = $idficha;
-
-        $sql = "SELECT idficha FROM fichas WHERE idficha = '{$this->id}'";
-        $request = $this->select_all($sql);
-        if (!empty($request)) {
-            $query = "UPDATE fichas SET numero_ficha = ?, cursos_idcurso = ?, fecha_inicio = ?, fecha_fin = ?, modalidad = ? WHERE idficha = ?";
-            $arrData = array($this->numficha, $this->idCurso, $this->fechaInicio, $this->fechaFin, $this->modalidad, $this->id);
-            $request_insert = $this->insert($query, $arrData);
-            $return = $request_insert;
-        } else {
-            $return = "empty";
-        }
-        return $return;
-    }
-
     public function eliminarFicha(int $id)
     {
         $return = "";
@@ -84,6 +54,40 @@ class FichasModel extends Mysql {
             $return = $request_insert;
         } else {
             $return = "empty";
+        }
+        return $return;
+    }
+    public function editarFicha(int $numero_ficha, int $cursos_idcurso, date $fecha_inicio, date $fecha_fin, string $modalidad, int $idficha)
+    {
+        $return = "";
+        $this->numficha = $numero_ficha;
+        $this->idCurso = $cursos_idcurso;
+        $this->fechaInicio = $fecha_inicio;
+        $this->fechaFin = $fecha_fin;
+        $this->modalidad = $modalidad;
+        $this->id = $idficha;
+        $sql = "SELECT idficha FROM fichas WHERE idficha = '{$this->id}'";
+        $request = $this->select_all($sql);
+        if (!empty($request)) {
+            $query = "UPDATE fichas SET numero_ficha = ?, cursos_idcurso = ?, fecha_inicio = ?, fecha_fin = ?, modalidad = ? WHERE idficha = ?";
+            $arrData = array($this->numficha, $this->idCurso, $this->fechaInicio, $this->fechaFin, $this->modalidad, $this->id);
+            $request_insert = $this->insert($query, $arrData);
+            $return = $request_insert;
+        } else {
+            $return = "empty";
+        }
+        return $return;
+    }
+    public function validarNumeroFicha(int $numficha)
+    {
+        $return = "";
+        $this->numficha = $numficha;
+        $sql = "SELECT numero_ficha FROM fichas WHERE numero_ficha = '{$this->numficha}'";
+        $request = $this->select($sql);
+        if (empty($request)) {
+            $return = "numfichaValido";
+        } else {
+            $return = "numfichaExiste";
         }
         return $return;
     }
