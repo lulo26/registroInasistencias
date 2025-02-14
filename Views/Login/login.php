@@ -61,22 +61,22 @@
 
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Inicio de sesión</h5>
-                    <p class="text-center small">ingrese su nombre de usuario y contraseña para acceder</p>
+                    <p class="text-center small">ingrese su correo electrónico y contraseña para acceder</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form class="row g-3 needs-validation" id="formLogin" novalidate>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">nombre de usuario</label>
+                      <label for="yourUsername" class="form-label">correo electrónico</label>
                       <div class="input-group has-validation">
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Ingrese su nombre de usuario.</div>
+                        <input type="email" name="txtEmail" class="form-control" id="txtEmail" required>
+                        <div class="invalid-feedback">Ingrese su correo electrónico.</div>
                       </div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Contraseña</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <input type="password" name="txtPassword" class="form-control" id="txtPassword" required>
                       <div class="invalid-feedback">Ingrese su contraseña</div>
                     </div>
 
@@ -113,19 +113,16 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+<!--   <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/chart.js/chart.umd.js"></script>
   <script src="assets/vendor/echarts/echarts.min.js"></script>
   <script src="assets/vendor/quill/quill.js"></script>
   <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script> -->
 
   <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <!-- <script src="assets/js/main.js"></script> -->
 
-</body>
-
-</html>
-   
+  <?php footer_admin($data) ?> 
