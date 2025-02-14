@@ -46,17 +46,17 @@ class UsuariosModel extends Mysql
         $this->idRol = $roles_idrol;
         $this->codigo = $codigo_usuario;
 
-        $sql = "SELECT * FROM usuarios WHERE nombre_usuario = '{$this->nombre}'";
+        /* $sql = "SELECT * FROM usuarios WHERE nombre_usuario = '{$this->nombre}'";
         $request = $this->select_all($sql);
 
-        if (empty($request)) {
-            $query = "INSERT INTO usuarios (numdoc_usuario, nombre_usuario, password_usuario, correo_usuario, telefono_usuario, roles_idrol, codigo_usuario) VALUES (?,?,?,?,?,?,?)";
-            $arrData = array($this->numdoc, $this->nombre, $this->password, $this->correo, $this->telefono, $this->idRol, $this->codigo);
-            $request_insert = $this->insert($query, $arrData);
-            $return = $request_insert;
-        } else {
+        if (empty($request)) { */
+        $query = "INSERT INTO usuarios (numdoc_usuario, nombre_usuario, password_usuario, correo_usuario, telefono_usuario, roles_idrol, codigo_usuario) VALUES (?,?,?,?,?,?,?)";
+        $arrData = array($this->numdoc, $this->nombre, $this->password, $this->correo, $this->telefono, $this->idRol, $this->codigo);
+        $request_insert = $this->insert($query, $arrData);
+        $return = $request_insert;
+        /* } else {
             $return = 'exists';
-        }
+        } */
         return $return;
     }
 

@@ -2,28 +2,42 @@
 
 class ExcusasModel extends Mysql
 {
-    /* -------------------------------------------------- */
-
+    /* private $numdoc;
+    private $nombre;
+    private $password;
+    private $correo;
+    private $telefono;
+    private $idRol;
+    private $codigo;
+    private $idusuario;
+    private $id;
+    private $fileName;
+    private $filePath;
+ */
     public function __construct()
     {
         parent::__construct();
     }
 
-    public function saveFilePathToDatabase(string $fileName, string $filePath)
+    public function insertarExcusa(string $fileName, string $filePath, int $idAprendiz, int $idInasistencia)
     {
         $return = "";
 
         $this->fileName = $fileName;
         $this->filePath = $filePath;
+        $this->idAprendiz = $idAprendiz;
+        $this->idInasistencia = $idInasistencia;
 
-
-
-        /* $sql = "SELECT * FROM usuarios WHERE nombre_usuario = '{$this->nombre}'";
+        /* $sql = "SELECT * FROM excusas WHERE nombre_usuario = '{$this->nombre}'";
         $request = $this->select_all($sql); */
 
         /* if (empty($request)) { */
+        /* $query = "INSERT INTO excusas (filename_excusa, filepath_excusa, aprendices_idusuario, registro_inasistencias_idregistro, estado_excusa) 
+        VALUES (?, ?, ?, ?, 'Por revisar')"; */
         $query = "INSERT INTO excusas (filename_excusa, filepath_excusa, aprendices_idusuario, registro_inasistencias_idregistro, estado_excusa) 
                   VALUES (?, ?, 1, 1, 'Por revisar')";
+        /* $arrData = array($this->fileName, $this->filePath, $this->idAprendiz, $this->idInasistencia);
+         */
         $arrData = array($this->fileName, $this->filePath);
         $request_insert = $this->insert($query, $arrData);
         $return = $request_insert;
@@ -47,41 +61,39 @@ class ExcusasModel extends Mysql
         return $request;
     }
 
-    /* public function insertarExcusa(string $numdoc_usuario, string $nombre_usuario, string $password_usuario, string $correo_usuario, string $telefono_usuario, int $roles_idrol, string $codigo_usuario)
+
+
+    /* -------------------------------------------------- */
+    /* -------------------------------------------------- */
+    /* -------------------------------------------------- */
+
+    public function selectExcusaByAprendizId()
     {
-        $return = "";
+        /* HACER LA CONSULTA Y SI NO DEVUELVE NINGUN REGISTRO QUIERE DECIR QUE NO HAY EXCUSA SUBIDA AÚN */
+    }
 
-        $this->numdoc = $numdoc_usuario;
-        $this->nombre = $nombre_usuario;
-        $this->password = $password_usuario;
-        $this->correo = $correo_usuario;
-        $this->telefono = $telefono_usuario;
-        $this->idRol = $roles_idrol;
-        $this->codigo = $codigo_usuario;
-
-        $sql = "SELECT * FROM usuarios WHERE nombre_usuario = '{$this->nombre}'";
+    public function selectInasistencias() /* selectInasistenciasAprendiz */
+    {
+        $sql = "SELECT idregistro, nombre_usuario, registro_idusuario, fecha_inasistencia, nombre_aprendiz, aprendices_idusuario, estado_inasistencia
+                FROM registro_inasistencias
+                JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario
+                JOIN aprendices ON aprendices.idaprendiz = registro_inasistencias.aprendices_idusuario ";
+        /* $sql = "SELECT idregistro, nombre_usuario, fecha_inasistencia, nombre_aprendiz, estado_excusa, estado_inasistencia, idexcusa
+                FROM registro_inasistencias
+                JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario
+                JOIN aprendices ON aprendices.idaprendiz = registro_inasistencias.aprendices_idusuario 
+                JOIN excusas ON excusas.registro_inasistencias_idregistro = registro_inasistencias.idregistro";
+         */
         $request = $this->select_all($sql);
+        return $request;
+    }
 
-        if (empty($request)) {
-            $query = "INSERT INTO usuarios (numdoc_usuario, nombre_usuario, password_usuario, correo_usuario, telefono_usuario, roles_idrol, codigo_usuario) VALUES (?,?,?,?,?,?,?)";
-            $arrData = array($this->numdoc, $this->nombre, $this->password, $this->correo, $this->telefono, $this->idRol, $this->codigo);
-            $request_insert = $this->insert($query, $arrData);
-            $return = $request_insert;
-        } else {
-            $return = 'exists';
-        }
-        return $return;
-    } */
-
-    /* -------------------------------------------------- */
-    /* -------------------------------------------------- */
-    /* -------------------------------------------------- */
-
-    public function selectInasistencias()
+    public function selectExcusasAprendiz()
     {
+        /* CONVERTIR ESTA FUNCION A "selectInasistenciaId" Y AÑADIR EL WHERE EN LA CONSULTA*/
         /* $sql = "SELECT idregistro, aprendices_idusuario, fecha_inasistencia, registro_idusuario, estado_inasistencia
                 FROM registro_inasistencias"; */
-        $sql = "SELECT idregistro, nombre_usuario, fecha_inasistencia, nombre_aprendiz, estado_excusa, estado_inasistencia
+        $sql = "SELECT idregistro, nombre_usuario, registro_idusuario, fecha_inasistencia, nombre_aprendiz, registro_inasistencias.aprendices_idusuario, estado_excusa, estado_inasistencia, idexcusa
                 FROM registro_inasistencias
                 JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario
                 JOIN aprendices ON aprendices.idaprendiz = registro_inasistencias.aprendices_idusuario 
@@ -90,46 +102,9 @@ class ExcusasModel extends Mysql
         return $request;
     }
 
-    public function selectInasAprendizID()
-    {
-        /* $sql = "SELECT idregistro, aprendices_idusuario, fecha_inasistencia, registro_idusuario, estado_inasistencia
-                FROM registro_inasistencias"; */
-        /*  $sql = "SELECT idregistro, nombre_usuario, fecha_inasistencia, nombre_aprendiz, estado_excusa, estado_inasistencia
-                FROM registro_inasistencias
-                JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario
-                JOIN aprendices ON aprendices.idaprendiz = registro_inasistencias.aprendices_idusuario 
-                JOIN excusas ON excusas.registro_inasistencias_idregistro = registro_inasistencias.idregistro";
-        $request = $this->select_all($sql);
-        return $request; */
-    }
-
-    public function selectInasInstructorID()
-    {
-        /* $sql = "SELECT idregistro, aprendices_idusuario, fecha_inasistencia, registro_idusuario, estado_inasistencia
-                FROM registro_inasistencias"; */
-        /* $sql = "SELECT idregistro, nombre_usuario, fecha_inasistencia, nombre_aprendiz, estado_excusa, estado_inasistencia
-                FROM registro_inasistencias
-                JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario
-                JOIN aprendices ON aprendices.idaprendiz = registro_inasistencias.aprendices_idusuario 
-                JOIN excusas ON excusas.registro_inasistencias_idregistro = registro_inasistencias.idregistro";
-        $request = $this->select_all($sql);
-        return $request; */
-    }
-
     /* -------------------------------------------------- */
     /* -------------------------------------------------- */
     /* -------------------------------------------------- */
-
-
-    public function selectExcusas()
-    {
-        $sql = "SELECT idusuario, numdoc_usuario, nombre_usuario, correo_usuario, telefono_usuario, roles.nombre_rol AS nombre_rol, codigo_usuario 
-                FROM usuarios
-                INNER JOIN roles ON roles.idrol = usuarios.roles_idrol
-                ORDER BY idusuario ASC";
-        $request = $this->select_all($sql);
-        return $request;
-    }
 
     public function selectExcusaID(int $id)
     {
@@ -156,25 +131,20 @@ class ExcusasModel extends Mysql
         return $request;
     }
 
-    public function editarExcusa(string $numdoc_usuario, string $nombre_usuario, string $password_usuario, string $correo_usuario, string $telefono_usuario, int $roles_idrol, string $codigo_usuario, int $idusuario)
+    public function editarExcusa(string $fileName, string $filePath, int $idExcusa)
     {
         $return = "";
 
-        $this->numdoc = $numdoc_usuario;
-        $this->nombre = $nombre_usuario;
-        $this->password = $password_usuario;
-        $this->correo = $correo_usuario;
-        $this->telefono = $telefono_usuario;
-        $this->idRol = $roles_idrol;
-        $this->codigo = $codigo_usuario;
-        $this->id = $idusuario;
+        $this->fileName = $fileName;
+        $this->filePath = $filePath;
+        $this->id = $idExcusa;
 
-        $sql = "SELECT idusuario FROM usuarios WHERE idusuario = '{$this->id}'";
+        $sql = "SELECT idexcusa FROM excusas WHERE idexcusa = '{$this->id}'";
         $request = $this->select_all($sql);
 
         if (!empty($request)) {
-            $query = "UPDATE usuarios SET numdoc_usuario = ?, nombre_usuario = ?, password_usuario = ?, correo_usuario = ?, telefono_usuario = ?, roles_idrol = ?, codigo_usuario = ? WHERE idusuario = ?";
-            $arrData = array($this->numdoc, $this->nombre, $this->password, $this->correo, $this->telefono, $this->idRol, $this->codigo, $this->id);
+            $query = "UPDATE excusas SET filename_excusa = ?, filepath_excusa = ? WHERE idusuario = ?";
+            $arrData = array($this->fileName, $this->filePath, $this->id);
             $request_insert = $this->insert($query, $arrData);
             $return = $request_insert;
         } else {
@@ -246,7 +216,8 @@ class ExcusasModel extends Mysql
 
     /* ------------------------ VALIDACIONES -------------------------- */
 
-    public function validarIdentificacion(int $numdoc)
+    /* VALIDAR QUE, AL EDITAR LA EXCUSA NO SE PUEDA SUBIR LA MISMA */
+    public function validarExcusa(int $numdoc)
     {
         $return = "";
 

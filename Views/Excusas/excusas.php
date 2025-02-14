@@ -44,7 +44,7 @@ getModal('subirExcusasModal', $data);
             <table class="table datatable">
                 <thead>
                     <tr>
-                        <th>Fecha</th>
+                        <th>Fecha Excusa</th>
                         <th>Aprendiz</th>
                         <th>Curso</th>
                         <th>Ficha</th>

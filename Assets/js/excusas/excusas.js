@@ -1,8 +1,9 @@
 /* const btnUsuario = document.querySelector("#btnUsuario");
 let frmUsuarios = document.querySelector("#frmUsuarios"); */
 
-const numdoc = document.querySelector("#numdoc_usuario");
-const select_roles = document.getElementById("roles_idrol");
+let idexcusa = document.querySelector("#idexcusa");
+let idAprendiz = document.querySelector("#idAprendiz");
+let idInasistencia = document.querySelector("#idInasistencia");
 
 const btnCerrar = document.getElementById("btnCerrar");
 const btnEquis = document.getElementById("btnEquis");
@@ -16,7 +17,7 @@ const tablaExcusas = document.getElementById("tablaExcusas");
 
 function listExcusas() {
   tablaExcusas.innerHTML = "";
-  let idInstructor = 4;
+  let idInstructor = 11;
   /* fetch(base_url + `/excusas/getExcusasPorInstructor/${idusuario}`, {
     method: "GET",
   }) */
@@ -25,9 +26,11 @@ function listExcusas() {
   })
     .then((data) => data.json())
     .then((data) => {
-      console.log(data);
+      /* 
+      console.log(data); */
       data.forEach((excusa) => {
-        console.log(excusa.nombre_aprendiz);
+        /* 
+        console.log(excusa.nombre_aprendiz); */
         tablaExcusas.innerHTML += `
                 <td>${excusa.fecha_excusa}</td>
                 <td>${excusa.nombre_aprendiz}</td>
@@ -41,23 +44,57 @@ function listExcusas() {
     });
 }
 
-////////////////////////////////////////////////
-// -------------- MOSTRAR EXCUSA ---------------
-////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+// -------------- MOSTRAR/APROBAR/RECHAZAR EXCUSA ---------------
+/////////////////////////////////////////////////////////////////
 document.addEventListener("click", (e) => {
   try {
     let selected = e.target.closest("button").getAttribute("data-action-type");
     let idexcusa = e.target.closest("button").getAttribute("rel");
 
-    if (selected == "excusa") {
-      console.log(idexcusa);
+    if (selected == "descargar") {
+      /* console.log(idexcusa); */
       fetch(base_url + `/excusas/mostrarExcusaDescargaDirecta?idexcusa=${idexcusa}`, {
         method: "GET",
-      }); /* 
-        .then((data) => data.json())
-        .then((data) => {
-          console.log(data);
-        }); */
+      })
+        .then((data) => data.blob())
+        .then((excusa) => {
+          const link = document.createElement("a"); // Crea un enlace de descarga
+          fileURL = URL.createObjectURL(excusa); // Crea una URL temporal para el archivo
+          window.open(fileURL, "_blank");
+          /* link.download = "archivo.pdf"; */ // Asigna un nombre al archivo descargado
+          link.click(); // Simula el clic para que el archivo se descargue
+        });
+    }
+
+    if (selected == "aprobar") {
+      Swal.fire({
+        title: "Aprobar excusa",
+        text: "¿Desea aprobar esta excusa?",
+        icon: "warning",
+        showDenyButton: true,
+        confirmButtonText: "Sí",
+        denyButtonText: `Cancelar`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let formData = new FormData();
+          formData.append("idexcusa", idexcusa);
+          /* console.log(formData); */
+          fetch(base_url + "/excusas/aprobarExcusa", {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              Swal.fire({
+                title: data.status ? "¡Correcto!" : "¡Error!",
+                text: data.msg,
+                icon: data.status ? "success" : "error",
+              });
+              listUsuarios();
+            });
+        }
+      });
     }
   } catch (e) {}
 });
@@ -69,31 +106,16 @@ document.addEventListener("click", (e) => {
 function listInasistencias() {
   tablaInasistencias.innerHTML = "";
 
-  fetch(base_url + "/excusas/getInasistencias")
+  fetch(base_url + "/excusas/getInasistencias1")
     .then((data) => data.json())
     .then((data) => {
-      console.log(data);
+      /* 
+      console.log(data); */
       data.forEach((inasistencia) => {
-        console.log(inasistencia.fecha_inasistencia);
-        /* let estadoExcusa = "";
-        if (inasistencia.estado_inasistencia === "Sin excusa") {
-          estadoExcusa = `<span class="badge rounded-pill text-bg-secondary">${inasistencia.estado_inasistencia}</span>`;
-        } else if (
-          inasistencia.estado_inasistencia === "Enviada" ||
-          inasistencia.estado_inasistencia === "Por revisar"
-        ) {
-          estadoExcusa = `
-            <span class="badge rounded-pill text-bg-info">${inasistencia.estado_inasistencia}</span>
-          `;
-        } else if (inasistencia.estado_inasistencia === "Aprobada") {
-          estadoExcusa = `<span class="badge rounded-pill text-bg-success">
-              ${inasistencia.estado_inasistencia}
-            </span>`;
-        } else if (inasistencia.estado_inasistencia === "Rechazada") {
-          estadoExcusa = `<span class="badge rounded-pill text-bg-danger">
-              ${inasistencia.estado_inasistencia}
-            </span>`;
-        } */
+        /* idexcusa.value = inasistencia.idexcusa;
+        idAprendiz.value = inasistencia.aprendices_idusuario;
+        idInasistencia.value = inasistencia.registro_idusuario; */
+
         tablaInasistencias.innerHTML += `
                 <td>${inasistencia.idregistro}</td>
                 <td>${inasistencia.nombre_aprendiz}</td>
@@ -104,6 +126,61 @@ function listInasistencias() {
       });
     });
 }
+
+///////////////////////////////////////////////////////////
+// ---------- ADJUNTAR/EDITAR/ELIMINAR EXCUSA--------------
+///////////////////////////////////////////////////////////
+
+document.addEventListener("click", (e) => {
+  try {
+    let selected = e.target.closest("button").getAttribute("data-action-type"); /* 
+    let idusuario = e.target.closest("button").getAttribute("rel"); */
+
+    if (selected == "adjuntar") {
+      /* 
+      document.getElementById("ExcusaModalLabel").innerHTML = "Agregar Usuario"; */
+      $("#subirExcusaModal").modal("show");
+    }
+
+    if (selected == "update") {
+      /* 
+      console.log(idAprendiz.value); */
+      let idInasistencia = e.target.closest("button").getAttribute("rel");
+      $("#subirExcusaModal").modal("show");
+      document.getElementById("ExcusaModalLabel").innerHTML = "Actualizar Excusa";
+    }
+
+    if (selected == "delete") {
+      Swal.fire({
+        title: "Eliminar excusa",
+        text: "¿Está seguro de eliminar esta excusa?",
+        icon: "warning",
+        showDenyButton: true,
+        confirmButtonText: "Sí",
+        denyButtonText: `Cancelar`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let formData = new FormData();
+          formData.append("idExcusa", idExcusa);
+          console.log(formData);
+          fetch(base_url + "/excusas/deleteExcusa", {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              Swal.fire({
+                title: data.status ? "¡Correcto!" : "¡Error!",
+                text: data.msg,
+                icon: data.status ? "success" : "error",
+              });
+              listUsuarios();
+            });
+        }
+      });
+    }
+  } catch (e) {}
+});
 
 /////////////////////////////////////////////////////////
 // ---------- LIMPIAR FORMULARIO AL CERRAR --------------
@@ -125,18 +202,6 @@ window.addEventListener("DOMContentLoaded", (e) => {
   listExcusas();
 });
 
-////////////////////////////////////////////////
-// --------------- ABRIR MODAL -----------------
-////////////////////////////////////////////////
-
-/* btnUsuario.addEventListener("click", () => {
-  numdoc.readOnly = false;
-  select_roles.innerHTML = "<option selected disabled>Seleccione el rol</option>";
-  listarRoles();
-  document.getElementById("UsuarioModalLabel").innerHTML = "Agregar Usuario";
-  $("#crearUsuarioModal").modal("show");
-}); */
-
 ///////////////////////////////////////////////
 // ------------- ENVIO DE DATOS ---------------
 ///////////////////////////////////////////////
@@ -144,83 +209,10 @@ window.addEventListener("DOMContentLoaded", (e) => {
 frmExcusas.addEventListener("submit", (e) => {
   e.preventDefault();
   frmData = new FormData(frmExcusas);
+  console.log(frmExcusas.idAprendiz);
   console.log(frmData);
+
   fetch(base_url + "/excusas/setExcusas", {
-    method: "POST",
-    body: frmData,
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      Swal.fire({
-        title: data.status ? "¡Correcto!" : "¡Error!",
-        text: data.msg,
-        icon: data.status ? "success" : "error",
-      });
-      if (data.status) {
-        frmExcusas.reset();
-        $("#subirExcusaModal").modal("hide");
-        listInasistencias();
-      }
-    });
-});
-
-///////////////////////////////////////////////
-// ---------- EDITAR Y ELIMINAR --------------
-///////////////////////////////////////////////
-
-document.addEventListener("click", (e) => {
-  try {
-    let selected = e.target.closest("button").getAttribute("data-action-type"); /* 
-    let idusuario = e.target.closest("button").getAttribute("rel"); */
-
-    if (selected == "adjuntar") {
-      /* 
-      document.getElementById("ExcusaModalLabel").innerHTML = "Agregar Usuario"; */
-      $("#subirExcusaModal").modal("show");
-    }
-  } catch (e) {}
-});
-
-//////////////////////////////////////////////////
-// -------------- APROBAR EXCUSAS ----------------
-//////////////////////////////////////////////////
-
-frmExcusas.addEventListener("submit", (e) => {
-  e.preventDefault();
-  let frmData = new FormData();
-  frmData.append("estado_excusa", "aprobada");
-  console.log(frmData);
-  fetch(base_url + "/excusas/aprobarExcusa", {
-    method: "POST",
-    body: frmData,
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      Swal.fire({
-        title: data.status ? "¡Correcto!" : "¡Error!",
-        text: data.msg,
-        icon: data.status ? "success" : "error",
-      });
-      if (data.status) {
-        frmExcusas.reset();
-        $("#subirExcusaModal").modal("hide");
-        listInasistencias();
-      }
-    });
-});
-
-//////////////////////////////////////////////////
-// -------------- RECHAZAR EXCUSAS ---------------
-//////////////////////////////////////////////////
-
-frmExcusas.addEventListener("submit", (e) => {
-  e.preventDefault();
-  let frmData = new FormData();
-  frmData.append("estado_excusa", "rechazada");
-  console.log(frmData);
-  fetch(base_url + "/excusas/rechazarExcusa", {
     method: "POST",
     body: frmData,
   })
