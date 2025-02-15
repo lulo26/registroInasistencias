@@ -17,7 +17,7 @@ const tablaExcusas = document.getElementById("tablaExcusas");
 
 function listExcusas() {
   tablaExcusas.innerHTML = "";
-  let idInstructor = 11;
+  let idInstructor = 4;
   /* fetch(base_url + `/excusas/getExcusasPorInstructor/${idusuario}`, {
     method: "GET",
   }) */
@@ -29,8 +29,6 @@ function listExcusas() {
       /* 
       console.log(data); */
       data.forEach((excusa) => {
-        /* 
-        console.log(excusa.nombre_aprendiz); */
         tablaExcusas.innerHTML += `
                 <td>${excusa.fecha_excusa}</td>
                 <td>${excusa.nombre_aprendiz}</td>
@@ -51,12 +49,16 @@ document.addEventListener("click", (e) => {
   try {
     let selected = e.target.closest("button").getAttribute("data-action-type");
     let idexcusa = e.target.closest("button").getAttribute("rel");
+    console.log(idexcusa);
 
     if (selected == "descargar") {
       /* console.log(idexcusa); */
-      fetch(base_url + `/excusas/mostrarExcusaDescargaDirecta?idexcusa=${idexcusa}`, {
-        method: "GET",
-      })
+      fetch(
+        base_url + `/excusas/mostrarExcusaDescargaDirecta?idexcusa=${idexcusa}`,
+        {
+          method: "GET",
+        }
+      )
         .then((data) => data.blob())
         .then((excusa) => {
           const link = document.createElement("a"); // Crea un enlace de descarga
@@ -106,7 +108,7 @@ document.addEventListener("click", (e) => {
 function listInasistencias() {
   tablaInasistencias.innerHTML = "";
 
-  fetch(base_url + "/excusas/getInasistencias1")
+  fetch(base_url + "/excusas/getInasistencias")
     .then((data) => data.json())
     .then((data) => {
       /* 
@@ -133,7 +135,9 @@ function listInasistencias() {
 
 document.addEventListener("click", (e) => {
   try {
-    let selected = e.target.closest("button").getAttribute("data-action-type"); /* 
+    let selected = e.target
+      .closest("button")
+      .getAttribute("data-action-type"); /* 
     let idusuario = e.target.closest("button").getAttribute("rel"); */
 
     if (selected == "adjuntar") {
@@ -145,15 +149,34 @@ document.addEventListener("click", (e) => {
     if (selected == "update") {
       /* 
       console.log(idAprendiz.value); */
-      let idInasistencia = e.target.closest("button").getAttribute("rel");
+      let idexcusa = e.target.closest("button").getAttribute("rel");
+      console.log(idexcusa);
       $("#subirExcusaModal").modal("show");
-      document.getElementById("ExcusaModalLabel").innerHTML = "Actualizar Excusa";
+      document.getElementById("ExcusaModalLabel").innerHTML =
+        "Actualizar Excusa";
+
+      fetch(base_url + `/excusas/getExcusaByID/${idexcusa}`, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          let excusa = res.data[0];
+          console.log(excusa.idexcusa);
+          console.log(excusa.aprendices_idusuario);
+          console.log(excusa.registro_inasistencias_idregistro);
+
+          document.querySelector("#idexcusa").value = excusa.idexcusa;
+          document.querySelector("#idAprendiz").value =
+            excusa.aprendices_idusuario;
+          document.querySelector("#idInasistencia").value =
+            excusa.registro_inasistencias_idregistro;
+        });
     }
 
     if (selected == "delete") {
       Swal.fire({
         title: "Eliminar excusa",
-        text: "¿Está seguro de eliminar esta excusa?",
+        text: "¿Desea eliminar esta excusa?",
         icon: "warning",
         showDenyButton: true,
         confirmButtonText: "Sí",
@@ -209,8 +232,10 @@ window.addEventListener("DOMContentLoaded", (e) => {
 frmExcusas.addEventListener("submit", (e) => {
   e.preventDefault();
   frmData = new FormData(frmExcusas);
+  console.log(frmExcusas.idexcusa.value);
   console.log(frmExcusas.idAprendiz);
-  console.log(frmData);
+  console.log(frmExcusas.idInasistencia);
+  console.log(frmExcusas.excusa);
 
   fetch(base_url + "/excusas/setExcusas", {
     method: "POST",

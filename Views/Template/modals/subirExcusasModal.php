@@ -19,8 +19,8 @@
 
               <div class="row">
                 <div class="form-group">
-                  <label for="excusa">Seleccionar un archivo PDF:</label>
-                  <input type="file" name="excusa" id="excusa" accept="application/pdf" required>
+                  <label class="form-label ms-1" for="excusa">Excusa:</label>
+                  <input class="form-control" type="file" name="excusa" id="excusa" accept="application/pdf" required>
                 </div>
               </div>
             </div>

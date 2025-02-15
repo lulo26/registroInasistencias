@@ -35,10 +35,10 @@ class ExcusasModel extends Mysql
         /* $query = "INSERT INTO excusas (filename_excusa, filepath_excusa, aprendices_idusuario, registro_inasistencias_idregistro, estado_excusa) 
         VALUES (?, ?, ?, ?, 'Por revisar')"; */
         $query = "INSERT INTO excusas (filename_excusa, filepath_excusa, aprendices_idusuario, registro_inasistencias_idregistro, estado_excusa) 
-                  VALUES (?, ?, 1, 1, 'Por revisar')";
+                  VALUES (?, ?, ?, ?, 'Por revisar')";
         /* $arrData = array($this->fileName, $this->filePath, $this->idAprendiz, $this->idInasistencia);
          */
-        $arrData = array($this->fileName, $this->filePath);
+        $arrData = array($this->fileName, $this->filePath, $this->idAprendiz, $this->idInasistencia);
         $request_insert = $this->insert($query, $arrData);
         $return = $request_insert;
         /* } else { 
@@ -47,29 +47,12 @@ class ExcusasModel extends Mysql
         return $return;
     }
 
-    /* ACTUALIZAR ESTADO DE LA TABLA INASISTENCIA: DE Sin excusa a Con excusa */
-    public function updateEstadoInasistencia()
-    {
-        $query = "UPDATE registro_inasistencias SET estado_inasistencia = 'Con excusa' WHERE idregistro = ?";
-    }
-
     public function getFilePath(int $id)
     {
         $sql = "SELECT filepath_excusa FROM excusas WHERE idexcusa = {$id}";
         $request = $this->select_all($sql);
 
         return $request;
-    }
-
-
-
-    /* -------------------------------------------------- */
-    /* -------------------------------------------------- */
-    /* -------------------------------------------------- */
-
-    public function selectExcusaByAprendizId()
-    {
-        /* HACER LA CONSULTA Y SI NO DEVUELVE NINGUN REGISTRO QUIERE DECIR QUE NO HAY EXCUSA SUBIDA AÚN */
     }
 
     public function selectInasistencias() /* selectInasistenciasAprendiz */
@@ -108,9 +91,9 @@ class ExcusasModel extends Mysql
 
     public function selectExcusaID(int $id)
     {
-        $sql = "SELECT idusuario, numdoc_usuario, nombre_usuario, correo_usuario, telefono_usuario, roles.nombre_rol AS nombre_rol, roles.idrol, codigo_usuario 
-                FROM usuarios
-                INNER JOIN roles ON roles.idrol = usuarios.roles_idrol WHERE idusuario = {$id}";
+        $sql = "SELECT idexcusa, aprendices_idusuario, registro_inasistencias_idregistro
+                FROM excusas
+                WHERE idexcusa = {$id}";
         $request = $this->select_all($sql);
         return $request;
     }
@@ -143,27 +126,8 @@ class ExcusasModel extends Mysql
         $request = $this->select_all($sql);
 
         if (!empty($request)) {
-            $query = "UPDATE excusas SET filename_excusa = ?, filepath_excusa = ? WHERE idusuario = ?";
+            $query = "UPDATE excusas SET filename_excusa = ?, filepath_excusa = ?, estado_excusa = 'Por revisar' WHERE idexcusa = ?";
             $arrData = array($this->fileName, $this->filePath, $this->id);
-            $request_insert = $this->insert($query, $arrData);
-            $return = $request_insert;
-        } else {
-            $return = "empty";
-        }
-        return $return;
-    }
-
-    public function eliminarExcusa(int $id)
-    {
-        $return = "";
-
-        $this->id = $id;
-
-        $sql = "SELECT * FROM usuarios WHERE idusuario = '{$this->id}'";
-        $request = $this->select_all($sql);
-        if (!empty($request)) {
-            $query = "DELETE FROM usuarios WHERE idusuario = ?";
-            $arrData = array($this->id);
             $request_insert = $this->insert($query, $arrData);
             $return = $request_insert;
         } else {

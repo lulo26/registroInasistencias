@@ -49,7 +49,7 @@ class Usuarios extends Controllers
         if ($intIdUsuario > 0) {
             $arrData = $this->model->selectUsuarioID($intIdUsuario);
             if (empty($arrData)) {
-                $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados');
+                $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
             } else {
                 $arrResponse = array('status' => true, 'data' => $arrData);
             }

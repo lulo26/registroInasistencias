@@ -40,13 +40,12 @@ getModal('subirExcusasModal', $data);
                 </tbody>
             </table>
 
-
             <table class="table datatable">
                 <thead>
                     <tr>
                         <th>Fecha Excusa</th>
                         <th>Aprendiz</th>
-                        <th>Curso</th>
+                        <th>Programa</th>
                         <th>Ficha</th>
                         <th>Inasistencia</th>
                         <th>Estado</th>
