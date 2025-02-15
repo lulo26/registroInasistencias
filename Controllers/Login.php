@@ -31,17 +31,12 @@ class Login extends Controllers{
                     $arrResponse = array('status' => false, 'msg' => 'El usuario o la contraseña es incorrecto');
                 }else{
                     $arrData = $requestUser;
-                    if ($arrData['status'] == 1) {
-                        $_SESSION['idUser'] = $arrData['id_persona'];
+                        $_SESSION['idUser'] = $arrData['idusuario'];
                         $_SESSION['login'] = true;
-
-                        $arrData = $this->model->sessionLogin($_SESSION['idUser']);
                         $_SESSION['userData'] = $arrData;
 
                         $arrResponse = array('status' => true, 'msg' => 'ok');
-                    }else{
-                        $arrResponse = array('status' => false, 'msg' => 'Usuario inactivo');
-                    }
+                    
                 }
             }
             echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
