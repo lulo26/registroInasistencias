@@ -21,7 +21,97 @@ class Excusas extends Controllers
         $this->views->getView($this, "excusas", $data);
     }
 
+    public function getUsuarioByID() {
+        $_SESSION['idUser'] = $arrData['idusuario'];
+    }
+
     public function getInasistencias()
+    {
+        $arrInasistencias = $this->model->selectInasistencias();
+        $arrResponse = $arrInasistencias;
+
+        for ($i = 0; $i < count($arrInasistencias); $i++) {
+
+            /* 
+$datetime1 = new DateTime('2025-02-11');
+$hoy = date('Y-m-d H:i:s');
+$datetime2 = new DateTime($hoy);
+$interval = $datetime1->diff($datetime2);
+echo $interval->format('%a días'); */
+
+            $limite = 6;
+
+            $fechaInasistencia = new DateTime($arrInasistencias[$i]['fecha_inasistencia']);
+            $hoy = date('Y-m-d H:i:s');
+            $fechaActual = new DateTime(date('Y-m-d H:i:s'));
+            $diasPlazo = $fechaInasistencia->diff($fechaActual);
+            $dif = (int)$diasPlazo->days;
+
+            if ($dif >= $limite) {
+                $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>Sin excusa</span>";
+                $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
+                $mensaje = "<div class='alert alert-danger' role='alert'>
+                              Ha superado el limite de dias para enviar la excusa
+                            </div>";
+                $arrResponse[$i]['options'] =  $mensaje;
+            } 
+            
+            
+            else {
+                if ($arrInasistencias[$i]['estado_inasistencia'] === "Sin excusa") {
+                    $arrResponse[$i]['idexcusa'] = 0;
+                    $arrResponse[$i]['estado_excusa'] = "Sin excusa";
+                } elseif ($arrInasistencias[$i]['estado_inasistencia'] === "Con excusa") {
+                    $arrExcusas = $this->model->selectExcusasAprendiz();
+    
+                    $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
+                    $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa'];
+                }
+    
+                if ($arrResponse[$i]['estado_excusa'] === "Sin excusa") {
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+                } elseif ($arrResponse[$i]['estado_excusa'] === "Enviada" || $arrResponse[$i]['estado_excusa'] === "Por revisar") {
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-info'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+                } elseif ($arrResponse[$i]['estado_excusa'] === "Aprobada") {
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-success'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+                } elseif ($arrResponse[$i]['estado_excusa'] === "Rechazada") {
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-danger'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+                }
+                $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
+    
+                if ($arrResponse[$i]['estado_inasistencia'] === "Con excusa") {
+                    if ($arrResponse[$i]['estado_excusa'] === "Aprobada") {
+                        $btnEdit = "<button disabled type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
+                                        <i class='bi bi-pencil-square'></i>
+                                    </button>";
+                        $arrResponse[$i]['options'] =  $btnEdit;
+                    } else {
+                        $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
+                                    <i class='bi bi-pencil-square'></i>
+                                </button>";
+                        $arrResponse[$i]['options'] =  $btnEdit;
+                    }
+                } else if ($arrResponse[$i]['estado_inasistencia'] === "Sin excusa") {
+                    $btnAdjuntar = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='adjuntar' rel='" . $arrResponse[$i]['idregistro'] . "'>
+                                    <i class='bi bi-paperclip'></i>
+                                </button>";
+                    $arrResponse[$i]['options'] =  $btnAdjuntar;
+                }
+            }
+            }
+
+            /* 
+$datetime1 = new DateTime($arrInasistencias[$i]['fecha_inasistencia']);
+$hoy = date('Y-m-d H:i:s')
+$datetime2 = new DateTime($hoy);
+$interval = $datetime1->diff($datetime2);
+echo $interval->format('%R%a días'); */
+
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    /* public function getInasistencias()
     {
         $arrInasistencias = $this->model->selectInasistencias();
         $arrResponse = $arrInasistencias;
@@ -70,7 +160,7 @@ class Excusas extends Controllers
 
         echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
         die();
-    }
+    } */
 
     public function getExcusaByID($idexcusa)
     {

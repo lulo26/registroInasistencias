@@ -17,7 +17,7 @@ const tablaExcusas = document.getElementById("tablaExcusas");
 
 function listExcusas() {
   tablaExcusas.innerHTML = "";
-  let idInstructor = 4;
+  let idInstructor = 11;
   /* fetch(base_url + `/excusas/getExcusasPorInstructor/${idusuario}`, {
     method: "GET",
   }) */
@@ -29,8 +29,13 @@ function listExcusas() {
       /* 
       console.log(data); */
       data.forEach((excusa) => {
+        let opciones = { year: "numeric", month: "short", day: "numeric" };
+        let fecha = new Date(excusa.fecha_excusa).toLocaleDateString(
+          "es",
+          opciones
+        );
         tablaExcusas.innerHTML += `
-                <td>${excusa.fecha_excusa}</td>
+                <td>${fecha}</td>
                 <td>${excusa.nombre_aprendiz}</td>
                 <td>${excusa.nombre_curso}</td>
                 <td>${excusa.numero_ficha}</td>
@@ -117,11 +122,15 @@ function listInasistencias() {
         /* idexcusa.value = inasistencia.idexcusa;
         idAprendiz.value = inasistencia.aprendices_idusuario;
         idInasistencia.value = inasistencia.registro_idusuario; */
+        let opciones = { year: "numeric", month: "short", day: "numeric" };
+        let fecha = new Date(
+          inasistencia.fecha_inasistencia
+        ).toLocaleDateString("es", opciones);
 
         tablaInasistencias.innerHTML += `
                 <td>${inasistencia.idregistro}</td>
                 <td>${inasistencia.nombre_aprendiz}</td>
-                <td>${inasistencia.fecha_inasistencia}</td>
+                <td>${fecha}</td>
                 <td>${inasistencia.nombre_usuario}</td>
                 <td>${inasistencia.estado_excusa}</td>
                 <td>${inasistencia.options}</td>`;
