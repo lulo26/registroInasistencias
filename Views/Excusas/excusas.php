@@ -1,6 +1,7 @@
 <?php
 header_admin($data);
-getModal('subirExcusasModal', $data);
+getModal('subirExcusaModal', $data);
+getModal('rechazarExcusaModal', $data);
 ?>
 
 <main id="main" class="main">
@@ -25,10 +26,8 @@ getModal('subirExcusasModal', $data);
             <table class="table datatable">
                 <thead>
                     <tr>
-                        <th>
-                            <b>I</b>D
-                        </th>
-                        <th>Aprendiz</th>
+                        <th># Inasistencia</th>
+                        <!-- <th>Aprendiz</th> -->
                         <th>Fecha</th>
                         <th>Instructor</th>
                         <th>Excusa</th>

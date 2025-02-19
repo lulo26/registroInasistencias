@@ -1,15 +1,20 @@
-/* const btnUsuario = document.querySelector("#btnUsuario");
-let frmUsuarios = document.querySelector("#frmUsuarios"); */
-
 let idexcusa = document.querySelector("#idexcusa");
 let idAprendiz = document.querySelector("#idAprendiz");
 let idInasistencia = document.querySelector("#idInasistencia");
 
 const btnCerrar = document.getElementById("btnCerrar");
 const btnEquis = document.getElementById("btnEquis");
-const tablaInasistencias = document.getElementById("tablaInasistencias");
 
+const tablaInasistencias = document.getElementById("tablaInasistencias");
 const tablaExcusas = document.getElementById("tablaExcusas");
+
+/* fetch(base_url + `getUsuarioByID`)
+  .then((res) => res.json)
+  .then((res) => {
+    let user = res.data[0];
+    if (user.rol === "INSTRUCTOR") {
+    }
+  }); */
 
 ////////////////////////////////////////////////
 // -------------- LISTAR EXCUSAS ---------------
@@ -24,26 +29,29 @@ function listExcusas() {
   fetch(base_url + `/excusas/getExcusasPorInstructor/${idInstructor}`, {
     method: "GET",
   })
-    .then((data) => data.json())
-    .then((data) => {
-      /* 
-      console.log(data); */
-      data.forEach((excusa) => {
-        let opciones = { year: "numeric", month: "short", day: "numeric" };
-        let fecha = new Date(excusa.fecha_excusa).toLocaleDateString(
-          "es",
-          opciones
-        );
-        tablaExcusas.innerHTML += `
-                <td>${fecha}</td>
-                <td>${excusa.nombre_aprendiz}</td>
-                <td>${excusa.nombre_curso}</td>
-                <td>${excusa.numero_ficha}</td>
-                <td>${excusa.fecha_inasistencia}</td>
-                <td>${excusa.estado_excusa}</td>
-                <td>${excusa.excusa}</td>
-                <td>${excusa.options}</td>`;
-      });
+    .then((res) => res.json())
+    .then((res) => {
+      let excusas = res.data; /* 
+      console.log(res); */
+
+      if (res.status === true) {
+        excusas.forEach((excusa) => {
+          let opciones = { year: "numeric", month: "long", day: "numeric" };
+          let fecha = new Date(excusa.fecha_excusa).toLocaleDateString("es", opciones);
+          tablaExcusas.innerHTML += `
+                  <td>${fecha}</td>
+                  <td>${excusa.nombre_aprendiz}</td>
+                  <td>${excusa.nombre_curso}</td>
+                  <td>${excusa.numero_ficha}</td>
+                  <td>${excusa.fecha_inasistencia}</td>
+                  <td>${excusa.estado_excusa}</td>
+                  <td>${excusa.excusa}</td>
+                  <td>${excusa.options}</td>`;
+        });
+      } else {
+        tablaExcusas.innerHTML = `
+                  <td colspan="7" align="center">${excusas.msg}</td>`;
+      }
     });
 }
 
@@ -58,12 +66,9 @@ document.addEventListener("click", (e) => {
 
     if (selected == "descargar") {
       /* console.log(idexcusa); */
-      fetch(
-        base_url + `/excusas/mostrarExcusaDescargaDirecta?idexcusa=${idexcusa}`,
-        {
-          method: "GET",
-        }
-      )
+      fetch(base_url + `/excusas/descargarExcusa?idexcusa=${idexcusa}`, {
+        method: "GET",
+      })
         .then((data) => data.blob())
         .then((excusa) => {
           const link = document.createElement("a"); // Crea un enlace de descarga
@@ -98,7 +103,39 @@ document.addEventListener("click", (e) => {
                 text: data.msg,
                 icon: data.status ? "success" : "error",
               });
-              listUsuarios();
+              listExcusas();
+            });
+        }
+      });
+    }
+
+    if (selected == "rechazar") {
+      $("#rechazarExcusaModal").modal("show");
+
+      Swal.fire({
+        title: "Rechazar excusa",
+        text: "¿Desea rechazar esta excusa?",
+        icon: "warning",
+        showDenyButton: true,
+        confirmButtonText: "Sí",
+        denyButtonText: `Cancelar`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let formData = new FormData();
+          formData.append("idexcusa", idexcusa);
+          /* console.log(formData); */
+          fetch(base_url + "/excusas/rechazarExcusa", {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              Swal.fire({
+                title: data.status ? "¡Correcto!" : "¡Error!",
+                text: data.msg,
+                icon: data.status ? "success" : "error",
+              });
+              listExcusas();
             });
         }
       });
@@ -116,20 +153,20 @@ function listInasistencias() {
   fetch(base_url + "/excusas/getInasistencias")
     .then((data) => data.json())
     .then((data) => {
+      let contadorInas = data.length + 1;
       /* 
       console.log(data); */
       data.forEach((inasistencia) => {
-        /* idexcusa.value = inasistencia.idexcusa;
+        idexcusa.value = inasistencia.idexcusa;
         idAprendiz.value = inasistencia.aprendices_idusuario;
-        idInasistencia.value = inasistencia.registro_idusuario; */
-        let opciones = { year: "numeric", month: "short", day: "numeric" };
-        let fecha = new Date(
-          inasistencia.fecha_inasistencia
-        ).toLocaleDateString("es", opciones);
+        idInasistencia.value = inasistencia.idregistro;
+        let opciones = { year: "numeric", month: "long", day: "numeric" };
+        let fecha = new Date(inasistencia.fecha_inasistencia).toLocaleDateString("es", opciones);
+
+        contadorInas = contadorInas - 1;
 
         tablaInasistencias.innerHTML += `
-                <td>${inasistencia.idregistro}</td>
-                <td>${inasistencia.nombre_aprendiz}</td>
+                <td>${contadorInas}</td>
                 <td>${fecha}</td>
                 <td>${inasistencia.nombre_usuario}</td>
                 <td>${inasistencia.estado_excusa}</td>
@@ -144,9 +181,7 @@ function listInasistencias() {
 
 document.addEventListener("click", (e) => {
   try {
-    let selected = e.target
-      .closest("button")
-      .getAttribute("data-action-type"); /* 
+    let selected = e.target.closest("button").getAttribute("data-action-type"); /* 
     let idusuario = e.target.closest("button").getAttribute("rel"); */
 
     if (selected == "adjuntar") {
@@ -161,8 +196,7 @@ document.addEventListener("click", (e) => {
       let idexcusa = e.target.closest("button").getAttribute("rel");
       console.log(idexcusa);
       $("#subirExcusaModal").modal("show");
-      document.getElementById("ExcusaModalLabel").innerHTML =
-        "Actualizar Excusa";
+      document.getElementById("ExcusaModalLabel").innerHTML = "Actualizar Excusa";
 
       fetch(base_url + `/excusas/getExcusaByID/${idexcusa}`, {
         method: "GET",
@@ -175,8 +209,7 @@ document.addEventListener("click", (e) => {
           console.log(excusa.registro_inasistencias_idregistro);
 
           document.querySelector("#idexcusa").value = excusa.idexcusa;
-          document.querySelector("#idAprendiz").value =
-            excusa.aprendices_idusuario;
+          document.querySelector("#idAprendiz").value = excusa.aprendices_idusuario;
           document.querySelector("#idInasistencia").value =
             excusa.registro_inasistencias_idregistro;
         });
@@ -240,11 +273,11 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 frmExcusas.addEventListener("submit", (e) => {
   e.preventDefault();
-  frmData = new FormData(frmExcusas);
+  frmData = new FormData(frmExcusas); /* 
   console.log(frmExcusas.idexcusa.value);
   console.log(frmExcusas.idAprendiz);
   console.log(frmExcusas.idInasistencia);
-  console.log(frmExcusas.excusa);
+  console.log(frmExcusas.excusa); */
 
   fetch(base_url + "/excusas/setExcusas", {
     method: "POST",
@@ -252,7 +285,8 @@ frmExcusas.addEventListener("submit", (e) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
+      /* 
+      console.log(data); */
       Swal.fire({
         title: data.status ? "¡Correcto!" : "¡Error!",
         text: data.msg,

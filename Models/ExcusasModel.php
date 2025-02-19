@@ -60,7 +60,7 @@ class ExcusasModel extends Mysql
         $sql = "SELECT idregistro, nombre_usuario, registro_idusuario, fecha_inasistencia, nombre_aprendiz, aprendices_idusuario, estado_inasistencia
                 FROM registro_inasistencias
                 JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario
-                JOIN aprendices ON aprendices.idaprendiz = registro_inasistencias.aprendices_idusuario ";
+                JOIN aprendices ON aprendices.idaprendiz = registro_inasistencias.aprendices_idusuario";
         /* $sql = "SELECT idregistro, nombre_usuario, fecha_inasistencia, nombre_aprendiz, estado_excusa, estado_inasistencia, idexcusa
                 FROM registro_inasistencias
                 JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario

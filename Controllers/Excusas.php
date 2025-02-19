@@ -4,9 +4,6 @@ class Excusas extends Controllers
 {
     private $targetDir = __DIR__ . "/../pdf/";
 
-    /* private $model;
-    private $views; */
-
     public function __construct()
     {
         parent::__construct();
@@ -21,86 +18,97 @@ class Excusas extends Controllers
         $this->views->getView($this, "excusas", $data);
     }
 
-    public function getUsuarioByID() {
-        $_SESSION['idUser'] = $arrData['idusuario'];
+    public function getUsuarioByID()
+    {
+        if ($_SESSION['idUser']) {
+            $idusuario = $_SESSION['idUser'];
+            /* $arrData = $this->model->selectUsuario($idusuario) */
+        }
     }
 
-    public function getInasistencias()
+    public function getInasistencias() /* getInasByAprendiz */
     {
         $arrInasistencias = $this->model->selectInasistencias();
         $arrResponse = $arrInasistencias;
 
         for ($i = 0; $i < count($arrInasistencias); $i++) {
+            if ($arrInasistencias[$i]['estado_inasistencia'] === "Sin excusa") {
 
-            /* 
-$datetime1 = new DateTime('2025-02-11');
-$hoy = date('Y-m-d H:i:s');
-$datetime2 = new DateTime($hoy);
-$interval = $datetime1->diff($datetime2);
-echo $interval->format('%a días'); */
+                $limite = 6;
 
-            $limite = 6;
+                $fechaInasistencia = new DateTime($arrInasistencias[$i]['fecha_inasistencia']);
+                $fechaActual = new DateTime(date('Y-m-d H:i:s'));
+                $diasPlazo = $fechaInasistencia->diff($fechaActual);
+                $dif = (int)$diasPlazo->days;
 
-            $fechaInasistencia = new DateTime($arrInasistencias[$i]['fecha_inasistencia']);
-            $hoy = date('Y-m-d H:i:s');
-            $fechaActual = new DateTime(date('Y-m-d H:i:s'));
-            $diasPlazo = $fechaInasistencia->diff($fechaActual);
-            $dif = (int)$diasPlazo->days;
-
-            if ($dif >= $limite) {
-                $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>Sin excusa</span>";
-                $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
-                $mensaje = "<div class='alert alert-danger' role='alert'>
-                              Ha superado el limite de dias para enviar la excusa
+                if ($dif >= $limite) {
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>Sin excusa</span>";
+                    $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
+                    $mensaje = "<div class='alert alert-danger' role='alert'>
+                              ¡Superaste el limite de dias para enviar una excusa!
                             </div>";
-                $arrResponse[$i]['options'] =  $mensaje;
-            } 
-            
-            
-            else {
-                if ($arrInasistencias[$i]['estado_inasistencia'] === "Sin excusa") {
+                    $arrResponse[$i]['options'] =  $mensaje;
+                } else {
+
                     $arrResponse[$i]['idexcusa'] = 0;
-                    $arrResponse[$i]['estado_excusa'] = "Sin excusa";
-                } elseif ($arrInasistencias[$i]['estado_inasistencia'] === "Con excusa") {
-                    $arrExcusas = $this->model->selectExcusasAprendiz();
-    
-                    $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
-                    $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa'];
-                }
-    
-                if ($arrResponse[$i]['estado_excusa'] === "Sin excusa") {
-                    $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
-                } elseif ($arrResponse[$i]['estado_excusa'] === "Enviada" || $arrResponse[$i]['estado_excusa'] === "Por revisar") {
-                    $estadoExcusa = "<span class='badge rounded-pill text-bg-info'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
-                } elseif ($arrResponse[$i]['estado_excusa'] === "Aprobada") {
-                    $estadoExcusa = "<span class='badge rounded-pill text-bg-success'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
-                } elseif ($arrResponse[$i]['estado_excusa'] === "Rechazada") {
-                    $estadoExcusa = "<span class='badge rounded-pill text-bg-danger'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
-                }
-                $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
-    
-                if ($arrResponse[$i]['estado_inasistencia'] === "Con excusa") {
-                    if ($arrResponse[$i]['estado_excusa'] === "Aprobada") {
-                        $btnEdit = "<button disabled type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
-                                        <i class='bi bi-pencil-square'></i>
-                                    </button>";
-                        $arrResponse[$i]['options'] =  $btnEdit;
-                    } else {
-                        $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
-                                    <i class='bi bi-pencil-square'></i>
-                                </button>";
-                        $arrResponse[$i]['options'] =  $btnEdit;
-                    }
-                } else if ($arrResponse[$i]['estado_inasistencia'] === "Sin excusa") {
+                    /* $arrResponse[$i]['estado_excusa'] = "Sin excusa"; */
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>Sin excusa</span>";
+
                     $btnAdjuntar = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='adjuntar' rel='" . $arrResponse[$i]['idregistro'] . "'>
-                                    <i class='bi bi-paperclip'></i>
-                                </button>";
+                                        <i class='bi bi-paperclip'></i>
+                                    </button>";
                     $arrResponse[$i]['options'] =  $btnAdjuntar;
                 }
-            }
-            }
+            } elseif ($arrInasistencias[$i]['estado_inasistencia'] === "Con excusa") {
+                $arrExcusas = $this->model->selectExcusasAprendiz();
 
-            /* 
+                for ($j = 0; $j < count($arrExcusas); $j++) {
+                    $idexcusa = 
+                }
+
+                $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
+                $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa'];
+
+                if ($arrResponse[$i]['estado_excusa'] === "Enviada" || $arrResponse[$i]['estado_excusa'] === "Por revisar") {
+
+                    $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
+                                    <i class='bi bi-pencil-square'></i>
+                                </button>";
+                    $arrResponse[$i]['options'] =  $btnEdit;
+
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-info'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+                } elseif ($arrResponse[$i]['estado_excusa'] === "Aprobada") {
+
+                    /*  $btnEdit = "<button disabled type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
+                                        <i class='bi bi-pencil-square'></i>
+                                    </button>";
+                    $arrResponse[$i]['options'] =  $btnEdit; */
+
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-success'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+
+                    $mensaje = "<div class='alert alert-success' role='alert'>
+                              ¡Tu excusa fue aprobada!
+                            </div>";
+                    $arrResponse[$i]['options'] =  $mensaje;
+                } elseif ($arrResponse[$i]['estado_excusa'] === "Rechazada") {
+
+                    /* $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
+                                    <i class='bi bi-pencil-square'></i>
+                                </button>";
+                    $arrResponse[$i]['options'] =  $btnEdit; */
+
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-danger'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+
+                    $mensaje = "<div class='alert alert-danger' role='alert'>
+                              ¡Tu excusa fue rechazada! <a href='#' class='alert-link'>Ver motivo.</a>
+                            </div>";
+                    $arrResponse[$i]['options'] =  $mensaje;
+                }
+            }
+            $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
+        }
+
+        /* 
 $datetime1 = new DateTime($arrInasistencias[$i]['fecha_inasistencia']);
 $hoy = date('Y-m-d H:i:s')
 $datetime2 = new DateTime($hoy);
@@ -179,16 +187,17 @@ echo $interval->format('%R%a días'); */
         die();
     }
 
-    public function getExcusasPorInstructor($idinstructor)
+    public function getExcusasPorInstructor($idinstructor) /* getExcusasByInstructor */
     {
         $intIdInstructor = intval(strClean($idinstructor));
         if ($intIdInstructor > 0) {
             $arrData = $this->model->selectExcusasInstructor($intIdInstructor);
             if (empty($arrData)) {
-                $arrData = array('status' => false, 'msg' => 'Datos no encontrados');
+                $mensaje = "<div class='alert alert-success' role='alert'>
+                          ¡No hay excusas por revisar!
+                        </div>";
+                $arrData = array('status' => false, 'msg' => $mensaje);
             } else {
-                /* $arrResponse = array('status' => true, 'data' => $arrData); */
-
                 /* Decision: si hay excusa, mostrarla en la tabla */
 
                 for ($i = 0; $i < count($arrData); $i++) {
@@ -219,9 +228,10 @@ echo $interval->format('%R%a días'); */
                     $arrData[$i]['options'] =  $btnAprobar . " " . " " . $btnRechazar;
                 }
             }
+            $arrResponse = array('status' => true, 'data' => $arrData);
         }
 
-        echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
         die();
     }
 
@@ -247,26 +257,26 @@ echo $interval->format('%R%a días'); */
             $arrRespuesta = array('status' => false, 'msg' => 'El archivo ya existe.');
         } elseif ($idExcusa == 0 || $idExcusa == "") {
 
-                // Intentar mover el archivo al directorio de destino
-                if (move_uploaded_file($file["tmp_name"], $targetFile)) {
-                    $requestModel = $this->model->insertarExcusa($fileName, $targetFile, $idAprendiz, $idInasistencia);
-                    if ($requestModel > 0) {
-                        $arrRespuesta = array('status' => true, 'msg' => 'Excusa enviada correctamente.');
-                    }
-                } else {
-                    $arrRespuesta = array('status' => false, 'msg' => 'Error al mover el archivo: ' . print_r(error_get_last(), true));
+            // Intentar mover el archivo al directorio de destino
+            if (move_uploaded_file($file["tmp_name"], $targetFile)) {
+                $requestModel = $this->model->insertarExcusa($fileName, $targetFile, $idAprendiz, $idInasistencia);
+                if ($requestModel > 0) {
+                    $arrRespuesta = array('status' => true, 'msg' => 'Excusa enviada correctamente.');
                 }
             } else {
-
-                // Intentar mover el archivo al directorio de destino
-                if (move_uploaded_file($file["tmp_name"], $targetFile)) {
-
-                    $requestModel = $this->model->editarExcusa($fileName, $targetFile, $idExcusa);
-                    $arrRespuesta = array('status' => true, 'msg' => 'Excusa actualizada correctamente.');
-                } else {
-                    $arrRespuesta = array('status' => false, 'msg' => 'Error al mover el archivo: ' . print_r(error_get_last(), true));
-                }
+                $arrRespuesta = array('status' => false, 'msg' => 'Error al mover el archivo: ' . print_r(error_get_last(), true));
             }
+        } else {
+
+            // Intentar mover el archivo al directorio de destino
+            if (move_uploaded_file($file["tmp_name"], $targetFile)) {
+
+                $requestModel = $this->model->editarExcusa($fileName, $targetFile, $idExcusa);
+                $arrRespuesta = array('status' => true, 'msg' => 'Excusa actualizada correctamente.');
+            } else {
+                $arrRespuesta = array('status' => false, 'msg' => 'Error al mover el archivo: ' . print_r(error_get_last(), true));
+            }
+        }
 
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();
@@ -293,9 +303,9 @@ echo $interval->format('%R%a días'); */
     {
         if ($_POST) {
             $idexcusa = intval($_POST['idexcusa']);
-            $request = $this->model->aprobarExcusa($idexcusa);
+            $request = $this->model->rechazarExcusa($idexcusa);
             if ($request == 'empty') {
-                $arrResponse = array('status' => false, 'msg' => 'Error al aprobar la excusa.');
+                $arrResponse = array('status' => false, 'msg' => 'Error al rechazar la excusa.');
             } elseif ($request == 'Rechazada') {
                 $arrResponse = array('status' => true, 'msg' => 'Excusa rechazada correctamente.');
             }
@@ -306,7 +316,7 @@ echo $interval->format('%R%a días'); */
         die();
     }
 
-    public function mostrarExcusaDescargaDirecta()
+    public function descargarExcusa()
     {
         if (isset($_GET['idexcusa'])) {
             $id = $_GET['idexcusa'];
@@ -316,7 +326,7 @@ echo $interval->format('%R%a días'); */
             // Verificar si el archivo existe
             if (!empty($response) && isset($response[0]['filepath_excusa'])) {
                 $filepath = $response[0]['filepath_excusa'];
-                
+
                 // Verificar si el archivo existe
                 if ($filepath && file_exists($filepath)) {
                     // Forzar la descarga del archivo
