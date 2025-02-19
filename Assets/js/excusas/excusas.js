@@ -37,7 +37,10 @@ function listExcusas() {
       if (res.status === true) {
         excusas.forEach((excusa) => {
           let opciones = { year: "numeric", month: "long", day: "numeric" };
-          let fecha = new Date(excusa.fecha_excusa).toLocaleDateString("es", opciones);
+          let fecha = new Date(excusa.fecha_excusa).toLocaleDateString(
+            "es",
+            opciones
+          );
           tablaExcusas.innerHTML += `
                   <td>${fecha}</td>
                   <td>${excusa.nombre_aprendiz}</td>
@@ -62,7 +65,7 @@ document.addEventListener("click", (e) => {
   try {
     let selected = e.target.closest("button").getAttribute("data-action-type");
     let idexcusa = e.target.closest("button").getAttribute("rel");
-    console.log(idexcusa);
+    /* console.log(idexcusa); */
 
     if (selected == "descargar") {
       /* console.log(idexcusa); */
@@ -110,9 +113,15 @@ document.addEventListener("click", (e) => {
     }
 
     if (selected == "rechazar") {
+      let idexcusa = e.target.closest("button").getAttribute("rel");
       $("#rechazarExcusaModal").modal("show");
+      document.querySelector("#idexcusa").value = idexcusa;
+      console.log("Rechazar");
+      console.log(idexcusa);
 
-      Swal.fire({
+      /* idexcusa.value = e.target.closest("button").getAttribute("rel"); */
+
+      /* Swal.fire({
         title: "Rechazar excusa",
         text: "¿Desea rechazar esta excusa?",
         icon: "warning",
@@ -123,7 +132,7 @@ document.addEventListener("click", (e) => {
         if (result.isConfirmed) {
           let formData = new FormData();
           formData.append("idexcusa", idexcusa);
-          /* console.log(formData); */
+          console.log(formData);
           fetch(base_url + "/excusas/rechazarExcusa", {
             method: "POST",
             body: formData,
@@ -138,7 +147,7 @@ document.addEventListener("click", (e) => {
               listExcusas();
             });
         }
-      });
+      }); */
     }
   } catch (e) {}
 });
@@ -161,12 +170,14 @@ function listInasistencias() {
         idAprendiz.value = inasistencia.aprendices_idusuario;
         idInasistencia.value = inasistencia.idregistro;
         let opciones = { year: "numeric", month: "long", day: "numeric" };
-        let fecha = new Date(inasistencia.fecha_inasistencia).toLocaleDateString("es", opciones);
+        let fecha = new Date(
+          inasistencia.fecha_inasistencia
+        ).toLocaleDateString("es", opciones);
 
         contadorInas = contadorInas - 1;
 
         tablaInasistencias.innerHTML += `
-                <td>${contadorInas}</td>
+                <td>${inasistencia.idregistro}</td>
                 <td>${fecha}</td>
                 <td>${inasistencia.nombre_usuario}</td>
                 <td>${inasistencia.estado_excusa}</td>
@@ -181,7 +192,9 @@ function listInasistencias() {
 
 document.addEventListener("click", (e) => {
   try {
-    let selected = e.target.closest("button").getAttribute("data-action-type"); /* 
+    let selected = e.target
+      .closest("button")
+      .getAttribute("data-action-type"); /* 
     let idusuario = e.target.closest("button").getAttribute("rel"); */
 
     if (selected == "adjuntar") {
@@ -196,7 +209,8 @@ document.addEventListener("click", (e) => {
       let idexcusa = e.target.closest("button").getAttribute("rel");
       console.log(idexcusa);
       $("#subirExcusaModal").modal("show");
-      document.getElementById("ExcusaModalLabel").innerHTML = "Actualizar Excusa";
+      document.getElementById("ExcusaModalLabel").innerHTML =
+        "Actualizar Excusa";
 
       fetch(base_url + `/excusas/getExcusaByID/${idexcusa}`, {
         method: "GET",
@@ -209,7 +223,8 @@ document.addEventListener("click", (e) => {
           console.log(excusa.registro_inasistencias_idregistro);
 
           document.querySelector("#idexcusa").value = excusa.idexcusa;
-          document.querySelector("#idAprendiz").value = excusa.aprendices_idusuario;
+          document.querySelector("#idAprendiz").value =
+            excusa.aprendices_idusuario;
           document.querySelector("#idInasistencia").value =
             excusa.registro_inasistencias_idregistro;
         });
@@ -263,7 +278,7 @@ btnEquis.addEventListener("click", limpiarFormulario);
 ///////////////////////////////////////////////
 
 window.addEventListener("DOMContentLoaded", (e) => {
-  listInasistencias();
+  /* listInasistencias(); */
   listExcusas();
 });
 
@@ -298,4 +313,43 @@ frmExcusas.addEventListener("submit", (e) => {
         listInasistencias();
       }
     });
+});
+
+frmMotivoRechazo.addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log(idexcusa.value);
+  const motivo_rechazo = document.querySelector("#motivo_rechazo");
+  if (motivo_rechazo.value.trim() == "") {
+    Swal.fire({
+      title: "¡Error!",
+      text: "Llene el motivo del rechazo de la excusa.",
+      icon: "error",
+    });
+  } else {
+    let idexcusa = document.querySelector("#idexcusa").value;
+    let motivo_rechazo = document.querySelector("#motivo_rechazo").value;
+    console.log(idexcusa, motivo_rechazo);
+    frmData = new FormData();
+    frmData.append("idexcusa", idexcusa);
+    frmData.append("motivo_rechazo", motivo_rechazo);
+    fetch(base_url + "/excusas/rechazarExcusa", {
+      method: "POST",
+      body: frmData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        /* 
+        console.log(data); */
+        Swal.fire({
+          title: data.status ? "¡Correcto!" : "¡Error!",
+          text: data.msg,
+          icon: data.status ? "success" : "error",
+        });
+        if (data.status) {
+          frmMotivoRechazo.reset();
+          $("#rechazarExcusaModal").modal("hide");
+          listExcusas();
+        }
+      });
+  }
 });

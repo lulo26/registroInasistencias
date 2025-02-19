@@ -74,7 +74,8 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 btnUsuario.addEventListener("click", () => {
   numdoc.readOnly = false;
-  select_roles.innerHTML = "<option selected disabled>Seleccione el rol</option>";
+  select_roles.innerHTML =
+    "<option selected disabled>Seleccione el rol</option>";
   listarRoles();
   document.getElementById("UsuarioModalLabel").innerHTML = "Agregar Usuario";
   $("#crearUsuarioModal").modal("show");
@@ -172,7 +173,8 @@ document.addEventListener("click", (e) => {
 
       let idusuario = e.target.closest("button").getAttribute("rel");
       $("#crearUsuarioModal").modal("show");
-      document.getElementById("UsuarioModalLabel").innerHTML = "Actualizar Usuario";
+      document.getElementById("UsuarioModalLabel").innerHTML =
+        "Actualizar Usuario";
       fetch(base_url + `/usuarios/getUsuarioByID/${idusuario}`, {
         method: "GET",
       })
@@ -182,12 +184,18 @@ document.addEventListener("click", (e) => {
           console.log(usuario);
 
           document.querySelector("#idusuario").value = usuario.idusuario;
-          document.querySelector("#nombre_usuario").value = usuario.nombre_usuario;
-          document.querySelector("#numdoc_usuario").value = usuario.numdoc_usuario;
-          document.querySelector("#correo_usuario").value = usuario.correo_usuario;
-          document.querySelector("#telefono_usuario").value = usuario.telefono_usuario;
-          document.querySelector("#codigo_usuario").value = usuario.codigo_usuario;
-          document.querySelector("#password_usuario").value = usuario.password_usuario;
+          document.querySelector("#nombre_usuario").value =
+            usuario.nombre_usuario;
+          document.querySelector("#numdoc_usuario").value =
+            usuario.numdoc_usuario;
+          document.querySelector("#correo_usuario").value =
+            usuario.correo_usuario;
+          document.querySelector("#telefono_usuario").value =
+            usuario.telefono_usuario;
+          document.querySelector("#codigo_usuario").value =
+            usuario.codigo_usuario;
+          document.querySelector("#password_usuario").value =
+            usuario.password_usuario;
 
           fetch(base_url + `/usuarios/getRoles`, {
             method: "GET",
@@ -197,7 +205,8 @@ document.addEventListener("click", (e) => {
               select_roles.innerHTML = "";
 
               data.forEach((roles) => {
-                let selected = usuario.roles_idrol == roles.idrol ? "selected" : "";
+                let selected =
+                  usuario.roles_idrol == roles.idrol ? "selected" : "";
                 select_roles.innerHTML += `<option ${selected} value="${roles.idrol}">${roles.nombre_rol}</option>`;
               });
             });
