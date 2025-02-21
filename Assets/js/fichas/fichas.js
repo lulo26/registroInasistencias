@@ -2,7 +2,7 @@ const numficha = document.querySelector("#numero_ficha");
 const tablaFichas = document.getElementById("tablaFichas");
 const selectCursos = document.getElementById("cursos_idcurso");
 const btnCerrar = document.getElementById("btnCerrar");
-const btnGuardar = document.getElementById("btnGuardar");
+const btnCerrar2 = document.getElementById("btnCerrar2");
 /////////////////////////////////////////////////////LISTA FICHAS/////////////////////////////////////////////////////
 function listFichas() {
     tablaFichas.innerHTML = "";
@@ -38,7 +38,7 @@ function limpiarFormulario() {
   frmFichas.reset();
 }
 btnCerrar.addEventListener("click", limpiarFormulario);
-btnGuardar.addEventListener("click", limpiarFormulario);
+btnCerrar2.addEventListener("click", limpiarFormulario);
 /////////////////////////////////////////////////////CARGAR FICHAS/////////////////////////////////////////////////////
 window.addEventListener("DOMContentLoaded", (e) => {
     listFichas();
