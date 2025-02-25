@@ -47,7 +47,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
 });
 /////////////////////////////////////////////////////ABRIR MODAL/////////////////////////////////////////////////////
 btnFicha.addEventListener("click", () => {
-  numdoc.readOnly = false;
+  numficha.readOnly = false;
   selectCursos.innerHTML = "<option selected disabled>Seleccione el Curso...</option>";
   listarCursos();
   document.getElementById("FichaModalLabel").innerHTML = "Agregar Ficha";
