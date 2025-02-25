@@ -1,5 +1,3 @@
-/* const btnFicha = document.querySelector("#btnFicha");
-let frmFichas = document.querySelector("#frmFichas"); */
 const numficha = document.querySelector("#numero_ficha");
 const tablaFichas = document.getElementById("tablaFichas");
 const selectCursos = document.getElementById("cursos_idcurso");
