@@ -14,7 +14,7 @@ getModal('fichasModal', $data);
   </div>
   <div class="card">
     <div class="card-body">
-      <h5 class="card-title">Tabla Fichas<button type="button" class="btn btn-primary m-2" id="btnFicha"><i class="bi bi-plus-circle"></i> Añadir Ficha</button></h5>
+      <h5 class="card-title">Tabla Fichas<button type="button" class="btn btn-primary m-2" id="btnFicha"><i class="bi bi-plus-circle"></i>Añadir Ficha</button></h5>
       <table class="table datatable">
         <thead>
           <tr>
@@ -32,5 +32,4 @@ getModal('fichasModal', $data);
       </table>
     </div>
   </div>
-
   <?php footer_admin($data) ?>

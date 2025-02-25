@@ -8,7 +8,7 @@ class Fichas extends Controllers{
         $data['page_title'] = "Fichas";
         $data['page_id_name'] = "fichas";
         $data['page_functions_js'] = "fichas/fichas.js";
-        $this->views->getView($this, "fichas", $data);
+        $this->views->getView($this,"fichas",$data);
     }
     public function getFichas()
     {

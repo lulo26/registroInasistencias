@@ -26,8 +26,7 @@ SET time_zone = "+00:00";
 --
 -- Estructura de tabla para la tabla `aprendices`
 --
-CREATE DATABASE inasistencias;
-USE inasistencias;
+
 CREATE TABLE `aprendices` (
   `idaprendiz` int(11) NOT NULL,
   `nombre_aprendiz` varchar(50) NOT NULL,
