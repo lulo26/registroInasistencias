@@ -9,7 +9,7 @@ $modo = "LOCAL"; //LOCAL || REMOTO
 const DB_HOST = "localhost";
 const DB_NAME = "inasistencias";
 const DB_USER = "root";
-const DB_PASSWORD = ""; 
+const DB_PASSWORD = "";
 const DB_PORT = 3306;
 
 
