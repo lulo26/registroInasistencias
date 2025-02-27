@@ -28,13 +28,19 @@ let container1 = document.querySelector("#container1");
         });
 }
 */
-
 //Insertar
 codigoInasistencia.focus();
-frmInasistencia.addEventListener("submit", (e) => {
-  e.preventDefault();
+
+
+//Con la funsion input se ejecuta cada que se escriba algo
+
+codigoInasistencia.addEventListener("input", () => {
+  let codigoValor = codigoInasistencia.value.trim();
+
+  // Evita envíos si el input está vacío
+  if (codigoValor === "") return;
+
   let frmData = new FormData(frmInasistencia);
-  let alerta = document.getElementById("alerta");
 
   fetch(inasistenciaUrl + "/setInasistencias", {
     method: "POST",
@@ -42,6 +48,8 @@ frmInasistencia.addEventListener("submit", (e) => {
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log("Respuesta del servidor:", data); // Para depuración
+
       alerta.style.display = "block";
       alerta.style.backgroundColor = data.status ? "green" : "red";
       alerta.style.color = "white";
@@ -55,9 +63,9 @@ frmInasistencia.addEventListener("submit", (e) => {
         frmInasistencia.reset();
         codigoInasistencia.focus();
       }
-    });
+    })
+    .catch((error) => console.error("Error en la petición:", error));
 });
-
 
 //Apartado de muestra de fichas
 

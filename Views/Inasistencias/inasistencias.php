@@ -23,7 +23,7 @@
 
             <input type="hidden" class="form-control" id="numeroFicha" name="numeroFicha" aria-describedby="emailHelp">
           </div>
-          <button type="submit" class="btn btn-primary">Insertar</button>
+          <!--<button type="submit" class="btn btn-primary">Insertar</button> -->
         </form>
 
       </div>
