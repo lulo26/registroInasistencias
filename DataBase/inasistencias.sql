@@ -1,12 +1,25 @@
--- MySQL Workbench Forward Engineering
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 13-02-2025 a las 22:42:59
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.0.30
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
--- -----------------------------------------------------
--- Schema inasistencias
--- -----------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `inasistencias`
+--
 
 -- -----------------------------------------------------
 -- Schema inasistencias
@@ -53,25 +66,35 @@ CREATE TABLE IF NOT EXISTS `inasistencias`.`cursos` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `inasistencias`.`fichas`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `inasistencias`.`fichas` (
-  `idficha` INT NOT NULL AUTO_INCREMENT,
-  `numero_ficha` INT NOT NULL,
-  `cursos_idcurso` INT NOT NULL,
-  `fecha_inicio` DATE NOT NULL,
-  `fecha_fin` DATE NOT NULL,
-  `modalidad` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`idficha`),
-  INDEX `fk_fichas_cursos1_idx` (`cursos_idcurso` ASC) ,
-  CONSTRAINT `fk_fichas_cursos1`
-    FOREIGN KEY (`cursos_idcurso`)
-    REFERENCES `inasistencias`.`cursos` (`idcurso`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `fichas`
+--
+
+CREATE TABLE `fichas` (
+  `idficha` int(11) NOT NULL,
+  `numero_ficha` int(11) NOT NULL,
+  `cursos_idcurso` int(11) NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date NOT NULL,
+  `modalidad` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `horarios`
+--
+
+CREATE TABLE `horarios` (
+  `idhorario` int(11) NOT NULL,
+  `fecha_horario` date NOT NULL,
+  `Jornada` varchar(45) NOT NULL,
+  `fichas_idficha` int(11) NOT NULL,
+  `usuarios_idusuario` int(11) NOT NULL,
+  `bloques_idbloque` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- -----------------------------------------------------
 -- Table `inasistencias`.`usuarios`
@@ -215,7 +238,6 @@ CREATE TABLE IF NOT EXISTS `inasistencias`.`excepciones` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
