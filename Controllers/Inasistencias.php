@@ -57,7 +57,7 @@ class Inasistencias extends Controllers
     public function setInasistencias()
     {
 
-        $idUsuario = 3;
+        $idUsuario = 4;
         $codigoInasistencia = strClean($_POST['codigoInasistencia']);
         $numeroFicha = strClean($_POST['numeroFicha']);
 

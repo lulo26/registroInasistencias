@@ -28,10 +28,13 @@ let container1 = document.querySelector("#container1");
         });
 }
 */
+
+
+window.onload = () => {
+  codigoInasistencia.focus();
+};
+
 //Insertar
-codigoInasistencia.focus();
-
-
 //Con la funsion input se ejecuta cada que se escriba algo
 
 codigoInasistencia.addEventListener("input", () => {
