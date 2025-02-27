@@ -3,7 +3,11 @@
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
+<<<<<<< HEAD
         <h5 class="modal-title" id="crearAprendizModalLabel">Crear Usuario</h5>
+=======
+        <h5 class="modal-title" id="crearUsuarioModalLabel">Crear Usuario</h5>
+>>>>>>> 670947a49ff133b601f3e0132ad63ddec737f499
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
