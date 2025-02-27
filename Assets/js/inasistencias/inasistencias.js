@@ -1,6 +1,7 @@
 const frmInasistencia = document.querySelector("#frmInasistencia");
 const inasistenciaUrl = "http://localhost/registroInasistencias/inasistencias/";
 let codigoInasistencia = document.querySelector("#codigoInasistencia");
+let numeroFichaInput = document.querySelector("#numeroFicha");
 let idUsuario = document.querySelector("#idUsuario");
 let card = document.getElementById("card");
 let numeroFicha = 0;
@@ -27,28 +28,36 @@ let container1 = document.querySelector("#container1");
         });
 }
 */
-//Insertar
 
+//Insertar
+codigoInasistencia.focus();
 frmInasistencia.addEventListener("submit", (e) => {
   e.preventDefault();
-  frmData = new FormData(frmInasistencia);
-  console.log(frmData);
+  let frmData = new FormData(frmInasistencia);
+  let alerta = document.getElementById("alerta");
+
   fetch(inasistenciaUrl + "/setInasistencias", {
     method: "POST",
     body: frmData,
   })
     .then((res) => res.json())
     .then((data) => {
-      Swal.fire({
-        title: data.status ? "Correcto" : "Error",
-        text: data.msg,
-        icon: data.status ? "success" : "error",
-      });
+      alerta.style.display = "block";
+      alerta.style.backgroundColor = data.status ? "green" : "red";
+      alerta.style.color = "white";
+      alerta.innerHTML = data.msg;
+
+      setTimeout(() => {
+        alerta.style.display = "none"; // Oculta la alerta después de 3 segundos
+      }, 3000);
+
       if (data.status) {
         frmInasistencia.reset();
+        codigoInasistencia.focus();
       }
     });
 });
+
 
 //Apartado de muestra de fichas
 
@@ -83,6 +92,7 @@ fetch(inasistenciaUrl + "/getFichas")
         console.log(numeroFicha);
         container2.style.display = "none";
         container1.style.display = "block";
+        numeroFichaInput.value = numeroFicha;
         codigoInasistencia.focus();
       });
     });

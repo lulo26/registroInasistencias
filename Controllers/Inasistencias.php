@@ -28,7 +28,7 @@ class Inasistencias extends Controllers
             $btnDelete = "<button type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idregistro'] . "'>
                 <i class='bi bi-trash-fill'></i>
                 </button>";
-            $arrData[$i]['actions'] =  $btnDelete . " " . " " . $btnEdit;
+            $arrData[$i]['actions'] = $btnDelete . " " . " " . $btnEdit;
         }
         echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
         die();
@@ -45,7 +45,7 @@ class Inasistencias extends Controllers
             $btnDelete = "<button type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idficha'] . "'>
                 <i class='bi bi-trash-fill'></i>
                 </button>";
-            $arrData[$i]['actions'] =  $btnDelete . " " . " " . $btnEdit;
+            $arrData[$i]['actions'] = $btnDelete . " " . " " . $btnEdit;
         }
 
         echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
@@ -56,120 +56,117 @@ class Inasistencias extends Controllers
 
     public function setInasistencias()
     {
-        $codigoInasistencia = strClean($_POST['codigoInasistencia']);
-        // $idUsuario = strClean($_POST['idUsuario']);
+
         $idUsuario = 3;
+        $codigoInasistencia = strClean($_POST['codigoInasistencia']);
+        $numeroFicha = strClean($_POST['numeroFicha']);
 
-        //Este array es para berificar los datos que entran desde el formulario
-
-        $arrPost = ['codigoInasistencia'];
+        $arrPost = ['codigoInasistencia', 'numeroFicha'];
 
         if (check_post($arrPost)) {
+            $requestModel = $this->model->insertarInasistencia($codigoInasistencia, $idUsuario, $numeroFicha);
 
-            $requestModel = $this->model->insertarInasistencia($codigoInasistencia, $idUsuario);
-            $option = 1;
-
-            if ($requestModel > 0) {
-                if ($option === 1) {
-                    $arrRespuesta = array('status' => true, 'msg' => 'Inasistencias agregada correctamente.');
-                }
-            } elseif ($requestModel === 'exists') {
-                $arrRespuesta = array('status' => false, 'msg' => 'Este aprendiz ya existe');
+            if ($requestModel === false) {
+                $arrRespuesta = ['status' => false, 'msg' => 'El aprendiz no fue encontrado.'];
+            } elseif ($requestModel > 0) {
+                $arrRespuesta = ['status' => true, 'msg' => 'Asistencia agregada correctamente.'];
             } else {
-                $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
+                $arrRespuesta = ['status' => false, 'msg' => 'Error al registrar la inasistencia.'];
             }
         } else {
-            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
+            $arrRespuesta = ['status' => false, 'msg' => 'Debe ingresar todos los datos'];
         }
+
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();
-    }/*
-
-    public function updateAprendices()
-    {
-        $idAprendiz = strClean($_POST['idaprendiz']);
-        $numeroDocumentoAprendiz = strClean($_POST['numeroDocumentoAprendiz']);
-        $nombreAprendiz = strClean($_POST['nombreAprendiz']);
-        $apellidoAprendiz = strClean($_POST['apellidoAprendiz']);
-        $codigoAprendiz = strClean($_POST['codigoAprendiz']);
-        $generoAprendiz = $_POST['generoAprendiz'];
-
-        $arrPost = ['idaprendiz', 'numeroDocumentoAprendiz', 'nombreAprendiz', 'apellidoAprendiz', 'generoAprendiz', 'codigoAprendiz'];
-        if (check_post($arrPost)) {
-            $requestModel = $this->model->editarAprendices($idAprendiz, $nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz, $codigoAprendiz);
-
-            $option = 2;
-
-            if ($requestModel > 0) {
-                if ($option === 1) {
-                    $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz agregado correctamente.');
-                }
-            } elseif ($requestModel === 'exists') {
-                $arrRespuesta = array('status' => false, 'msg' => 'Este aprendiz ya existe');
-            } else {
-                $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
-            }
-        } else {
-            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
-        }
-        echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
-        die();
-    }/*
-
-
-    public function getAprendiz($idAprendiz)
-    {
-
-        $intIdAprendiz = intval(strClean($id));
-
-        if ($intIdAprendiz > 0) {
-
-            $arrData = $this->model->selectMascotaID($idAprendiz);
-            if (empty($arrData)) {
-                $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados');
-            } else {
-                $arrResponse = array('status' => true, 'data' => $arrData);
-            }
-        }
-
-        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
-        die();
     }
+    /*
 
-    public function getAprendizByID($idAprendiz)
-    {
+public function updateAprendices()
+{
+$idAprendiz = strClean($_POST['idaprendiz']);
+$numeroDocumentoAprendiz = strClean($_POST['numeroDocumentoAprendiz']);
+$nombreAprendiz = strClean($_POST['nombreAprendiz']);
+$apellidoAprendiz = strClean($_POST['apellidoAprendiz']);
+$codigoAprendiz = strClean($_POST['codigoAprendiz']);
+$generoAprendiz = $_POST['generoAprendiz'];
 
-        $intIdAprendiz = intval(strClean($idAprendiz));
+$arrPost = ['idaprendiz', 'numeroDocumentoAprendiz', 'nombreAprendiz', 'apellidoAprendiz', 'generoAprendiz', 'codigoAprendiz'];
+if (check_post($arrPost)) {
+   $requestModel = $this->model->editarAprendices($idAprendiz, $nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz, $codigoAprendiz);
 
-        if ($intIdAprendiz > 0) {
+   $option = 2;
 
-            $arrData = $this->model->getAprendizPorId($intIdAprendiz);
-            if (empty($arrData)) {
-                $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados');
-            } else {
-                $arrResponse = array('status' => true, 'data' => $arrData);
-            }
-        }
+   if ($requestModel > 0) {
+       if ($option === 1) {
+           $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz agregado correctamente.');
+       }
+   } elseif ($requestModel === 'exists') {
+       $arrRespuesta = array('status' => false, 'msg' => 'Este aprendiz ya existe');
+   } else {
+       $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
+   }
+} else {
+   $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
+}
+echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
+die();
+}/*
 
-        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
-        die();
-    }
+
+public function getAprendiz($idAprendiz)
+{
+
+$intIdAprendiz = intval(strClean($id));
+
+if ($intIdAprendiz > 0) {
+
+   $arrData = $this->model->selectMascotaID($idAprendiz);
+   if (empty($arrData)) {
+       $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados');
+   } else {
+       $arrResponse = array('status' => true, 'data' => $arrData);
+   }
+}
+
+echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+die();
+}
+
+public function getAprendizByID($idAprendiz)
+{
+
+$intIdAprendiz = intval(strClean($idAprendiz));
+
+if ($intIdAprendiz > 0) {
+
+   $arrData = $this->model->getAprendizPorId($intIdAprendiz);
+   if (empty($arrData)) {
+       $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados');
+   } else {
+       $arrResponse = array('status' => true, 'data' => $arrData);
+   }
+}
+
+echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+die();
+}
 
 
-    public function eliminarAprendiz()
-    {
-        if ($_POST) {
-            $idAprendiz = intval($_POST['idAprendiz']);
-            $requestDelete = $this->model->eliminarAprendiz($idAprendiz);
-            if ($requestDelete == 'empty') {
-                $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el Aprendiz.');
-            } else {
-                $arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el aprendiz.');
-            }
-            echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
-        } else {
-            print_r($_POST);
-        }
-        die();
-    } */
+public function eliminarAprendiz()
+{
+if ($_POST) {
+   $idAprendiz = intval($_POST['idAprendiz']);
+   $requestDelete = $this->model->eliminarAprendiz($idAprendiz);
+   if ($requestDelete == 'empty') {
+       $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el Aprendiz.');
+   } else {
+       $arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el aprendiz.');
+   }
+   echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+} else {
+   print_r($_POST);
+}
+die();
+} */
 }

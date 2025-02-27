@@ -105,7 +105,7 @@ class Aprendiz extends Controllers
     public function getAprendiz($idAprendiz)
     {
 
-        $intIdAprendiz = intval(strClean($id));
+        $intIdAprendiz = intval(strClean($idAprendiz));
 
         if ($intIdAprendiz > 0) {
 

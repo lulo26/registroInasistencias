@@ -4,7 +4,8 @@
 
   <div class="pagetitle">
 
-    <div class="container" id="container" name="container" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+    <div class="container" id="container" name="container"
+      style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
 
 
       <div class="container1" id="container1" style="display: none;" name="container1">
@@ -17,9 +18,10 @@
         <form id="frmInasistencia" name="frmInasistencia">
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Codigo del aprendiz</label>
-            <input type="text" class="form-control" id="codigoInasistencia" name="codigoInasistencia" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">Id temporal.</div><br>
+            <input type="text" class="form-control" id="codigoInasistencia" name="codigoInasistencia"
+              aria-describedby="emailHelp">
 
+            <input type="hidden" class="form-control" id="numeroFicha" name="numeroFicha" aria-describedby="emailHelp">
           </div>
           <button type="submit" class="btn btn-primary">Insertar</button>
         </form>
@@ -33,6 +35,7 @@
         </div>
       </div>
 
+      <div id="alerta" style="display: none; padding: 10px; margin-top: 10px; border-radius: 5px;"></div>
 
     </div>
 

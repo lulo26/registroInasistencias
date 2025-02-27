@@ -26,26 +26,23 @@ class InasistenciasModel extends Mysql
         return $request;
     }
 
-
-    public function insertarInasistencia(string $codigoAprendiz, int $idUsuario)
+    public function insertarInasistencia(string $codigoAprendiz, int $idUsuario, string $numeroFicha)
     {
         $return = "";
         $this->codigo = $codigoAprendiz;
         $this->idUsuario = $idUsuario;
-
+        $this->idFicha = $numeroFicha;
 
         $sql = "SELECT idaprendiz FROM aprendices WHERE codigo_aprendiz=?";
         $request = $this->efectuarConsulta($sql, [$codigoAprendiz], 's');
 
         if ($request && count($request) > 0) {
 
-            $result = $request[0];  // Usamos el primer resultado
+            $result = $request[0];
             $this->idAprendiz = $result['idaprendiz'];
         } else {
-
-            return "Error: Aprendiz no encontrado";
+            return false;
         }
-
 
         $sql = "INSERT INTO inasistencias (aprendices_idusuario, registro_idusuario, estado_inasistencia, retardos_inasistencia) 
                 VALUES(?, ?, 'Activo', 'No')";
