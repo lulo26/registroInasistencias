@@ -61,7 +61,8 @@ class ExcusasModel extends Mysql
                 FROM registro_inasistencias
                 JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario
                 JOIN aprendices ON aprendices.idaprendiz = registro_inasistencias.aprendices_idusuario
-                WHERE aprendices.idaprendiz = {$id}";
+                WHERE aprendices.idaprendiz = {$id}
+                ORDER BY fecha_inasistencia DESC";
         /* $sql = "SELECT idregistro, nombre_usuario, fecha_inasistencia, nombre_aprendiz, estado_excusa, estado_inasistencia, idexcusa
                 FROM registro_inasistencias
                 JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario
@@ -77,12 +78,13 @@ class ExcusasModel extends Mysql
         /* CONVERTIR ESTA FUNCION A "selectInasistenciaId" Y AÑADIR EL WHERE EN LA CONSULTA*/
         /* $sql = "SELECT idregistro, aprendices_idusuario, fecha_inasistencia, registro_idusuario, estado_inasistencia
                 FROM registro_inasistencias"; */
-        $sql = "SELECT idregistro, nombre_usuario, registro_idusuario, fecha_inasistencia, nombre_aprendiz, registro_inasistencias.aprendices_idusuario, estado_excusa, estado_inasistencia, idexcusa
+        $sql = "SELECT idregistro, nombre_usuario, registro_idusuario, fecha_inasistencia, nombre_aprendiz, registro_inasistencias.aprendices_idusuario, estado_excusa, estado_inasistencia, motivo_rechazo, idexcusa
                 FROM registro_inasistencias
                 JOIN usuarios ON usuarios.idusuario = registro_inasistencias.registro_idusuario
                 JOIN aprendices ON aprendices.idaprendiz = registro_inasistencias.aprendices_idusuario 
                 JOIN excusas ON excusas.registro_inasistencias_idregistro = registro_inasistencias.idregistro
-                WHERE aprendices.idaprendiz = {$id}";
+                WHERE aprendices.idaprendiz = {$id}
+                ORDER BY fecha_inasistencia DESC";
         $request = $this->select_all($sql);
         return $request;
     }
@@ -200,5 +202,15 @@ class ExcusasModel extends Mysql
         }
 
         return $return;
+    }
+
+
+    public function selectMotivoRechazo(int $id)
+    {
+        $sql = "SELECT motivo_rechazo
+                FROM excusas
+                WHERE excusas.idexcusa = {$id}";
+        $request = $this->select_all($sql);
+        return $request;
     }
 }

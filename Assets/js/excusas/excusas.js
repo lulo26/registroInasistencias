@@ -7,6 +7,8 @@ const btnEquis = document.getElementById("btnEquis");
 
 const tablaInasistencias = document.getElementById("tablaInasistencias");
 const tablaExcusas = document.getElementById("tablaExcusas");
+/* 
+const verMotivo = document.getElementById("verMotivo"); */
 
 /* fetch(base_url + `getUsuarioByID`)
   .then((res) => res.json)
@@ -37,16 +39,13 @@ function listExcusas() {
       if (res.status === true) {
         excusas.forEach((excusa) => {
           let opciones = { year: "numeric", month: "long", day: "numeric" };
-          let fecha = new Date(excusa.fecha_excusa).toLocaleDateString(
-            "es",
-            opciones
-          );
+          let fecha = new Date(excusa.fecha_excusa).toLocaleDateString("es", opciones);
           tablaExcusas.innerHTML += `
                   <td>${fecha}</td>
                   <td>${excusa.nombre_aprendiz}</td>
                   <td>${excusa.nombre_curso}</td>
                   <td>${excusa.numero_ficha}</td>
-                  <td>${excusa.fecha_inasistencia}</td>
+                  <td>${fecha}</td>
                   <td>${excusa.estado_excusa}</td>
                   <td>${excusa.excusa}</td>
                   <td>${excusa.options}</td>`;
@@ -61,6 +60,7 @@ function listExcusas() {
 /////////////////////////////////////////////////////////////////
 // -------------- MOSTRAR/APROBAR/RECHAZAR EXCUSA ---------------
 /////////////////////////////////////////////////////////////////
+
 document.addEventListener("click", (e) => {
   try {
     let selected = e.target.closest("button").getAttribute("data-action-type");
@@ -162,22 +162,30 @@ function listInasistencias() {
   fetch(base_url + "/excusas/getInasistencias")
     .then((data) => data.json())
     .then((data) => {
-      let contadorInas = data.length + 1;
       /* 
       console.log(data); */
+      let contadorInas = data.length + 1;
       data.forEach((inasistencia) => {
         idexcusa.value = inasistencia.idexcusa;
         idAprendiz.value = inasistencia.aprendices_idusuario;
         idInasistencia.value = inasistencia.idregistro;
         let opciones = { year: "numeric", month: "long", day: "numeric" };
-        let fecha = new Date(
-          inasistencia.fecha_inasistencia
-        ).toLocaleDateString("es", opciones);
+        let fecha = new Date(inasistencia.fecha_inasistencia).toLocaleDateString("es", opciones);
 
         contadorInas = contadorInas - 1;
 
+        /* if (verMotivo) {
+          console.log("yasta");
+          verMotivo.addEventListener("click", (e) => {
+            $("#rechazarExcusaModal").modal("show");
+            let txtMotivo = document.querySelector("#motivo_rechazo");
+            txtMotivo.readOnly = true;
+            txtMotivo.text = inasistencia.motivo_rechazo;
+          });
+        } */
+
         tablaInasistencias.innerHTML += `
-                <td>${inasistencia.idregistro}</td>
+                <td>${contadorInas}</td>
                 <td>${fecha}</td>
                 <td>${inasistencia.nombre_usuario}</td>
                 <td>${inasistencia.estado_excusa}</td>
@@ -192,9 +200,35 @@ function listInasistencias() {
 
 document.addEventListener("click", (e) => {
   try {
-    let selected = e.target
-      .closest("button")
-      .getAttribute("data-action-type"); /* 
+    let verMotivo = document.getElementById("verMotivo");
+
+    verMotivo.addEventListener("click", (e) => {
+      let idexcusa = verMotivo.getAttribute("data-idexcusa");
+
+      fetch(base_url + `/excusas/getMotivoRechazo/${idexcusa}`, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          let excusa = res.data[0];
+
+          if (res.status === true) {
+            console.log(excusa);
+
+            document.getElementById("RechazarModalLabel").textContent = "Excusada Rechazada";
+            document.getElementById("btnRechazar").style.display = "none";
+
+            $("#rechazarExcusaModal").modal("show");
+            let txtMotivo = document.querySelector("#motivo_rechazo");
+            txtMotivo.readOnly = true;
+            txtMotivo.value = excusa.motivo_rechazo;
+          } else {
+            console.log("Error al traer el motivo de rechazo de la excusa");
+          }
+        });
+    });
+
+    let selected = e.target.closest("button").getAttribute("data-action-type"); /* 
     let idusuario = e.target.closest("button").getAttribute("rel"); */
 
     if (selected == "adjuntar") {
@@ -209,8 +243,7 @@ document.addEventListener("click", (e) => {
       let idexcusa = e.target.closest("button").getAttribute("rel");
       console.log(idexcusa);
       $("#subirExcusaModal").modal("show");
-      document.getElementById("ExcusaModalLabel").innerHTML =
-        "Actualizar Excusa";
+      document.getElementById("ExcusaModalLabel").innerHTML = "Actualizar Excusa";
 
       fetch(base_url + `/excusas/getExcusaByID/${idexcusa}`, {
         method: "GET",
@@ -223,8 +256,7 @@ document.addEventListener("click", (e) => {
           console.log(excusa.registro_inasistencias_idregistro);
 
           document.querySelector("#idexcusa").value = excusa.idexcusa;
-          document.querySelector("#idAprendiz").value =
-            excusa.aprendices_idusuario;
+          document.querySelector("#idAprendiz").value = excusa.aprendices_idusuario;
           document.querySelector("#idInasistencia").value =
             excusa.registro_inasistencias_idregistro;
         });
@@ -278,7 +310,7 @@ btnEquis.addEventListener("click", limpiarFormulario);
 ///////////////////////////////////////////////
 
 window.addEventListener("DOMContentLoaded", (e) => {
-  /* listInasistencias(); */
+  listInasistencias();
   listExcusas();
 });
 

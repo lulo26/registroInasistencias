@@ -28,14 +28,13 @@ class Excusas extends Controllers
 
     public function getInasistencias() /* getInasByAprendiz */
     {
-        $id = 1;
+        $id = 2;
 
         $arrInasistencias = $this->model->selectInasistencias($id);
         $arrExcusas = $this->model->selectExcusasAprendiz($id);
         $arrResponse = $arrInasistencias;
 
-        for ($j=0; $j < count($arrExcusas); $j++) { 
-            
+        for ($j = 0; $j < count($arrExcusas); $j++) {
         }
 
         for ($i = 0; $i < count($arrInasistencias); $i++) {
@@ -71,14 +70,14 @@ class Excusas extends Controllers
                     $arrResponse[$i]['idexcusa'] = $arrExcusas[$j]['idexcusa'];
                     $arrResponse[$i]['estado_excusa'] = $arrExcusas[$j]['estado_excusa'];
                 } */
-               /* foreach ($arrExcusas as $excusa) {
+                /* foreach ($arrExcusas as $excusa) {
                     if ($arrResponse[$i]['idregistro'] === $excusa['idregistro']) {
                         # code...
                     }
                } */
 
-               if ($arrResponse[$i]['idregistro'] === $arrExcusas[$i]['idregistro']) {
-               
+                if ($arrResponse[$i]['idregistro'] === $arrExcusas[$i]['idregistro']) {
+
                     $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
                     $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa'];
 
@@ -112,14 +111,15 @@ class Excusas extends Controllers
                         $estadoExcusa = "<span class='badge rounded-pill text-bg-danger'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
 
                         $mensaje = "<div class='alert alert-danger' role='alert'>
-                                ¡Tu excusa fue rechazada! <a href='#' class='alert-link'>Ver motivo.</a>
+                                ¡Tu excusa fue rechazada! <a href='#' class='alert-link' id='verMotivo' data-idexcusa=" . $arrResponse[$i]['idexcusa'] . ">Ver motivo.</a>
                                 </div>";
+                        /* $arrResponse[$i]['motivo'] =  $arrResponse[$i]['motivo_rechazo']; */
                         $arrResponse[$i]['options'] =  $mensaje;
                     }
                     $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
-               }
+                }
 
-               /*  $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
+                /*  $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
                 $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa']; */
             }
         }
@@ -361,5 +361,23 @@ echo $interval->format('%R%a días'); */
         } else {
             echo "ID de archivo no proporcionado.";
         }
+    }
+
+
+    public function getMotivoRechazo($idexcusa)
+    {
+        $intIdExcusa = intval(strClean($idexcusa));
+
+        if ($intIdExcusa > 0) {
+            $arrData = $this->model->selectMotivoRechazo($intIdExcusa);
+            if (empty($arrData)) {
+                $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
+            } else {
+                $arrResponse = array('status' => true, 'data' => $arrData);
+            }
+        }
+
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        die();
     }
 }
