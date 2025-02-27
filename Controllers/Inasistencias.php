@@ -57,9 +57,12 @@ class Inasistencias extends Controllers
     public function setInasistencias()
     {
         $codigoInasistencia = strClean($_POST['codigoInasistencia']);
-        $idUsuario = strClean($_POST['idUsuario']);
+        // $idUsuario = strClean($_POST['idUsuario']);
+        $idUsuario = 3;
 
-        $arrPost = ['codigoInasistencia', 'idUsuario'];
+        //Este array es para berificar los datos que entran desde el formulario
+
+        $arrPost = ['codigoInasistencia'];
 
         if (check_post($arrPost)) {
 

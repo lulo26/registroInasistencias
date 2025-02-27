@@ -19,8 +19,7 @@
             <label for="exampleInputEmail1" class="form-label">Codigo del aprendiz</label>
             <input type="text" class="form-control" id="codigoInasistencia" name="codigoInasistencia" aria-describedby="emailHelp">
             <div id="emailHelp" class="form-text">Id temporal.</div><br>
-            <label for="exampleInputEmail1" class="form-label">Id de intructor o admin</label>
-            <input type="number" class="form-control" id="idUsuario" name="idUsuario" aria-describedby="emailHelp">
+
           </div>
           <button type="submit" class="btn btn-primary">Insertar</button>
         </form>

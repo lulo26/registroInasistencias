@@ -38,11 +38,11 @@ class InasistenciasModel extends Mysql
         $request = $this->efectuarConsulta($sql, [$codigoAprendiz], 's');
 
         if ($request && count($request) > 0) {
-            // Si hay resultados, obtener el idaprendiz
+
             $result = $request[0];  // Usamos el primer resultado
             $this->idAprendiz = $result['idaprendiz'];
         } else {
-            // Si no se encuentra el aprendiz, retornar un error
+
             return "Error: Aprendiz no encontrado";
         }
 

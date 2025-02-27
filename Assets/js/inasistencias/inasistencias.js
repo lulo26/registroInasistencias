@@ -1,11 +1,11 @@
-const frmInasistencia = document.querySelector('#frmInasistencia');
+const frmInasistencia = document.querySelector("#frmInasistencia");
 const inasistenciaUrl = "http://localhost/registroInasistencias/inasistencias/";
-let codigoInasistencia = document.querySelector('#codigoInasistencia');
-let idUsuario = document.querySelector('#idUsuario');
-let card = document.getElementById('card');
-let numeroFicha =0;
-let container2= document.querySelector('#container2');
-let container1= document.querySelector('#container1');
+let codigoInasistencia = document.querySelector("#codigoInasistencia");
+let idUsuario = document.querySelector("#idUsuario");
+let card = document.getElementById("card");
+let numeroFicha = 0;
+let container2 = document.querySelector("#container2");
+let container1 = document.querySelector("#container1");
 /*function listAprendices() {
 
     fetch(aprendicesUrl + "/getInasistencias")
@@ -30,36 +30,35 @@ let container1= document.querySelector('#container1');
 //Insertar
 
 frmInasistencia.addEventListener("submit", (e) => {
-    e.preventDefault();
-    frmData = new FormData(frmInasistencia);
-    console.log(frmData);
-    fetch(inasistenciaUrl + "/setInasistencias", {
-        method: "POST",
-        body: frmData,
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            Swal.fire({
-                title: data.status ? "Correcto" : "Error",
-                text: data.msg,
-                icon: data.status ? "success" : "error",
-            });
-            if (data.status) {
-                frmInasistencia.reset();
-            }
-        });
+  e.preventDefault();
+  frmData = new FormData(frmInasistencia);
+  console.log(frmData);
+  fetch(inasistenciaUrl + "/setInasistencias", {
+    method: "POST",
+    body: frmData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      Swal.fire({
+        title: data.status ? "Correcto" : "Error",
+        text: data.msg,
+        icon: data.status ? "success" : "error",
+      });
+      if (data.status) {
+        frmInasistencia.reset();
+      }
+    });
 });
 
-//Apartado de muestra de fichas 
+//Apartado de muestra de fichas
 
 function listFichas() {
-
-    fetch(inasistenciaUrl + "/getFichas")
-      .then((data) => data.json())
-      .then((data) => {
-        console.log(data);
-        data.forEach((fichas) => {
-          card.innerHTML += `
+  fetch(inasistenciaUrl + "/getFichas")
+    .then((data) => data.json())
+    .then((data) => {
+      console.log(data);
+      data.forEach((fichas) => {
+        card.innerHTML += `
             <div class="col-4">
           <div class="card" name="ficha${fichas.numero_ficha}" id="ficha${fichas.numero_ficha}" style="width: 18rem;">
             <img src="Assets/img/sena.png" class="card-img-top" alt="...">
@@ -68,26 +67,25 @@ function listFichas() {
             </div>
           </div>
         </div>`;
-        });
+      });
     });
 }
 
 //Asigna valor de numero de ficha
 
 fetch(inasistenciaUrl + "/getFichas")
-      .then((data) => data.json())
-      .then((data) => {
-        data.forEach((fichas) => {
-          $(document).on("click", `#ficha${fichas.numero_ficha}`, function () {
-            console.log(`El numero de ficha es ${fichas.numero_ficha}`);
-            numeroFicha=fichas.numero_ficha;
-            console.log(numeroFicha);
-            container2.style.display="none";
-            container1.style.display="block";
-          });
-        });
+  .then((data) => data.json())
+  .then((data) => {
+    data.forEach((fichas) => {
+      $(document).on("click", `#ficha${fichas.numero_ficha}`, function () {
+        console.log(`El numero de ficha es ${fichas.numero_ficha}`);
+        numeroFicha = fichas.numero_ficha;
+        console.log(numeroFicha);
+        container2.style.display = "none";
+        container1.style.display = "block";
+        codigoInasistencia.focus();
+      });
     });
-
+  });
 
 listFichas();
-  
