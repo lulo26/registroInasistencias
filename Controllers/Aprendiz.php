@@ -28,7 +28,7 @@ class Aprendiz extends Controllers
             $btnDelete = "<button type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idaprendiz'] . "'>
                 <i class='bi bi-trash-fill'></i>
                 </button>";
-            $arrData[$i]['actions'] =  $btnDelete . " " . " " . $btnEdit;
+            $arrData[$i]['actions'] = $btnDelete . " " . " " . $btnEdit;
         }
         echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
         die();
@@ -40,15 +40,19 @@ class Aprendiz extends Controllers
         $numeroDocumentoAprendiz = strClean($_POST['numeroDocumentoAprendiz']);
         $nombreAprendiz = strClean($_POST['nombreAprendiz']);
         $apellidoAprendiz = strClean($_POST['apellidoAprendiz']);
+        $codigoAprendiz = strClean($_POST['codigoAprendiz']);
         $generoAprendiz = $_POST['generoAprendiz'];
+        $usuarioAprendiz = $_POST['usuarioAprendiz'];
+        $contraAprendiz = $_POST['contraAprendiz'];
 
-        $arrPost = ['numeroDocumentoAprendiz', 'nombreAprendiz', 'apellidoAprendiz', 'generoAprendiz'];
+        $arrPost = ['numeroDocumentoAprendiz', 'nombreAprendiz', 'apellidoAprendiz', 'codigoAprendiz', 'generoAprendiz', 'usuarioAprendiz', 'contraAprendiz'];
+
         if (check_post($arrPost)) {
             if ($idAprendiz == 0 || $idAprendiz == "") {
-                $requestModel = $this->model->insertarAprendices($nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz);
+                $requestModel = $this->model->insertarAprendices($nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz, $codigoAprendiz, $usuarioAprendiz, $contraAprendiz);
                 $option = 1;
             } else {
-                $requestModel = $this->model->editarAprendices($idAprendiz, $nombreAprendiz, $apellidoAprendiz, $numeroDocumentoAprendiz);
+                $requestModel = $this->model->editarAprendices($idAprendiz, $nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz, $codigoAprendiz);
                 $option = 2;
             }
             if ($requestModel > 0) {
@@ -73,11 +77,12 @@ class Aprendiz extends Controllers
         $numeroDocumentoAprendiz = strClean($_POST['numeroDocumentoAprendiz']);
         $nombreAprendiz = strClean($_POST['nombreAprendiz']);
         $apellidoAprendiz = strClean($_POST['apellidoAprendiz']);
+        $codigoAprendiz = strClean($_POST['codigoAprendiz']);
         $generoAprendiz = $_POST['generoAprendiz'];
 
-        $arrPost = ['numeroDocumentoAprendiz', 'nombreAprendiz', 'apellidoAprendiz', 'generoAprendiz'];
+        $arrPost = ['idaprendiz', 'numeroDocumentoAprendiz', 'nombreAprendiz', 'apellidoAprendiz', 'generoAprendiz', 'codigoAprendiz'];
         if (check_post($arrPost)) {
-            $requestModel = $this->model->editarAprendices($idAprendiz, $nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz);
+            $requestModel = $this->model->editarAprendices($idAprendiz, $nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz, $codigoAprendiz);
             $option = 2;
 
             if ($requestModel > 0) {

@@ -1,3 +1,4 @@
+
 const frmAprendiz = document.querySelector("#frmAprendiz");
 const aprendicesUrl = "http://localhost/registroInasistencias/aprendiz/";
 let idAprendiz = document.querySelector("#idAprendiz");
@@ -5,6 +6,21 @@ let btnCrearAprendiz = document.querySelector("#btnCrearAprendiz");
 let nombreAprendiz = document.querySelector("#nombreAprendiz");
 let apellidoAprendiz = document.querySelector("#apellidoAprendiz");
 let generoAprendiz = document.querySelector("#generoAprendiz");
+let codigoAprendiz = document.querySelector("#codigoAprendiz");
+
+let inputUser = document.querySelector('#usuario');
+let inputPass = document.querySelector('#contra');
+
+
+/*
+import DataTable from 'datatables.net-dt';
+import 'datatables.net-responsive-dt';
+
+let table = new DataTable('#tablaAprendiz', {
+  responsive: true
+});
+*/
+
 let numeroDocumentoAprendiz = document.querySelector(
   "#numeroDocumentoAprendiz"
 );
@@ -14,10 +30,9 @@ btnCrearAprendiz.addEventListener("click", () => {
   $("#crearAprendizModal").modal("show");
 });
 
-console.log("hello word");
 
 function listAprendices() {
-  let nada = "rtr";
+
   fetch(aprendicesUrl + "/getAprendices")
     .then((data) => data.json())
     .then((data) => {
@@ -35,6 +50,8 @@ function listAprendices() {
       });
     });
 }
+
+
 
 //Insertar
 
@@ -61,6 +78,10 @@ frmAprendiz.addEventListener("submit", (e) => {
     });
 });
 
+window.addEventListener("DOMContentLoaded", (e) => {
+  listAprendices();
+});
+
 /* frmAprendiz.addEventListener("submit", (e) => {
   e.preventDefault();
   frmData = new FormData(frmAprendiz);
@@ -84,9 +105,7 @@ frmAprendiz.addEventListener("submit", (e) => {
     });
 }); */
 
-window.addEventListener("DOMContentLoaded", (e) => {
-  listAprendices();
-});
+
 
 document.addEventListener("click", (e) => {
   try {
@@ -101,6 +120,7 @@ document.addEventListener("click", (e) => {
         showDenyButton: true,
         confirmButtonText: "Sí",
         denyButtonText: `Cancelar`,
+
       }).then((result) => {
         if (result.isConfirmed) {
           let formData = new FormData();
@@ -116,9 +136,13 @@ document.addEventListener("click", (e) => {
                 text: data.msg,
                 icon: data.status ? "success" : "error",
               });
+              if (data.status) {
+                window.location.reload();  // Recargar la página
+              }
             });
         }
       });
+
     }
 
     if (selected == "update") {
@@ -143,7 +167,9 @@ document.addEventListener("click", (e) => {
             aprendiz.apellido_aprendiz;
           document.querySelector("#generoAprendiz").value =
             aprendiz.generos_idgenero;
-
+          document.querySelector("#codigoAprendiz").value =
+            aprendiz.codigo_aprendiz;
+          container2.style.display = "none";
           /*  document.querySelector(
             "#generoAprendiz"
           ).innerHTML = `<option selected hidden value="${aprendiz.generos_idgenero}">${aprendiz.generos_idgenero}</option>
@@ -152,6 +178,7 @@ document.addEventListener("click", (e) => {
           <option value="Otros">Otros..</option>`; */
         });
     }
+
   } catch { }
 });
 

@@ -13,32 +13,54 @@
                 <form id="frmAprendiz" name="frmAprendiz">
                     <input type="hidden" id="idAprendiz" name="idAprendiz" value="0">
                     <span>Todos los campos son obligatorios</span>
-
+                    <br><br>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtIdentificacion">Identificacion</label>
-                            <input type="number" class="form-control valid validNumber" id="numeroDocumentoAprendiz" name="numeroDocumentoAprendiz" autocomplete="off" required="">
+                            <input type="number" class="form-control valid validNumber" id="numeroDocumentoAprendiz"
+                                name="numeroDocumentoAprendiz" autocomplete="off" required="">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtNombres">Nombres del aprendiz</label>
-                            <input type="text" class="form-control valid validText" id="nombreAprendiz" name="nombreAprendiz" autocomplete="off" required="">
+                            <input type="text" class="form-control valid validText" id="nombreAprendiz"
+                                name="nombreAprendiz" autocomplete="off" required="">
 
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="txtApellidos">Apellidos del aprendiz</label>
-                            <input type="text" class="form-control valid validText" id="apellidoAprendiz" name="apellidoAprendiz" autocomplete="off" required="">
                         </div>
                     </div>
-
+                    <div class="form-group col-md-6">
+                        <label for="txtApellidos">Apellidos del aprendiz</label>
+                        <input type="text" class="form-control valid validText" id="apellidoAprendiz"
+                            name="apellidoAprendiz" autocomplete="off" required="">
+                    </div>
+                    <div class="form-group col-md-6" name="usuario" id="contra">
+                        <label for="txtApellidos">Nombre de usuario</label>
+                        <input type="text" class="form-control valid validText" id="usuarioAprendiz"
+                            name="usuarioAprendiz" autocomplete="off" required="">
+                    </div>
+                    <div class="form-group col-md-6" name="contra" id="contra">
+                        <label for="txtApellidos">Contraseña</label>
+                        <input type="text" class="form-control valid validText" id="contraAprendiz"
+                            name="contraAprendiz" autocomplete="off" required="">
+                    </div>
                     <div class="form-row">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="txtApellidos">Codigo del aprendiz</label>
+                                <input type="text" class="form-control valid validText" id="codigoAprendiz"
+                                    name="codigoAprendiz" autocomplete="off" required="">
+                            </div>
+                        </div>
+
                         <div class="form-group col-md-6">
                             <label for="txtApellidos">Genero</label>
-                            <input type="text" class="form-control valid validText" id="generoAprendiz" name="generoAprendiz" autocomplete="off" required="">
+                            <input type="text" class="form-control" id="generoAprendiz" name="generoAprendiz"
+                                autocomplete="off" required="">
                         </div>
                     </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

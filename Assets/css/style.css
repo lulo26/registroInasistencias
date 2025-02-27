@@ -13,10 +13,29 @@
   scroll-behavior: smooth;
 }
 
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+.card:hover{
+  box-shadow: 5px 5px 20px rgba(0,0,0,0.4);
+  transform: translateY(-3%);
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   background: #f6f9ff;
   color: #444444;
+}
+.card .contenido-card a{
+  display: inline-block;
+  padding: 10px;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #2fb4cc;
+  border: 1px solid #2fb4cc;
+  border-radius: 4px;
+  transition: all 400ms ease;
+  margin-bottom: 5px;
 }
 
 a {

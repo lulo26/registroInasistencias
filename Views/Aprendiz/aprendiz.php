@@ -3,6 +3,7 @@ getModal('aprendizModal', $data);
 //require_once '../../Views/Aprendiz/aprendiz.php'
 ?>
 
+
 <main id="main" class="main">
 
   <div class="pagetitle">
@@ -15,7 +16,7 @@ getModal('aprendizModal', $data);
       </div>
 
       <div class="row mt-3">
-        <table class="table" id="tablaAprendiz">
+        <table class="table" id="tablaAprendiz" name="tablaAprendiz">
           <thead>
             <tr>
               <th scope="col">Id</th>
