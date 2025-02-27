@@ -58,26 +58,31 @@ class Mysql extends Conexion
         try {
             $stmt = $this->conexion->prepare($consulta);
             if (!$stmt) {
-                throw new Exception("Error en la preparación de la consulta: " . $this->conexion->error);
+                throw new Exception("Error en la preparación de la consulta: " . $this->conexion->errorInfo());
             }
+
+            // Vincular parámetros (para PDO usamos bindValue o bindParam)
             if ($parametros) {
-                $stmt->bind_param($tipos, ...$parametros);
+                // Si tienes parámetros, necesitas usar bindValue (PDO no usa bind_param)
+                $i = 0;
+                foreach ($parametros as $parametro) {
+                    $stmt->bindValue(++$i, $parametro, PDO::PARAM_STR); // Puedes cambiar el tipo según sea necesario
+                }
             }
+
             $stmt->execute();
-            $resultado = $stmt->get_result();
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC); // Para obtener todos los resultados en un array asociativo
 
             if ($resultado) {
-                $stmt->close();
                 return $resultado;
             } else {
-                $stmt->close();
-                return $this->conexion->affected_rows; // Para consultas que no devuelven un
-                //conjunto de resultados
+                return $stmt->rowCount(); // Para consultas que no devuelven un conjunto de resultados
             }
         } catch (Exception $e) {
             die("Excepción capturada: " . $e->getMessage());
         }
     }
+
 
 
     public function delete(string $query)

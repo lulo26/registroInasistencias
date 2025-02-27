@@ -26,29 +26,31 @@ class InasistenciasModel extends Mysql
         return $request;
     }
 
-    // ejemplo insertar
-    public function insertarInasistencia(string $codigoAprendiz, int $idUsuario,)
+
+    public function insertarInasistencia(string $codigoAprendiz, int $idUsuario)
     {
         $return = "";
         $this->codigo = $codigoAprendiz;
         $this->idUsuario = $idUsuario;
 
-        $sql = "SELECT aprendices.idaprendiz FROM aprendices WHERE aprendices.codigo_aprendiz=?";
+
+        $sql = "SELECT idaprendiz FROM aprendices WHERE codigo_aprendiz=?";
         $request = $this->efectuarConsulta($sql, [$codigoAprendiz], 's');
-        $result = mysqli_fetch_assoc($request);
+
+        if ($request && count($request) > 0) {
+            // Si hay resultados, obtener el idaprendiz
+            $result = $request[0];  // Usamos el primer resultado
+            $this->idAprendiz = $result['idaprendiz'];
+        } else {
+            // Si no se encuentra el aprendiz, retornar un error
+            return "Error: Aprendiz no encontrado";
+        }
 
 
-        $this->idAprendiz = ['idaprendiz'];
+        $sql = "INSERT INTO inasistencias (aprendices_idusuario, registro_idusuario, estado_inasistencia, retardos_inasistencia) 
+                VALUES(?, ?, 'Activo', 'No')";
 
-        // Falta que haga la consulta del el aprendiz q tenga ese codigo 
-
-        // $this->idAprendiz = $request[0]['idAprendiz'];
-
-        $sql = "INSERT INTO inasistencias (inasistencias.aprendices_idusuario,inasistencias.registro_idusuario,inasistencias.estado_inasistencia,inasistencias.retardos_inasistencia) 
-        VALUES(?,?,'Activo','No')";
         $arrData = array($this->idAprendiz, $this->idUsuario);
-
-        // $return = $this->insert($sql, $arrData);
 
         return $this->insert($sql, $arrData);
     }
