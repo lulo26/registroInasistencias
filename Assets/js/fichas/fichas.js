@@ -1,3 +1,6 @@
+console.log("hello world");
+let base_url = "http://localhost/registroInasistencias"
+
 const numficha = document.querySelector("#numero_ficha");
 const tablaFichas = document.getElementById("tablaFichas");
 const selectCursos = document.getElementById("cursos_idcurso");

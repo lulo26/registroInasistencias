@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-02-2025 a las 22:42:59
+-- Tiempo de generación: 27-02-2025 a las 17:26:14
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -26,12 +26,15 @@ SET time_zone = "+00:00";
 --
 -- Estructura de tabla para la tabla `aprendices`
 --
-
+CREATE DATABASE inasistencias;
+USE inasistencias;
 CREATE TABLE `aprendices` (
   `idaprendiz` int(11) NOT NULL,
   `nombre_aprendiz` varchar(50) NOT NULL,
   `apellido_aprendiz` varchar(50) NOT NULL,
-  `generos_idgenero` int(11) NOT NULL,
+  `usuario_aprendiz` varchar(45) DEFAULT NULL,
+  `contra_aprendiz` varchar(45) DEFAULT NULL,
+  `generos_idgenero` varchar(40) NOT NULL,
   `numdoc` varchar(50) NOT NULL,
   `estado_aprendiz` varchar(50) NOT NULL,
   `codigo_aprendiz` varchar(80) NOT NULL
@@ -70,11 +73,12 @@ CREATE TABLE `cursos` (
 
 CREATE TABLE `excepciones` (
   `idexcepcion` int(11) NOT NULL,
-  `fecha` datetime NOT NULL,
+  `fecha` date NOT NULL,
   `motivo_excepcion` text NOT NULL,
   `usuarios_idusuario` int(11) NOT NULL,
   `excepcionescol` varchar(45) DEFAULT NULL,
-  `bloques_idbloque` int(11) NOT NULL
+  `bloques_idbloque` int(11) NOT NULL,
+  `horaEntrada_excepcion` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -90,7 +94,8 @@ CREATE TABLE `excusas` (
   `filepath_excusa` varchar(500) DEFAULT NULL,
   `aprendices_idusuario` int(11) NOT NULL,
   `registro_inasistencias_idregistro` int(11) NOT NULL,
-  `estado_excusa` varchar(45) NOT NULL
+  `estado_excusa` varchar(45) NOT NULL,
+  `motivo_rechazo` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -118,7 +123,6 @@ CREATE TABLE `horarios` (
   `idhorario` int(11) NOT NULL,
   `fecha_horario` date NOT NULL,
   `Jornada` varchar(45) NOT NULL,
-  `fichas_idficha` int(11) NOT NULL,
   `usuarios_idusuario` int(11) NOT NULL,
   `bloques_idbloque` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -136,8 +140,19 @@ CREATE TABLE `inasistencias` (
   `registro_idusuario` int(11) NOT NULL,
   `estado_inasistencia` varchar(45) NOT NULL,
   `hora_inasistencia` time NOT NULL,
-  `retardos_inasistencia` varchar(30) NOT NULL
+  `retardos_inasistencia` varchar(30) NOT NULL,
+  `fichas_idficha` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Disparadores `inasistencias`
+--
+DELIMITER $$
+CREATE TRIGGER `before_insert_update_hour` BEFORE INSERT ON `inasistencias` FOR EACH ROW BEGIN
+        SET NEW.hora_inasistencia = CURRENT_TIME;
+    END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -165,7 +180,8 @@ CREATE TABLE `usuarios` (
 --
 ALTER TABLE `aprendices`
   ADD PRIMARY KEY (`idaprendiz`),
-  ADD UNIQUE KEY `numdoc_UNIQUE` (`numdoc`);
+  ADD UNIQUE KEY `numdoc_UNIQUE` (`numdoc`),
+  ADD UNIQUE KEY `usuario_aprendiz_UNIQUE` (`usuario_aprendiz`);
 
 --
 -- Indices de la tabla `bloques`
@@ -207,7 +223,6 @@ ALTER TABLE `fichas`
 --
 ALTER TABLE `horarios`
   ADD PRIMARY KEY (`idhorario`),
-  ADD KEY `fk_horarios_fichas1_idx` (`fichas_idficha`),
   ADD KEY `fk_horarios_usuarios1_idx` (`usuarios_idusuario`),
   ADD KEY `fk_horarios_bloques1_idx` (`bloques_idbloque`);
 
@@ -217,7 +232,8 @@ ALTER TABLE `horarios`
 ALTER TABLE `inasistencias`
   ADD PRIMARY KEY (`idregistro`),
   ADD KEY `fk_registro_inasistencias_aprendices1_idx` (`aprendices_idusuario`),
-  ADD KEY `fk_registro_inasistencias_usuarios1_idx` (`registro_idusuario`);
+  ADD KEY `fk_registro_inasistencias_usuarios1_idx` (`registro_idusuario`),
+  ADD KEY `fk_inasistencias_fichas1_idx` (`fichas_idficha`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -233,25 +249,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `aprendices`
 --
 ALTER TABLE `aprendices`
-  MODIFY `idaprendiz` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `idaprendiz` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT de la tabla `bloques`
 --
 ALTER TABLE `bloques`
-  MODIFY `idbloque` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idbloque` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `cursos`
 --
 ALTER TABLE `cursos`
-  MODIFY `idcurso` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idcurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `excepciones`
 --
 ALTER TABLE `excepciones`
-  MODIFY `idexcepcion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idexcepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `excusas`
@@ -263,7 +279,7 @@ ALTER TABLE `excusas`
 -- AUTO_INCREMENT de la tabla `fichas`
 --
 ALTER TABLE `fichas`
-  MODIFY `idficha` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idficha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `horarios`
@@ -275,13 +291,13 @@ ALTER TABLE `horarios`
 -- AUTO_INCREMENT de la tabla `inasistencias`
 --
 ALTER TABLE `inasistencias`
-  MODIFY `idregistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idregistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
@@ -312,13 +328,13 @@ ALTER TABLE `fichas`
 --
 ALTER TABLE `horarios`
   ADD CONSTRAINT `fk_horarios_bloques1` FOREIGN KEY (`bloques_idbloque`) REFERENCES `bloques` (`idbloque`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_horarios_fichas1` FOREIGN KEY (`fichas_idficha`) REFERENCES `fichas` (`idficha`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_horarios_usuarios1` FOREIGN KEY (`usuarios_idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `inasistencias`
 --
 ALTER TABLE `inasistencias`
+  ADD CONSTRAINT `fk_inasistencias_fichas1` FOREIGN KEY (`fichas_idficha`) REFERENCES `fichas` (`idficha`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_registro_inasistencias_aprendices1` FOREIGN KEY (`aprendices_idusuario`) REFERENCES `aprendices` (`idaprendiz`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_registro_inasistencias_usuarios1` FOREIGN KEY (`registro_idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
