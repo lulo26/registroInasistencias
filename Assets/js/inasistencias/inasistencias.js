@@ -29,7 +29,7 @@ let container1 = document.querySelector("#container1");
 }
 */
 
-
+//Para que quede por dewfecto en focus ahi
 window.onload = () => {
   codigoInasistencia.focus();
 };
