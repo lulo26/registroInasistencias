@@ -1,7 +1,7 @@
 console.log("hello world");
 let base_url = "http://localhost/registroInasistencias"
 
-const numficha = document.querySelector("#numero_ficha");
+const numero = document.querySelector("#numero_ficha");
 const tablaFichas = document.getElementById("tablaFichas");
 const selectCursos = document.getElementById("cursos_idcurso");
 const btnCerrar = document.getElementById("btnCerrar");
@@ -46,7 +46,9 @@ btnCerrar2.addEventListener("click", limpiarFormulario);
 window.addEventListener("DOMContentLoaded", (e) => {
     listFichas();
 });
-/* frmFichas.addEventListener("submit", (e)=>{
+
+/////////////////// PRUEBAS/////////////////////////////////////////
+frmFichas.addEventListener("submit", (e)=>{
   e.preventDefault();
   frmData = new FormData(frmFichas);
   console.log(frmData);
@@ -67,17 +69,17 @@ window.addEventListener("DOMContentLoaded", (e) => {
         listFichas();
       }
     });
-}); */
+});
 /////////////////////////////////////////////////////ABRIR MODAL/////////////////////////////////////////////////////
 btnFicha.addEventListener("click", () => {
-  numficha.readOnly = false;
+  numero.readOnly = false;
   selectCursos.innerHTML = "<option selected disabled>Seleccione el Curso...</option>";
   listarCursos();
   document.getElementById("FichaModalLabel").innerHTML = "Agregar Ficha";
   $("#crearFichaModal").modal("show");
 });
 /////////////////////////////////////////////////////VALIDAR LONGITUD CODIGO/////////////////////////////////////////////
-numficha.addEventListener("input", function () {
+numero.addEventListener("input", function () {
   if (this.value.length > 10) {
     this.value = this.value.slice(0, 10);
   }
@@ -150,7 +152,7 @@ document.addEventListener("click", (e) => {
       });
     }
     if (selected == "update") {
-      numficha.readOnly = true;
+      numero.readOnly = true;
       let idficha = e.target.closest("button").getAttribute("rel");
       $("#crearFichaModal").modal("show");
       document.getElementById("FichaModalLabel").innerHTML = "Actualizar Ficha";
