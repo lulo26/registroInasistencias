@@ -18,7 +18,7 @@ function listFichas() {
         tablaFichas.innerHTML += `
                 <td>${ficha.idficha }</td>
                 <td>${ficha.numero_ficha}</td>
-                <td>${ficha.cursos_idcurso }</td>
+                <td>${ficha.id_curso }</td>
                 <td>${ficha.fecha_inicio}</td>
                 <td>${ficha.fecha_fin}</td>
                 <td>${ficha.modalidad}</td>`;
@@ -32,7 +32,7 @@ function listarCursos() {
     .then((data) => {
       console.log(data);
       data.forEach((curso) => {
-        selectCursos.innerHTML += `<option value="${curso.idcurso}">${curso.nombre_curso}</option>`;
+        selectCursos.innerHTML += `<option value="${curso.idcurso}">${curso.id_curso}</option>`;
       });
     });
 }
@@ -46,6 +46,28 @@ btnCerrar2.addEventListener("click", limpiarFormulario);
 window.addEventListener("DOMContentLoaded", (e) => {
     listFichas();
 });
+/* frmFichas.addEventListener("submit", (e)=>{
+  e.preventDefault();
+  frmData = new FormData(frmFichas);
+  console.log(frmData);
+  fetch(base_url + "/fichas/setFichas",{
+    method: "POST",
+    body: frmData,
+  })
+    .then((res) => res.json())
+    .then((data)=>{
+      Swal.fire({
+        title: data.status ? "corrrecto" : "Error",
+        text: data.msg,
+        icon: data.status ? "success" : "error",
+      });
+      if (data.status){
+        frmFichas.reset();
+        $("#crearFichaModal").modal("hide");
+        listFichas();
+      }
+    });
+}); */
 /////////////////////////////////////////////////////ABRIR MODAL/////////////////////////////////////////////////////
 btnFicha.addEventListener("click", () => {
   numficha.readOnly = false;
@@ -94,6 +116,7 @@ frmFichas.addEventListener("submit", (e) => {
 });
 /////////////////////////////////////////////////////EDITAR /////// ELIMINAR/////////////////////////////////////////////////////
 document.addEventListener("click", (e) => {
+  console.log("click");
   try {
     let selected = e.target.closest("button").getAttribute("data-action-type");
     let idficha = e.target.closest("button").getAttribute("rel");

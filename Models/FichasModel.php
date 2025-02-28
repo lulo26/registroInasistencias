@@ -5,7 +5,7 @@ class FichasModel extends Mysql {
     }
     public function selectFichas()
     {
-        $sql = "SELECT idficha, numero_ficha, numero_ficha, cursos.idcurso AS id_curso, fecha_inicio, fecha_fin, modalidad  FROM fichas INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso ORDER BY idficha ASC";
+        $sql = "SELECT idficha, numero_ficha, numero_ficha, cursos.nombre_curso AS id_curso, fecha_inicio, fecha_fin, modalidad  FROM fichas INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso ORDER BY idficha ASC";
         $request = $this->select_all($sql);
         return $request;
     }
