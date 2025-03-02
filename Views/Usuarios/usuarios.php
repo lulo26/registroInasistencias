@@ -32,8 +32,8 @@ getModal('usuariosModal', $data);
             <th>Nombre</th>
             <th>Correo</th>
             <th>Telefono</th>
-            <th>Rol</th>
             <th>Codigo</th>
+            <th>Rol</th>
             <th>Opciones</th>
           </tr>
         </thead>

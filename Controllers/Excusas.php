@@ -7,6 +7,10 @@ class Excusas extends Controllers
     public function __construct()
     {
         parent::__construct();
+        session_start();
+        if (empty($_SESSION['login'])) {
+            header('Location: ' . base_url() . '/login');
+        }
     }
 
     public function excusas()
@@ -22,20 +26,29 @@ class Excusas extends Controllers
     {
         if ($_SESSION['idUser']) {
             $idusuario = $_SESSION['idUser'];
-            /* $arrData = $this->model->selectUsuario($idusuario) */
+            $arrData = $this->model->selectUsuarioID($idusuario);
+
+            if (empty($arrData)) {
+                $arrResponse = array('status' => false, 'msg' => 'No se encontraron datos.');
+            } else {
+                $arrResponse = array('status' => true, 'data' => $arrData);
+            }
         }
+
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        die();
     }
 
     public function getInasistencias() /* getInasByAprendiz */
     {
-        $id = 2;
+        $id = 1;
 
         $arrInasistencias = $this->model->selectInasistencias($id);
         $arrExcusas = $this->model->selectExcusasAprendiz($id);
         $arrResponse = $arrInasistencias;
 
-        for ($j = 0; $j < count($arrExcusas); $j++) {
-        }
+        /* for ($j = 0; $j < count($arrExcusas); $j++) {
+        } */
 
         for ($i = 0; $i < count($arrInasistencias); $i++) {
             if ($arrInasistencias[$i]['estado_inasistencia'] === "Sin excusa") {
@@ -66,58 +79,61 @@ class Excusas extends Controllers
                 }
             } elseif ($arrInasistencias[$i]['estado_inasistencia'] === "Con excusa") {
 
-                /* for ($j = 0; $j < count($arrExcusas); $j++) {
-                    $arrResponse[$i]['idexcusa'] = $arrExcusas[$j]['idexcusa'];
-                    $arrResponse[$i]['estado_excusa'] = $arrExcusas[$j]['estado_excusa'];
-                } */
+                for ($j = 0; $j < count($arrExcusas); $j++) {
+                    if ($arrResponse[$i]['idregistro'] === $arrExcusas[$j]['idregistro']) {
+                        $arrResponse[$i]['idexcusa'] = $arrExcusas[$j]['idexcusa'];
+                        $arrResponse[$i]['estado_excusa'] = $arrExcusas[$j]['estado_excusa'];
+                        break;
+                    }
+                }
                 /* foreach ($arrExcusas as $excusa) {
                     if ($arrResponse[$i]['idregistro'] === $excusa['idregistro']) {
                         # code...
                     }
                } */
 
-                if ($arrResponse[$i]['idregistro'] === $arrExcusas[$i]['idregistro']) {
+                /* if ($arrResponse[$i]['idregistro'] === $arrExcusas[$i]['idregistro']) {
 
                     $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
-                    $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa'];
+                    $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa']; */
 
-                    if ($arrResponse[$i]['estado_excusa'] === "Enviada" || $arrResponse[$i]['estado_excusa'] === "Por revisar") {
+                if ($arrResponse[$i]['estado_excusa'] === "Enviada" || $arrResponse[$i]['estado_excusa'] === "Por revisar") {
 
-                        $estadoExcusa = "<span class='badge rounded-pill text-bg-info'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-info'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
 
-                        $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
+                    $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
                                         <i class='bi bi-pencil-square'></i>
                                     </button>";
-                        $arrResponse[$i]['options'] =  $btnEdit;
-                    } elseif ($arrResponse[$i]['estado_excusa'] === "Aprobada") {
-                        /*  $btnEdit = "<button disabled type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
+                    $arrResponse[$i]['options'] =  $btnEdit;
+                } elseif ($arrResponse[$i]['estado_excusa'] === "Aprobada") {
+                    /*  $btnEdit = "<button disabled type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
                                             <i class='bi bi-pencil-square'></i>
                                         </button>";
                         $arrResponse[$i]['options'] =  $btnEdit; */
 
-                        $estadoExcusa = "<span class='badge rounded-pill text-bg-success'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-success'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
 
-                        $mensaje = "<div class='alert alert-success' role='alert'>
+                    $mensaje = "<div class='alert alert-success' role='alert'>
                                 ¡Tu excusa fue aprobada!
                                 </div>";
-                        $arrResponse[$i]['options'] =  $mensaje;
-                    } elseif ($arrResponse[$i]['estado_excusa'] === "Rechazada") {
+                    $arrResponse[$i]['options'] =  $mensaje;
+                } elseif ($arrResponse[$i]['estado_excusa'] === "Rechazada") {
 
-                        /* $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
+                    /* $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
                                         <i class='bi bi-pencil-square'></i>
                                     </button>";
                         $arrResponse[$i]['options'] =  $btnEdit; */
 
-                        $estadoExcusa = "<span class='badge rounded-pill text-bg-danger'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
+                    $estadoExcusa = "<span class='badge rounded-pill text-bg-danger'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
 
-                        $mensaje = "<div class='alert alert-danger' role='alert'>
-                                ¡Tu excusa fue rechazada! <a href='#' class='alert-link' id='verMotivo' data-idexcusa=" . $arrResponse[$i]['idexcusa'] . ">Ver motivo.</a>
+                    $mensaje = "<div class='alert alert-danger' role='alert'>
+                                ¡Tu excusa fue rechazada! <a href='#' class='alert-link' id='verMotivo' data-action-type='verMotivo' data-idexcusa=" . $arrResponse[$i]['idexcusa'] . ">Ver motivo.</a>
                                 </div>";
-                        /* $arrResponse[$i]['motivo'] =  $arrResponse[$i]['motivo_rechazo']; */
-                        $arrResponse[$i]['options'] =  $mensaje;
-                    }
-                    $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
+                    /* $arrResponse[$i]['motivo'] =  $arrResponse[$i]['motivo_rechazo']; */
+                    $arrResponse[$i]['options'] =  $mensaje;
                 }
+                $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
+                /* } */
 
                 /*  $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
                 $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa']; */
@@ -212,13 +228,30 @@ echo $interval->format('%R%a días'); */
                 $mensaje = "<div class='alert alert-success' role='alert'>
                           ¡No hay excusas por revisar!
                         </div>";
-                $arrData = array('status' => false, 'msg' => $mensaje);
+                $arrData = array('msg' => $mensaje);
+                $arrResponse = array('status' => false, 'data' => $arrData);
             } else {
                 /* Decision: si hay excusa, mostrarla en la tabla */
 
                 for ($i = 0; $i < count($arrData); $i++) {
 
-                    if ($arrData[$i]['estado_excusa'] === "Sin excusa") {
+                    if ($arrData[$i]['estado_excusa'] === "Por revisar") {
+                        $btnDescargar = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='descargar' rel='" . $arrData[$i]['idexcusa'] . "'>
+                            <i class='bi bi-file-earmark-text'></i>
+                        </button>";
+                        $arrData[$i]['excusa'] = $btnDescargar;
+
+                        $btnAprobar = "<button type='button' class='btn btn-outline-success rounded-pill' data-action-type='aprobar' rel='" . $arrData[$i]['idexcusa'] . "'>
+                            <i class='bi bi-check-circle'></i>
+                        </button>";
+
+                        $btnRechazar = "<button type='button' class='btn btn-outline-danger rounded-pill' data-action-type='rechazar' rel='" . $arrData[$i]['idexcusa'] . "'>
+                            <i class='bi bi-x-circle'></i>
+                          </button>";
+                        $arrData[$i]['options'] =  $btnAprobar . " " . " " . $btnRechazar;
+                    }
+
+                    /* if ($arrData[$i]['estado_excusa'] === "Sin excusa") {
                         $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>" . $arrData[$i]['estado_excusa'] . "</span>";
                     } elseif ($arrData[$i]['estado_excusa'] === "Enviada" || $arrData[$i]['estado_excusa'] === "Por revisar") {
                         $estadoExcusa = "<span class='badge rounded-pill text-bg-info'>" . $arrData[$i]['estado_excusa'] . "</span>";
@@ -226,7 +259,7 @@ echo $interval->format('%R%a días'); */
                         $estadoExcusa = "<span class='badge rounded-pill text-bg-success'>" . $arrData[$i]['estado_excusa'] . "</span>";
                     } elseif ($arrData[$i]['estado_excusa'] === "Rechazada") {
                         $estadoExcusa = "<span class='badge rounded-pill text-bg-danger'>" . $arrData[$i]['estado_excusa'] . "</span>";
-                    }
+                    } 
                     $arrData[$i]['estado_excusa'] = $estadoExcusa;
 
                     $btnDescargar = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='descargar' rel='" . $arrData[$i]['idexcusa'] . "'>
@@ -241,10 +274,10 @@ echo $interval->format('%R%a días'); */
                     $btnRechazar = "<button type='button' class='btn btn-outline-danger rounded-pill' data-action-type='rechazar' rel='" . $arrData[$i]['idexcusa'] . "'>
                             <i class='bi bi-x-circle'></i>
                           </button>";
-                    $arrData[$i]['options'] =  $btnAprobar . " " . " " . $btnRechazar;
+                    $arrData[$i]['options'] =  $btnAprobar . " " . " " . $btnRechazar;*/
                 }
+                $arrResponse = array('status' => true, 'data' => $arrData);
             }
-            $arrResponse = array('status' => true, 'data' => $arrData);
         }
 
         echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
@@ -362,7 +395,6 @@ echo $interval->format('%R%a días'); */
             echo "ID de archivo no proporcionado.";
         }
     }
-
 
     public function getMotivoRechazo($idexcusa)
     {

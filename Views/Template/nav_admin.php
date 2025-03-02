@@ -19,13 +19,6 @@
 
     <li class="nav-item">
       <a class="nav-link collapsed" href="<?= base_url() ?>/excusas">
-        <i class="bi bi-person-x"></i>
-        <span>Inasistencias</span>
-      </a>
-    </li><!-- End Profile Page Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="<?= base_url() ?>/excusas">
         <i class="bi bi-person"></i>
         <span>Excusas</span>
       </a>
@@ -53,9 +46,9 @@
     </li><!-- End Register Page Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="<?= base_url() ?>/login">
+      <a class="nav-link collapsed" href="<?= base_url() ?>/logout">
         <i class="bi bi-box-arrow-in-right"></i>
-        <span>Login</span>
+        <span>Cerrar Sesión</span>
       </a>
     </li><!-- End Login Page Nav -->
   </ul>

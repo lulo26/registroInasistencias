@@ -1,28 +1,30 @@
 <?php
 
-class LoginModel extends Mysql{
+class LoginModel extends Mysql
+{
 
     private $intIdUsuario;
     private $strUsuario;
     private $strToken;
 
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    public function loginUser(string $usuario, string $password){
+    public function loginUser(string $usuario, string $password)
+    {
         $this->strUsuario = $usuario;
         $this->strPassword = $password;
-        $sql = "SELECT id_persona, status FROM personas WHERE
-        email_user = '{$this->strUsuario}' AND
-        password = '{$this->strPassword}' AND
-        status != 0";
-        
+        $sql = "SELECT idusuario FROM usuarios WHERE
+        correo_usuario = '{$this->strUsuario}' AND
+        password_usuario = '{$this->strPassword}'";
+
         $request = $this->select($sql);
-        return $request;        
+        return $request;
     }
 
-    public function sessionLogin(int $idUser){
+    /* public function sessionLogin(int $idUser){
         $this->intUsuario = $idUser;
 
         $sql = "SELECT p.id_persona, 
@@ -41,6 +43,5 @@ class LoginModel extends Mysql{
 
         $request = $this->select($sql);
         return $request;
-    }
-
+    } */
 }

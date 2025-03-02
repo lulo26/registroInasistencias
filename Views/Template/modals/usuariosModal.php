@@ -48,9 +48,16 @@
                 </div>
               </div>
 
-              <label for="roles_idrol" class="form-label mt-2">Rol</label>
+              <!-- <label for="roles_idrol" class="form-label mt-2">Rol</label>
               <select class="form-select" aria-label="Default select example" name="roles_idrol" id="roles_idrol">
-                <!-- Aqui se cargan los roles dinamicamente -->
+                Aqui se cargan los roles dinamicamente 
+              </select> -->
+
+              <label for="rol_usuario" class="form-label mt-2">Rol</label>
+              <select class="form-select" aria-label="Default select example" name="rol_usuario" id="rol_usuario">
+                <option disabled selected>Selecciona un rol</option>
+                <option value="INSTRUCTOR">Instructor</option>
+                <option value="COORDINADOR">Coordinador</option>
               </select>
             </div>
 
