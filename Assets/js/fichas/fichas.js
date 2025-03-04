@@ -31,7 +31,8 @@ function listarCursos() {
     .then((data) => {
       console.log(data);
       data.forEach((curso) => {
-        selectCursos.innerHTML += `<option value="${curso.idcurso}">${curso.id_curso}</option>`;
+        selectCursos.innerHTML += `<option value="${curso.idcurso}">${curso.idcurso}</option>`;
+        console.log(curso.idcurso)
       });
     });
 }
@@ -167,14 +168,10 @@ document.addEventListener("click", (e) => {
           document.querySelector("#fecha_inicio").value = ficha.fecha_inicio;
           document.querySelector("#fecha_fin").value = ficha.fecha_fin;
           document.querySelector("#modalidad").value = ficha.modalidad;
-
           selectCursos.innerHTML = "";
-
           cursos.forEach((curso) => {
             let selected = ficha.cursos_idcurso == curso ? "selected" : "";
-            selectCursos.innerHTML += `<option ${selected} value="${curso}">${mayusInicial(
-              curso
-            )}</option>`;
+            selectCursos.innerHTML += `<option ${selected} value="${curso}">${curso}</option>`;
           });
         }); 
     }
