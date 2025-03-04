@@ -1,6 +1,5 @@
-console.log("hello world");
-let base_url = "http://localhost/registroInasistencias"
 
+const btnFicha = document.querySelector("#btnFicha");
 const numero = document.querySelector("#numero_ficha");
 const tablaFichas = document.getElementById("tablaFichas");
 const selectCursos = document.getElementById("cursos_idcurso");
@@ -46,7 +45,6 @@ btnCerrar2.addEventListener("click", limpiarFormulario);
 window.addEventListener("DOMContentLoaded", (e) => {
     listFichas();
 });
-
 /////////////////// PRUEBAS/////////////////////////////////////////
 frmFichas.addEventListener("submit", (e)=>{
   e.preventDefault();
@@ -73,8 +71,8 @@ frmFichas.addEventListener("submit", (e)=>{
 /////////////////////////////////////////////////////ABRIR MODAL/////////////////////////////////////////////////////
 btnFicha.addEventListener("click", () => {
   numero.readOnly = false;
-  selectCursos.innerHTML = "<option selected disabled>Seleccione el Curso...</option>";
-  listarCursos();
+/*   selectCursos.innerHTML = "<option selected disabled>Seleccione el Curso...</option>";
+  listarCursos(); */
   document.getElementById("FichaModalLabel").innerHTML = "Agregar Ficha";
   $("#crearFichaModal").modal("show");
 });
@@ -169,19 +167,16 @@ document.addEventListener("click", (e) => {
           document.querySelector("#fecha_inicio").value = ficha.fecha_inicio;
           document.querySelector("#fecha_fin").value = ficha.fecha_fin;
           document.querySelector("#modalidad").value = ficha.modalidad;
-          fetch(base_url + `/fichas/getCursos`, {
-            method: "GET",
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              selectCursos.innerHTML = "";
 
-              data.forEach((cursos) => {
-                let selected = fichas.cursos_idcurso == cursos.idcurso ? "selected" : "";
-                selectCursos.innerHTML += `<option ${selected} value="${cursos.idcurso}">${cursos.nombre_curso}</option>`;
-              });
-            });
-        });
+          selectCursos.innerHTML = "";
+
+          cursos.forEach((curso) => {
+            let selected = ficha.cursos_idcurso == curso ? "selected" : "";
+            selectCursos.innerHTML += `<option ${selected} value="${curso}">${mayusInicial(
+              curso
+            )}</option>`;
+          });
+        }); 
     }
   } catch (e) {}
 });

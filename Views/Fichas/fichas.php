@@ -33,4 +33,3 @@ getModal('fichasModal', $data);
     </div>
   </div>
   <?php footer_admin($data) ?>
-  <script src="<?= media() ?>/js/fichas/fichas.js"></script>
