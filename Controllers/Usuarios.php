@@ -24,10 +24,16 @@ class Usuarios extends Controllers
         $arrData = $this->model->selectUsuarios();
 
         for ($i = 0; $i < count($arrData); $i++) {
-            $btnEdit = "<button type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idusuario'] . "'>
-                            <i class='bi bi-pencil-square'></i>
-                        </button>";
-            $btnDelete = "<button type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idusuario'] . "'>
+            if ($_SESSION['idUser'] === $arrData[$i]['idusuario']) {
+                $btnEdit = "<button type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idusuario'] . "'>
+                                <i class='bi bi-pencil-square'></i>
+                            </button>";
+            } else {
+                $btnEdit = "<button disabled type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idusuario'] . "'>
+                                <i class='bi bi-pencil-square'></i>
+                            </button>";
+            }
+            $btnDelete = "<button disabled type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idusuario'] . "'>
                             <i class='bi bi-trash-fill'></i>
                           </button>";
             $arrData[$i]['options'] =  $btnDelete . " " . " " . $btnEdit;

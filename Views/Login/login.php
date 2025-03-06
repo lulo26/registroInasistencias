@@ -69,7 +69,7 @@
                                         <div class="col-12">
                                             <label for="yourUsername" class="form-label">correo electrónico</label>
                                             <div class="input-group has-validation">
-                                                <input type="email" name="txtEmail" class="form-control" id="txtEmail" required>
+                                                <input type="text" name="txtEmail" class="form-control" id="txtEmail" required>
                                                 <div class="invalid-feedback">Ingrese su correo electrónico.</div>
                                             </div>
                                         </div>

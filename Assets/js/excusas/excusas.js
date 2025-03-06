@@ -10,24 +10,35 @@ const tablaExcusas = document.getElementById("tablaExcusas");
 /* 
 const verMotivo = document.getElementById("verMotivo"); */
 
-/* fetch(base_url + "/excusas/getUsuarioByID")
-  .then((res) => res.json)
+fetch(base_url + "/excusas/getUsuarioByID")
+  .then((res) => res.json())
   .then((res) => {
     if (res.status) {
-      usuario = res.data;
-      if (usuario.rol === "INSTRUCTOR") {
-      } else if (usuario.rol === "APRENDIZ") {
+      usuario = res.data[0];
+      console.log(usuario);
+      if (usuario.rol_usuario === "INSTRUCTOR") {
+        console.log(usuario.rol_usuario);
+        let idInstructor = usuario.idusuario;
+        console.log(idInstructor);
+        listExcusas(idInstructor);
+      } else if (usuario.rol_usuario === "APRENDIZ") {
+        console.log(usuario.rol_usuario);
+        let idaprendiz = usuario.idaprendiz;
+        console.log(idaprendiz);
+        listInasistencias(idaprendiz);
       }
+    } else {
+      console.log("Status: " + res.status + ". " + res.msg);
     }
-  }); */
+  });
 
 ////////////////////////////////////////////////
 // -------------- LISTAR EXCUSAS ---------------
 ////////////////////////////////////////////////
 
-function listExcusas() {
-  tablaExcusas.innerHTML = "";
-  let idInstructor = 1;
+function listExcusas(idInstructor) {
+  tablaExcusas.innerHTML = ""; /* 
+  let idInstructor = 1; */
   /* fetch(base_url + `/excusas/getExcusasPorInstructor/${idusuario}`, {
     method: "GET",
   }) */
@@ -169,10 +180,10 @@ document.addEventListener("click", (e) => {
 // ------------ LISTAR INASISTENCIAS -------------
 //////////////////////////////////////////////////
 
-function listInasistencias() {
+function listInasistencias(idaprendiz) {
   tablaInasistencias.innerHTML = "";
 
-  fetch(base_url + "/excusas/getInasistencias")
+  fetch(base_url + `/excusas/getInasistencias/${idaprendiz}`)
     .then((data) => data.json())
     .then((data) => {
       /* 
@@ -364,10 +375,10 @@ btnEquis.addEventListener("click", limpiarFormulario);
 // -------------- CARGAR DATOS ----------------
 ///////////////////////////////////////////////
 
-window.addEventListener("DOMContentLoaded", (e) => {
+/* window.addEventListener("DOMContentLoaded", (e) => {
   listInasistencias();
   listExcusas();
-});
+}); */
 
 ///////////////////////////////////////////////
 // ------------- ENVIO DE DATOS ---------------
@@ -375,11 +386,11 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 frmExcusas.addEventListener("submit", (e) => {
   e.preventDefault();
-  frmData = new FormData(frmExcusas); /* 
+  frmData = new FormData(frmExcusas);
   console.log(frmExcusas.idexcusa.value);
   console.log(frmExcusas.idAprendiz);
   console.log(frmExcusas.idInasistencia);
-  console.log(frmExcusas.excusa); */
+  console.log(frmExcusas.excusa);
 
   fetch(base_url + "/excusas/setExcusas", {
     method: "POST",

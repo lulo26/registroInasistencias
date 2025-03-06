@@ -48,7 +48,7 @@ getModal('rechazarExcusaModal', $data);
                         <th>Ficha</th>
                         <th>Fecha Excusa</th>
                         <th>Excusa</th>
-                        <th>Opciones</th>
+                        <th>Aprobar/Rechazar</th>
                     </tr>
                 </thead>
                 <tbody id="tablaExcusas">

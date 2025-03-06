@@ -38,7 +38,7 @@ class UsuariosModel extends Mysql
 
     public function selectUsuarioID(int $id)
     {
-        $sql = "SELECT idusuario, numdoc_usuario, nombre_usuario, correo_usuario, telefono_usuario, codigo_usuario, rol_usuario
+        $sql = "SELECT idusuario, numdoc_usuario, nombre_usuario, correo_usuario, telefono_usuario, codigo_usuario, password_usuario, rol_usuario
                 FROM usuarios 
                 WHERE idusuario = {$id} AND estado_usuario = 'Activo'";
         $request = $this->select_all($sql);

@@ -104,7 +104,7 @@ class ExcusasModel extends Mysql
 
     public function selectExcusasInstructor(int $id)
     {
-        $sql = "SELECT idexcusa, fecha_inasistencia, CONCAT(nombre_aprendiz, apellido_aprendiz) AS nombre_aprendiz, nombre_curso, numero_ficha, fecha_excusa, estado_excusa, filepath_excusa 
+        $sql = "SELECT idexcusa, fecha_inasistencia, CONCAT(nombre_aprendiz, ' ', apellido_aprendiz) AS nombre_aprendiz, nombre_curso, numero_ficha, fecha_excusa, estado_excusa, filepath_excusa 
                 FROM excusas 
                 JOIN inasistencias ON inasistencias.idregistro = excusas.registro_inasistencias_idregistro 
                 JOIN usuarios ON usuarios.idusuario = inasistencias.registro_idusuario 
@@ -114,6 +114,15 @@ class ExcusasModel extends Mysql
                 JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso
                 WHERE excusas.estado_excusa = 'Por revisar' AND usuarios.idusuario = {$id}
                 ORDER BY inasistencias.fecha_inasistencia ASC";
+        /*  $sql = "SELECT idexcusa, fecha_inasistencia, CONCAT(nombre_aprendiz, ' ', apellido_aprendiz) AS nombre_aprendiz, nombre_curso, numero_ficha, fecha_excusa, estado_excusa, filepath_excusa 
+                FROM excusas 
+                JOIN inasistencias ON inasistencias.idregistro = excusas.registro_inasistencias_idregistro 
+                JOIN usuarios ON usuarios.idusuario = inasistencias.registro_idusuario 
+                JOIN aprendices ON aprendices.idaprendiz = inasistencias.aprendices_idusuario
+                JOIN fichas ON fichas.idficha = inasistencias.fichas_idficha
+                JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso
+                WHERE excusas.estado_excusa = 'Por revisar' AND usuarios.idusuario = {$id}
+                ORDER BY inasistencias.fecha_inasistencia ASC"; */
         $request = $this->select_all($sql);
         return $request;
     }
@@ -218,6 +227,15 @@ class ExcusasModel extends Mysql
         $sql = "SELECT idusuario, numdoc_usuario, nombre_usuario, correo_usuario, telefono_usuario, rol_usuario, codigo_usuario 
                 FROM usuarios
                 WHERE idusuario = {$id} AND estado_usuario = 'Activo'";
+        $request = $this->select_all($sql);
+        return $request;
+    }
+
+    public function selectAprendizID(int $id)
+    {
+        $sql = "SELECT idaprendiz, nombre_aprendiz, apellido_aprendiz, numdoc_aprendiz, codigo_aprendiz, 'APRENDIZ' AS rol_usuario
+                FROM aprendices
+                WHERE idaprendiz = {$id} AND estado_aprendiz = 'Activo'";
         $request = $this->select_all($sql);
         return $request;
     }
