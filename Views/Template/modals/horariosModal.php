@@ -9,7 +9,7 @@
                       <h5 class="modal-title" id="horarioModalLabel">Agregar horario</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form class="row g-3" id="frmCursos">
+                    <form class="row g-3" id="frmHorario">
                     <div class="modal-body">
                     <div class="col-md-12">
                   <label for="numFicha" class="form-label">Numero de la ficha</label>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-12 mt-3">
                   <label for="horarioFile" class="form-label">Subir horario</label>
-                  <input class="form-control" type="file" id="horarioFile" name="horarioFile">
+                  <!-- <input class="form-control" type="file" id="horarioFile" name="horarioFile" accept=".xlsx"> -->
                 </div>                          
                     </div>
                     <div class="modal-footer">

@@ -17,8 +17,9 @@ getModal('horariosModal', $data);?>
       <i class="bi bi-plus-circle"></i> Agregar horario
     </button>
   </h5> 
+  <input class="form-control" type="file" id="horarioFile" name="horarioFile" accept=".xlsx">
   </div>
 </div>
 
-
+<script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
 <?php footer_admin($data) ?> <!-- Carga todo el footer -->
