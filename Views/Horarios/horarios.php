@@ -17,8 +17,12 @@ getModal('horariosModal', $data);?>
       <i class="bi bi-plus-circle"></i> Agregar horario
     </button>
   </h5> 
-  <input class="form-control" type="file" id="horarioFile" name="horarioFile" accept=".xlsx">
+  <input class="form-control" type="file" id="excel" name="horarioFile" accept=".xlsx">
   </div>
+
+  <div id="alertZone"></div>
+
+  <div id="display"></div>
 </div>
 
 <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
