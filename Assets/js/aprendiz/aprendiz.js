@@ -59,24 +59,32 @@ frmAprendiz.addEventListener("submit", (e) => {
   e.preventDefault();
   frmData = new FormData(frmAprendiz);
   console.log(frmData);
+
   fetch(aprendicesUrl + "/setAprendices", {
     method: "POST",
     body: frmData,
   })
     .then((res) => res.json())
     .then((data) => {
+      // Mostramos el SweetAlert
       Swal.fire({
         title: data.status ? "Correcto" : "Error",
         text: data.msg,
         icon: data.status ? "success" : "error",
+      }).then(() => {
+        // Solo después de que el usuario haya cerrado el SweetAlert
+        if (data.status) {
+          frmAprendiz.reset();  // Reseteamos el formulario
+          $("#crearAprendizModal").modal("hide");  // Cerramos el modal
+        }
+        // Recargamos la página después de cerrar el SweetAlert
+        window.location.reload();
       });
-      if (data.status) {
-        frmAprendiz.reset();
-        $("#crearAprendizModal").modal("hide");
-        listAprendices();
-      }
     });
 });
+
+
+
 
 window.addEventListener("DOMContentLoaded", (e) => {
   listAprendices();
@@ -135,10 +143,11 @@ document.addEventListener("click", (e) => {
                 title: data.status ? "Correcto" : "Error",
                 text: data.msg,
                 icon: data.status ? "success" : "error",
-              });
-              if (data.status) {
-                window.location.reload();  // Recargar la página
-              }
+              }).then(() => {
+                if (data.status) {
+                  window.location.reload();  // Recargar la página
+                }
+              })
             });
         }
       });
@@ -203,7 +212,7 @@ if (accion == "update") {
         if (data.status) {
           frmAprendiz.reset();
           $("#crearAprendizModal").modal("hide");
-          listAprendices();
+          window.location.reload();
         }
       });
   });
