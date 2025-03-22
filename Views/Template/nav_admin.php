@@ -46,7 +46,7 @@
     </li><!-- End Register Page Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="<?= base_url() ?>/reportes">
+      <a class="nav-link collapsed" href="<?= base_url() ?>/reporte">
         <i class="bi bi-card-list"></i>
         <span>Reportes</span>
       </a>

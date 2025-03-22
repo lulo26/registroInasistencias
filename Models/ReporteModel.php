@@ -43,10 +43,20 @@ class ReporteModel extends Mysql
     {
         $return = "";
 
-        $sql = "SELECT * FROM aprendices where estado_aprendiz=1";
+        $sql = "SELECT aprendices.idaprendiz,aprendices.nombre_aprendiz,apellido_aprendiz FROM aprendices where estado_aprendiz=1";
         $request = $this->select_all($sql);
         return $request;
     }
+
+    public function getFichas()
+    {
+        $return = "";
+
+        $sql = "SELECT fichas.idficha,fichas.numero_ficha FROM fichas ";
+        $request = $this->select_all($sql);
+        return $request;
+    }
+
 
 
 }

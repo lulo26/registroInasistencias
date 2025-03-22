@@ -15,10 +15,9 @@
     <div class="row mt-3">
         <div class="col-3 text-right">
             <h5>Aprendiz</h5>
-            <select class="form-select" aria-label="Default select example">
-                <option id="selectAprendices" selected>Seleccione el aprendiz</option>
-
-            </select>
+            <input type="text" id="inputAprendiz" class="form-control" placeholder="Seleccione el aprendiz"
+                list="listAprendices">
+            <datalist id="listAprendices"></datalist>
         </div>
         <div class="col-3 text-right">
             <h5>Mes</h5>
@@ -41,7 +40,8 @@
         <div class="col-3 text-right">
             <h5>Ficha</h5>
             <select class="form-select" aria-label="Default select example">
-                <option id="selectFicha" selected>Seleccione la ficha</option>
+                <option selected>Seleccione la ficha</option>
+                <div class="selectFicha" id="selectFicha"></div>
 
             </select>
         </div>

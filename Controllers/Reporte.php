@@ -25,5 +25,14 @@ class Reporte extends Controllers
         die();
     }
 
+    public function getFichas()
+    {
+        $arrData = $this->model->getFichas();
+
+        echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+
 }
 ?>
