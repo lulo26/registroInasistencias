@@ -75,7 +75,75 @@
     </div>
 </div>
 
+<!-- Modal para Actualizar Aprendiz -->
 
+<div class="modal fade" id="actualizarAprendizModal" name="actualizarAprendizModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title font-weight-bold" id="actualizarAprendizModalLabel">Actualizar Aprendiz</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmActualizarAprendiz" name="frmActualizarAprendiz">
+                    <input type="hidden" id="idAprendiz1" name="idAprendiz1">
+
+                    <div class="alert alert-info text-center">
+                        <strong>Importante:</strong> Todos los campos son obligatorios.
+                    </div>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6 mx-auto">
+                                <div class="form-group text-center">
+                                    <label for="numeroDocumentoAprendiz1">Identificación <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="numeroDocumentoAprendiz1"
+                                        name="numeroDocumentoAprendiz1" autocomplete="off" required>
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="nombreAprendiz1">Nombres del aprendiz <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="nombreAprendiz1" name="nombreAprendiz1"
+                                        autocomplete="off" required>
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="apellidoAprendiz1">Apellidos del aprendiz <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="apellidoAprendiz1"
+                                        name="apellidoAprendiz1" autocomplete="off" required>
+                                </div>
+
+                                <div class="form-group text-center">
+                                    <label for="codigoAprendiz1">Código del aprendiz <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="codigoAprendiz1" name="codigoAprendiz1"
+                                        autocomplete="off" required>
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="generoAprendiz1">Género <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="generoAprendiz1" name="generoAprendiz1" required>
+                                        <option value="">Seleccione un género</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Otros">Otros..</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" id="btnCancelarActualizarModal" class="btn btn-secondary">Cancelar</button>
+
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <!-- Modal VER USUARIOS --><!-- 

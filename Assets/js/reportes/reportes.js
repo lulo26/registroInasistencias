@@ -2,7 +2,7 @@
 const reportesUrl = "http://localhost/registroInasistencias/reporte/";
 //let selectFichas = document.querySelector('#selectFichas');
 //let selectAprendices = document.querySelector('#selectAprendices');
-
+let btnBuscar = document.querySelector('#btnBuscar');
 
 
 // Listar aprendices en el select
@@ -49,3 +49,5 @@ function selectFichas() {
 selectFichas();
 
 selectAprendices();
+
+btnBuscar.addEventListener()
