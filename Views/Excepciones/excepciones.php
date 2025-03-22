@@ -1,7 +1,6 @@
 <?php
 header_admin($data);
-getModal('subirExcusaModal', $data);
-getModal('rechazarExcusaModal', $data);
+getModal('excepcionesModal', $data);
 ?>
 
 <main id="main" class="main">
