@@ -39,5 +39,14 @@ class ReporteModel extends Mysql
         return $request;
     }
 
+    public function getAprendices()
+    {
+        $return = "";
+
+        $sql = "SELECT * FROM aprendices where estado_aprendiz=1";
+        $request = $this->select_all($sql);
+        return $request;
+    }
+
 
 }
