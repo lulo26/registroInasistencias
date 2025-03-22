@@ -41,6 +41,15 @@
                   <input type="text" class="form-control valid validText" id="modalidad" name="modalidad" autocomplete="off">
                 </div>
               </div>
+              <!-- Fila para Selección de Usuarios -->
+              <div class="row mt-2">
+                <div class="form-group col-12">
+                  <label for="usuarios">Usuarios</label>
+                  <select class="form-select" multiple="multiple" name="usuarios[]" id="usuarios">
+                    <!-- Opciones de usuarios aquí -->
+                  </select>
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" name="btnCerrar" id="btnCerrar" data-bs-dismiss="modal">Cerrar</button>

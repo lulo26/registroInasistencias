@@ -21,20 +21,32 @@ class FichasModel extends Mysql {
         $request = $this->select_all($sql);
         return $request;
     }
-    public function insertarFicha(int $numero_ficha, int $cursos_idcurso, date $fecha_inicio, date $fecha_fin, string $modalidad)
-    {
+    public function insertarFicha(int $numero_ficha, int $cursos_idcurso, date $fecha_inicio, date $fecha_fin, string $modalidad, array $usuarios = []) {
         $return = "";
         $this->numficha = $numero_ficha;
         $this->idCurso = $cursos_idcurso;
         $this->fechaInicio = $fecha_inicio;
         $this->fechaFin = $fecha_fin;
         $this->modalidad = $modalidad;
+
         $sql = "SELECT * FROM fichas WHERE numero_ficha = '{$this->numficha}'";
         $request = $this->select_all($sql);
+
         if (empty($request)) {
             $query = "INSERT INTO fichas (numero_ficha, cursos_idcurso, fecha_inicio, fecha_fin, modalidad) VALUES (?,?,?,?,?)";
             $arrData = array($this->numficha, $this->idCurso, $this->fechaInicio, $this->fechaFin, $this->modalidad);
             $request_insert = $this->insert($query, $arrData);
+
+            // Si se insertó la ficha, asociamos los usuarios
+            if ($request_insert > 0 && !empty($usuarios)) {
+                $idficha = $request_insert;
+                foreach ($usuarios as $usuario_id) {
+                    $query_relacion = "INSERT INTO fichas_has_usuarios (fichas_idficha, usuarios_idusuario) VALUES (?, ?)";
+                    $arrData_relacion = array($idficha, $usuario_id);
+                    $this->insert($query_relacion, $arrData_relacion);
+                }
+            }
+
             $return = $request_insert;
         } else {
             $return = 'exists';
@@ -91,5 +103,18 @@ class FichasModel extends Mysql {
         }
         return $return;
     }
+    public function selectUsuariosByFicha(int $idficha) {
+        $sql = "SELECT usuarios_idusuario FROM fichas_has_usuarios WHERE fichas_idficha = {$idficha}";
+        $request = $this->select_all($sql);
+        return $request;
+    }
+
+    // Método para obtener todos los usuarios disponibles
+    public function selectUsuarios() {
+        $sql = "SELECT idusuario, nombre_usuario FROM usuarios";
+        $request = $this->select_all($sql);
+        return $request;
+    }
+
 }
 ?>

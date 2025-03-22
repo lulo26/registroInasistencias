@@ -58,22 +58,23 @@ class Fichas extends Controllers{
         }
         die();
     }
-    public function setFichas()
-    {
+    public function setFichas() {
         $numero_ficha = strClean($_POST['numero_ficha']);
         $cursos_idcurso = strClean($_POST['cursos_idcurso']);
         $fecha_inicio = strClean($_POST['fecha_inicio']);
         $fecha_fin = strClean($_POST['fecha_fin']);
         $modalidad = strClean($_POST['modalidad']);
         $idficha = strClean($_POST['idficha']);
-        $arrPost = ['numero_ficha','cursos_idcurso','fecha_inicio','fecha_inicio','fecha_fin','modalidad'];
+        $usuarios = isset($_POST['usuarios']) ? $_POST['usuarios'] : []; // IDs de usuarios seleccionados
+
+        $arrPost = ['numero_ficha', 'cursos_idcurso', 'fecha_inicio', 'fecha_fin', 'modalidad'];
         if (check_post($arrPost)) {
             if ($idficha == 0 || $idficha == "") {
                 $validarFicha = $this->model->validarNumeroFicha($numero_ficha);
                 if ($validarFicha == "numfichaExiste") {
-                    $arrRespuesta = array('status' => false, 'msg' => 'La ficha ya esta registrado.');
+                    $arrRespuesta = array('status' => false, 'msg' => 'La ficha ya está registrada.');
                 } else {
-                    $requestModel = $this->model->insertarFicha($numero_ficha, $cursos_idcurso, $fecha_inicio, $fecha_fin, $modalidad);
+                    $requestModel = $this->model->insertarFicha($numero_ficha, $cursos_idcurso, $fecha_inicio, $fecha_fin, $modalidad, $usuarios);
                     if ($requestModel > 0) {
                         $arrRespuesta = array('status' => true, 'msg' => '¡Ficha agregada correctamente!.');
                     }
@@ -87,6 +88,13 @@ class Fichas extends Controllers{
         }
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();
-    } 
+    }
+
+    // Método para obtener los usuarios disponibles
+    public function getUsuarios() {
+        $arrData = $this->model->selectUsuarios();
+        echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
+        die();
+    }
 }
 ?>
