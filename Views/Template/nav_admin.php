@@ -19,8 +19,15 @@
 
     <li class="nav-item">
       <a class="nav-link collapsed" href="<?= base_url() ?>/excusas">
-        <i class="bi bi-person"></i>
+        <i class="bi bi-file-earmark-text"></i>
         <span>Excusas</span>
+      </a>
+    </li><!-- End Profile Page Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="<?= base_url() ?>/excepciones">
+        <i class="bi bi-exclamation-circle"></i>
+        <span>Excepciones</span>
       </a>
     </li><!-- End Profile Page Nav -->
 

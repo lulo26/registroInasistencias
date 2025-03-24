@@ -1,7 +1,6 @@
 <?php
 header_admin($data);
-getModal('subirExcusaModal', $data);
-getModal('rechazarExcusaModal', $data);
+getModal('excepcionesModal', $data);
 ?>
 
 <main id="main" class="main">
@@ -29,7 +28,11 @@ getModal('rechazarExcusaModal', $data);
                         <th># Excepcion</th>
                         <th>Fecha</th>
                         <th>Motivo</th>
-                        <th>Excusa</th>
+                        <th>Usuario</th>
+                        <th>Rol</th>
+                        <th>ID Bloque</th>
+                        <th>Hora</th>
+                        <th>Ficha</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>

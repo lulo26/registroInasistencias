@@ -1,23 +1,23 @@
 <?php
 
-class Excusas extends Controllers
+class Excepciones extends Controllers
 {
     public function __construct()
     {
         parent::__construct();
-        /* session_start();
+        session_start();
         if (empty($_SESSION['login'])) {
             header('Location: ' . base_url() . '/login');
-        } */
+        }
     }
 
-    public function excepsiones()
+    public function excepciones()
     {
-        $data['page_title'] = "Excepsiones";
-        $data['page_id_name'] = "excepsiones";
-        $data['page_functions_js'] = "excepsiones/excepsiones.js";
+        $data['page_title'] = "Excepciones";
+        $data['page_id_name'] = "excepciones";
+        $data['page_functions_js'] = "excepciones/excepciones.js";
 
-        $this->views->getView($this, "excepsiones", $data);
+        $this->views->getView($this, "excepciones", $data);
     }
 
     public function getUsuarioByID()
@@ -37,249 +37,192 @@ class Excusas extends Controllers
         die();
     }
 
-    public function getExcepciones() {}
-
-    public function getExcepcionesByID() {}
-
-    public function getExcByInstructor() {}
-
-    public function setExcepciones() {}
-
-    public function getInasistencias() /* getInasByAprendiz */
+    public function getFichasByUserID()
     {
-        $id = 1;
+        if ($_SESSION['idUser']) {
+            $idUsuario = $_SESSION['idUser'];
+            $arrData = $this->model->selectFichasUserID($idUsuario);
 
-        $arrInasistencias = $this->model->selectInasistencias($id);
-        $arrExcusas = $this->model->selectExcusasAprendiz($id);
-        $arrResponse = $arrInasistencias;
-
-        /* for ($j = 0; $j < count($arrExcusas); $j++) {
-        } */
-
-        for ($i = 0; $i < count($arrInasistencias); $i++) {
-            if ($arrInasistencias[$i]['estado_inasistencia'] === "Sin excusa") {
-
-                $limite = 6;
-                $fechaInasistencia = new DateTime($arrInasistencias[$i]['fecha_inasistencia']);
-                $fechaActual = new DateTime(date('Y-m-d H:i:s'));
-                $diasPlazo = $fechaInasistencia->diff($fechaActual);
-                $dif = (int)$diasPlazo->days;
-
-                if ($dif >= $limite) {
-                    $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>Sin excusa</span>";
-                    $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
-                    $mensaje = "<div class='alert alert-danger' role='alert'>
-                              ¡Superaste el limite de dias para enviar una excusa!
-                            </div>";
-                    $arrResponse[$i]['options'] =  $mensaje;
-                } else {
-                    $arrResponse[$i]['idexcusa'] = 0;
-
-                    $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>Sin excusa</span>";
-                    $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
-
-                    $btnAdjuntar = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='adjuntar' rel='" . $arrResponse[$i]['idregistro'] . "'>
-                                        <i class='bi bi-paperclip'></i>
-                                    </button>";
-                    $arrResponse[$i]['options'] =  $btnAdjuntar;
-                }
-            } elseif ($arrInasistencias[$i]['estado_inasistencia'] === "Con excusa") {
-
-                for ($j = 0; $j < count($arrExcusas); $j++) {
-                    if ($arrResponse[$i]['idregistro'] === $arrExcusas[$j]['idregistro']) {
-                        $arrResponse[$i]['idexcusa'] = $arrExcusas[$j]['idexcusa'];
-                        $arrResponse[$i]['estado_excusa'] = $arrExcusas[$j]['estado_excusa'];
-                        break;
-                    }
-                }
-                /* foreach ($arrExcusas as $excusa) {
-                    if ($arrResponse[$i]['idregistro'] === $excusa['idregistro']) {
-                        # code...
-                    }
-               } */
-
-                /* if ($arrResponse[$i]['idregistro'] === $arrExcusas[$i]['idregistro']) {
-
-                    $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
-                    $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa']; */
-
-                if ($arrResponse[$i]['estado_excusa'] === "Enviada" || $arrResponse[$i]['estado_excusa'] === "Por revisar") {
-
-                    $estadoExcusa = "<span class='badge rounded-pill text-bg-info'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
-
-                    $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
-                                        <i class='bi bi-pencil-square'></i>
-                                    </button>";
-                    $arrResponse[$i]['options'] =  $btnEdit;
-                } elseif ($arrResponse[$i]['estado_excusa'] === "Aprobada") {
-                    /*  $btnEdit = "<button disabled type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
-                                            <i class='bi bi-pencil-square'></i>
-                                        </button>";
-                        $arrResponse[$i]['options'] =  $btnEdit; */
-
-                    $estadoExcusa = "<span class='badge rounded-pill text-bg-success'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
-
-                    $mensaje = "<div class='alert alert-success' role='alert'>
-                                ¡Tu excusa fue aprobada!
-                                </div>";
-                    $arrResponse[$i]['options'] =  $mensaje;
-                } elseif ($arrResponse[$i]['estado_excusa'] === "Rechazada") {
-
-                    /* $btnEdit = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='update' rel='" . $arrResponse[$i]['idexcusa'] . "'>
-                                        <i class='bi bi-pencil-square'></i>
-                                    </button>";
-                        $arrResponse[$i]['options'] =  $btnEdit; */
-
-                    $estadoExcusa = "<span class='badge rounded-pill text-bg-danger'>" . $arrResponse[$i]['estado_excusa'] . "</span>";
-
-                    $mensaje = "<div class='alert alert-danger' role='alert'>
-                                ¡Tu excusa fue rechazada! <a href='#' class='alert-link' id='verMotivo' data-action-type='verMotivo' data-idexcusa=" . $arrResponse[$i]['idexcusa'] . ">Ver motivo.</a>
-                                </div>";
-                    /* $arrResponse[$i]['motivo'] =  $arrResponse[$i]['motivo_rechazo']; */
-                    $arrResponse[$i]['options'] =  $mensaje;
-                }
-                $arrResponse[$i]['estado_excusa'] = $estadoExcusa;
-                /* } */
-
-                /*  $arrResponse[$i]['idexcusa'] = $arrExcusas[$i]['idexcusa'];
-                $arrResponse[$i]['estado_excusa'] = $arrExcusas[$i]['estado_excusa']; */
+            if (empty($arrData)) {
+                $arrResponse = array('status' => false, 'msg' => 'No se encontraron datos.');
+            } else {
+                $arrResponse = array('status' => true, 'data' => $arrData);
             }
         }
-
-        /* 
-$datetime1 = new DateTime($arrInasistencias[$i]['fecha_inasistencia']);
-$hoy = date('Y-m-d H:i:s')
-$datetime2 = new DateTime($hoy);
-$interval = $datetime1->diff($datetime2);
-echo $interval->format('%R%a días'); */
 
         echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
         die();
     }
 
-    public function getExcusaByID($idexcusa)
+    public function getFichasByDate($fecha)
     {
-        $intIdExcusa = intval(strClean($idexcusa));
+        if ($_SESSION['idUser']) {
+            $idUsuario = $_SESSION['idUser'];
+            $fecha = strClean($_POST['fecha']);
+            $arrData = $this->model->selectFichasDate($idUsuario, $fecha);
 
-        if ($intIdExcusa > 0) {
-            $arrData = $this->model->selectExcusaID($intIdExcusa);
+            if (empty($arrData)) {
+                $arrResponse = array('status' => false, 'msg' => 'No se encontraron datos.');
+            } else {
+                $arrResponse = array('status' => true, 'data' => $arrData);
+            }
+        }
+
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function getExcepciones()
+    {
+        $arrData = $this->model->selectExcepciones();
+
+        if (empty($arrData)) {
+            $arrResponse = array('status' => false, 'msg' => 'Sin excepciones.');
+        } else {
+            for ($i = 0; $i < count($arrData); $i++) {
+                /* if ($_SESSION['idUser'] === $arrData[$i]['idusuario'] && $arrData[$i]['userData']['rol_usuario'] === 'COORDINADOR') {
+                     */
+                $btnEdit = "<button type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idexcepcion'] . "'>
+                                    <i class='bi bi-pencil-square'></i>
+                                </button>";
+                $btnDelete = "<button type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idexcepcion'] . "'>
+                                    <i class='bi bi-trash-fill'></i>
+                                  </button>";
+                /* } else {
+                    $btnEdit = "<button disabled type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idexcepcion'] . "'>
+                                    <i class='bi bi-pencil-square'></i>
+                                </button>";
+                    $btnDelete = "<button disabled type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idexcepcion'] . "'>
+                                    <i class='bi bi-trash-fill'></i>
+                                  </button>";
+                } */
+                $arrData[$i]['options'] =  $btnDelete . " " . " " . $btnEdit;
+            }
+            $arrResponse = array('status' => true, 'data' => $arrData);
+        }
+
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function getExcepByInstructor($idInstructor)
+    {
+        $intIdInstructor = intval(strClean($idInstructor));
+        if ($intIdInstructor > 0) {
+            $arrData = $this->model->selectExcepInstructor($intIdInstructor);
+
+            if (empty($arrData)) {
+                $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
+            } else {
+
+                for ($i = 0; $i < count($arrData); $i++) {
+                    if ($_SESSION['idUser'] === $intIdInstructor) {
+                        $btnEdit = "<button type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idexcepcion'] . "'>
+                                        <i class='bi bi-pencil-square'></i>
+                                    </button>";
+                        $btnDelete = "<button type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idexcepcion'] . "'>
+                                        <i class='bi bi-trash-fill'></i>
+                                      </button>";
+                    } else {
+                        $btnEdit = "<button disabled type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idexcepcion'] . "'>
+                                        <i class='bi bi-pencil-square'></i>
+                                    </button>";
+                        $btnDelete = "<button disabled type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idexcepcion'] . "'>
+                                        <i class='bi bi-trash-fill'></i>
+                                      </button>";
+                    }
+                    $arrData[$i]['options'] =  $btnDelete . " " . " " . $btnEdit;
+                }
+                $arrResponse = array('status' => true, 'data' => $arrData);
+            }
+        }
+
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function getExcepcionByID($idExcepcion)
+    {
+        $intIdExcep = intval(strClean($idExcepcion));
+        if ($intIdExcep > 0) {
+            $arrData = $this->model->selectExcepID($intIdExcep);
             if (empty($arrData)) {
                 $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
             } else {
                 $arrResponse = array('status' => true, 'data' => $arrData);
             }
         }
-
         echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
         die();
     }
 
-    public function getExcusasPorInstructor($idinstructor) /* getExcusasByInstructor */
+    public function setExcepciones()
     {
-        $intIdInstructor = intval(strClean($idinstructor));
-        if ($intIdInstructor > 0) {
-            $arrData = $this->model->selectExcusasInstructor($intIdInstructor);
-            if (empty($arrData)) {
-                $mensaje = "<div class='alert alert-success' role='alert'>
-                          ¡No hay excusas por revisar!
-                        </div>";
-                $arrData = array('msg' => $mensaje);
-                $arrResponse = array('status' => false, 'data' => $arrData);
-            } else {
-                /* Decision: si hay excusa, mostrarla en la tabla */
+        $idExcepcion = strClean($_POST['idexcepcion']);
+        $fecha = strClean($_POST['fecha_excep']);
+        $motivo = strClean($_POST['motivo_excep']);
+        $idUsuario = strClean($_POST['usuarios_idusuario']);
+        $idBloque = strClean($_POST['bloques_idbloque']);
+        $idFicha = strClean($_POST['fichas_idficha']);
+        /* $horaEntrada_excepcion = strClean($_POST['horaEntrada_excepcion']); */
 
-                for ($i = 0; $i < count($arrData); $i++) {
+        $arrPost = ['fecha_excep', 'motivo_excep', 'usuarios_idusuario', 'bloques_idbloque'];
 
-                    if ($arrData[$i]['estado_excusa'] === "Por revisar") {
-                        $btnDescargar = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='descargar' rel='" . $arrData[$i]['idexcusa'] . "'>
-                            <i class='bi bi-file-earmark-text'></i>
-                        </button>";
-                        $arrData[$i]['excusa'] = $btnDescargar;
+        if (check_post($arrPost)) {
+            if ($idExcepcion == 0 || $idExcepcion == "") {
 
-                        $btnAprobar = "<button type='button' class='btn btn-outline-success rounded-pill' data-action-type='aprobar' rel='" . $arrData[$i]['idexcusa'] . "'>
-                            <i class='bi bi-check-circle'></i>
-                        </button>";
+                /* $validarIdentificacion = $this->model->validarIdentificacion($numdoc_usuario);
+                $validarCorreo = $this->model->validarEmail($correo_usuario);
+                $validarCodigo = $this->model->validarCodigo($codigo_usuario); */
 
-                        $btnRechazar = "<button type='button' class='btn btn-outline-danger rounded-pill' data-action-type='rechazar' rel='" . $arrData[$i]['idexcusa'] . "'>
-                            <i class='bi bi-x-circle'></i>
-                          </button>";
-                        $arrData[$i]['options'] =  $btnAprobar . " " . " " . $btnRechazar;
-                    }
-
-                    /* if ($arrData[$i]['estado_excusa'] === "Sin excusa") {
-                        $estadoExcusa = "<span class='badge rounded-pill text-bg-secondary'>" . $arrData[$i]['estado_excusa'] . "</span>";
-                    } elseif ($arrData[$i]['estado_excusa'] === "Enviada" || $arrData[$i]['estado_excusa'] === "Por revisar") {
-                        $estadoExcusa = "<span class='badge rounded-pill text-bg-info'>" . $arrData[$i]['estado_excusa'] . "</span>";
-                    } elseif ($arrData[$i]['estado_excusa'] === "Aprobada") {
-                        $estadoExcusa = "<span class='badge rounded-pill text-bg-success'>" . $arrData[$i]['estado_excusa'] . "</span>";
-                    } elseif ($arrData[$i]['estado_excusa'] === "Rechazada") {
-                        $estadoExcusa = "<span class='badge rounded-pill text-bg-danger'>" . $arrData[$i]['estado_excusa'] . "</span>";
-                    } 
-                    $arrData[$i]['estado_excusa'] = $estadoExcusa;
-
-                    $btnDescargar = "<button type='button' class='btn btn-outline-primary rounded-pill' data-action-type='descargar' rel='" . $arrData[$i]['idexcusa'] . "'>
-                            <i class='bi bi-file-earmark-text'></i>
-                        </button>";
-                    $arrData[$i]['excusa'] = $btnDescargar;
-
-                    $btnAprobar = "<button type='button' class='btn btn-outline-success rounded-pill' data-action-type='aprobar' rel='" . $arrData[$i]['idexcusa'] . "'>
-                            <i class='bi bi-check-circle'></i>
-                        </button>";
-
-                    $btnRechazar = "<button type='button' class='btn btn-outline-danger rounded-pill' data-action-type='rechazar' rel='" . $arrData[$i]['idexcusa'] . "'>
-                            <i class='bi bi-x-circle'></i>
-                          </button>";
-                    $arrData[$i]['options'] =  $btnAprobar . " " . " " . $btnRechazar;*/
+                /* if ($validarIdentificacion == "numdocExiste") {
+                    $arrRespuesta = array('status' => false, 'msg' => 'Numero de identificacion ya registrado.');
+                } elseif ($validarCorreo == "correoExiste") {
+                    $arrRespuesta = array('status' => false, 'msg' => 'Correo ya registrado.');
+                } elseif ($validarCodigo == "codigoExiste") {
+                    $arrRespuesta = array('status' => false, 'msg' => 'Codigo no valido.');
+                } else { */
+                if ($idFicha === 0) {
+                    $idFicha = null;
                 }
-                $arrResponse = array('status' => true, 'data' => $arrData);
-            }
-        }
-
-        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
-        die();
-    }
-
-    public function setExcusas()
-    {
-        $file = ($_FILES['excusa']);
-        $fileName = basename($file["name"]);
-        $idExcusa = strClean($_POST['idexcusa']);
-        $idAprendiz = strClean($_POST['idAprendiz']);
-        $idInasistencia = strClean($_POST['idInasistencia']);
-
-        $targetFile = $this->targetDir . uniqid() . $fileName;
-        $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-        /* $arrPost = ['idexcusa', 'idAprendiz', 'idInasistencia']; */
-
-        // Verificar si el archivo es un PDF
-        if ($fileType != "pdf") {
-            $arrRespuesta = array('status' => false, 'msg' => 'Solo se permiten archivos PDF.');
-        }
-        // Verificar si el archivo ya existe
-        elseif (file_exists($targetFile)) {
-            $arrRespuesta = array('status' => false, 'msg' => 'El archivo ya existe.');
-        } elseif ($idExcusa == 0 || $idExcusa == "") {
-
-            // Intentar mover el archivo al directorio de destino
-            if (move_uploaded_file($file["tmp_name"], $targetFile)) {
-                $requestModel = $this->model->insertarExcusa($fileName, $targetFile, $idAprendiz, $idInasistencia);
+                $requestModel = $this->model->insertarExcepcion($fecha, $motivo, $idUsuario, $idBloque, $idFicha);
                 if ($requestModel > 0) {
-                    $arrRespuesta = array('status' => true, 'msg' => 'Excusa enviada correctamente.');
+                    $arrRespuesta = array('status' => true, 'msg' => 'Excepción agregada correctamente.');
                 }
+                /* } */
             } else {
-                $arrRespuesta = array('status' => false, 'msg' => 'Error al mover el archivo: ' . print_r(error_get_last(), true));
+                $validarCorreoEditar = $this->model->validarEmail($correo_usuario, $idusuario);
+                $validarCodigoEditar = $this->model->validarCodigo($codigo_usuario, $idusuario);
+
+                if ($validarCorreoEditar == "correoExiste") {
+                    $arrRespuesta = array('status' => false, 'msg' => 'Correo ya registrado.');
+                } elseif ($validarCodigoEditar == "codigoExiste") {
+                    $arrRespuesta = array('status' => false, 'msg' => 'Codigo no valido.');
+                } else {
+                    $requestModel = $this->model->editarUsuario($numdoc_usuario, $nombre_usuario, $password_usuario, $correo_usuario, $telefono_usuario, $codigo_usuario, $rol_usuario, $idusuario);
+                    $arrRespuesta = array('status' => true, 'msg' => 'Usuario actualizado correctamente.');
+                }
+                /* $option = 2; */
+                /* $validarCorreo = $this->model->validarEmail($correo_usuario);
+                if ($validarCorreo === "correoExiste") {
+                    $arrRespuesta = array('status' => false, 'msg' => 'Correo ya registrado.');
+                } else {
+                    $requestModel = $this->model->editarUsuario($numdoc_usuario, $nombre_usuario, $password_usuario, $correo_usuario, $telefono_usuario, $roles_idrol, $codigo_usuario, $idusuario);
+                    $option = 2;
+                } */
             }
+            // echo($option);
+            /* if ($requestModel > 0) {
+                if ($option === 1) {
+                    $arrRespuesta = array('status' => true, 'msg' => 'Usuario agregado correctamente.');
+                }
+            } elseif ($requestModel === 'exists') {
+                $arrRespuesta = array('status' => false, 'msg' => 'Este usuario ya existe.');
+            } else {
+                $arrRespuesta = array('status' => true, 'msg' => 'Usuario actualizado correctamente.');
+            } */
         } else {
-
-            // Intentar mover el archivo al directorio de destino
-            if (move_uploaded_file($file["tmp_name"], $targetFile)) {
-
-                $requestModel = $this->model->editarExcusa($fileName, $targetFile, $idExcusa);
-                $arrRespuesta = array('status' => true, 'msg' => 'Excusa actualizada correctamente.');
-            } else {
-                $arrRespuesta = array('status' => false, 'msg' => 'Error al mover el archivo: ' . print_r(error_get_last(), true));
-            }
+            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos.');
         }
 
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);

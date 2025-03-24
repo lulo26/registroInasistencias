@@ -17,53 +17,40 @@
 
                             <div class="row">
                                 <div class="form-group col-6">
-                                    <label for="nombre_usuario">Nombre</label>
-                                    <input type="text" class="form-control valid validText" id="nombre_usuario" name="nombre_usuario" autocomplete="off" required="">
+                                    <label for="fecha_excep">Fecha</label>
+                                    <input type="date" min="<?php echo date('Y-m-d'); ?>" class="form-control valid validDate" id="fecha_excep" name="fecha_excep" autocomplete="off" required="">
                                 </div>
                                 <div class="form-group col-6">
-                                    <label for="numdoc_usuario">Identificacion</label>
-                                    <input type="number" min="1" class="form-control valid validNumber" id="numdoc_usuario" name="numdoc_usuario" autocomplete="off" required="">
-                                </div>
-                                <div class="form-group col-6">
-                                    <label for="fecha_excep">Fecha:</label>
-                                    <input type="date" class="form-control valid validDate" id="fecha_excep" name="fecha_excep" autocomplete="off" required="">
+                                    <label for="fichas_idficha">Ficha</label>
+                                    <select class="form-select" aria-label="Default select example" name="fichas_idficha" id="fichas_idficha">
+                                        <!-- Aqui se cargan las fichas dinamicamente -->
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="row mt-2">
                                 <div class="form-group">
-                                    <label for="motivo_excep">Motivo:</label>
-                                    <textarea class="form-control valid validText" name="motivo_excep" id="motivo_excep"></textarea>
+                                    <label for="motivo_excep">Motivo</label>
+                                    <textarea class="form-control valid validText" rows="2" name="motivo_excep" id="motivo_excep" required></textarea>
                                 </div>
                             </div>
 
                             <div class="row mt-2">
-                                <div class="form-group col-6">
-                                    <label for="codigo_usuario">Codigo</label>
-                                    <input type="text" class="form-control valid validText" id="codigo_usuario" name="codigo_usuario" autocomplete="off">
-                                </div>
-                                <div class="form-group col-6">
-                                    <label for="password_usuario">Contraseña</label>
-                                    <input type="password" class="form-control valid validPassword" id="password_usuario" name="password_usuario" autocomplete="off" required="">
+                                <div class="form-group">
+                                    <label for="bloques_idbloque">Bloque</label>
+                                    <select class="form-select" aria-label="Default select example" name="bloques_idbloque" id="bloques_idbloque">
+                                        <option disabled selected>Seleccione un bloque</option>
+                                        <option value="3">3 horas</option>
+                                        <option value="3">6 horas</option>
+                                    </select>
                                 </div>
                             </div>
 
-                            <label for="roles_idrol" class="form-label mt-2">Rol</label>
-                            <select class="form-select" aria-label="Default select example" name="roles_idrol" id="roles_idrol">
-                                <!-- Aqui se cargan los roles dinamicamente -->
-                            </select>
-
                             <!-- <label for="roles_idrol" class="form-label mt-2">Rol</label>
-              <select class="form-select" aria-label="Default select example" name="roles_idrol" id="roles_idrol">
-                Aqui se cargan los roles dinamicamente 
-              </select> -->
+                            <select class="form-select" aria-label="Default select example" name="roles_idrol" id="roles_idrol">
+                                Aqui se cargan los roles dinamicamente 
+                            </select> -->
 
-                            <label for="rol_usuario" class="form-label mt-2">Rol</label>
-                            <select class="form-select" aria-label="Default select example" name="rol_usuario" id="rol_usuario">
-                                <option disabled selected>Selecciona un rol</option>
-                                <option value="INSTRUCTOR">Instructor</option>
-                                <option value="COORDINADOR">Coordinador</option>
-                            </select>
                         </div>
 
                         <div class="modal-footer">
