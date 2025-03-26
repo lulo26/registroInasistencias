@@ -136,6 +136,8 @@ function fntSearchFicha(rows){
             msg:"No se pudo encontrar el numero de ficha"
         }
     }
+    console.log(ficha);
+    
 }
 
 function fntSearchHorarios(rows){
@@ -329,7 +331,7 @@ function sentData(){
     const frmHorario = document.querySelector('#frmHorario')
     let frmData = new FormData(frmHorario)
 
-    fetch(base_url + '/horario/setHorario',{
+    fetch(base_url + '/horarios/setHorarios',{
         method: "POST",
         body: frmData,
     })
@@ -488,6 +490,8 @@ function printForms(){
     <form id="frmHorario">
         <input type="hidden" class="form-control" name="ficha" value="${ficha}">
     `
+    console.log(ficha);
+    
 
     Object.entries(dataProcesada).forEach((data, index) => {
         data = data[1]
@@ -505,24 +509,24 @@ function printForms(){
                     <div class="col-lg-6">
                         <div class="mb-3 col-12">
                             <label for="txtNombre" class="form-label">Fecha</label>
-                            <input type="text" class="form-control" name="hFecha[]" value="${data.fecha}">
+                            <input type="text" class="form-control" name="fecha[]" value="${data.fecha}">
                         </div>
 
                         <div class="mb-3 col-12">
                             <label for="txtNombre" class="form-label">Instructor</label>
-                            <input type="text" class="form-control" name="hInstructor[]" value="${data.instructor}">
+                            <input type="text" class="form-control" name="usuario[]" value="${data.instructor}">
                         </div>
                     </div>
 
                     <div class="col-lg-6">
                         <div class="mb-3 col-6">
                             <label for="txtNombre" class="form-label">Hora Inicio</label>
-                            <input type="text" class="form-control" name="hHoraInicio[]" value="${data.horaInicio}">
+                            <input type="text" class="form-control" name="fechaIni[]" value="${data.horaInicio}">
                         </div>
 
                         <div class="mb-3 col-6">
                             <label for="txtNombre" class="form-label">Hora Fin</label>
-                            <input type="text" class="form-control" name="hHoraFin[]" value="${data.horaFin}">
+                            <input type="text" class="form-control" name="fechaFin[]" value="${data.horaFin}">
                         </div>
                     </div>
                 </div>
