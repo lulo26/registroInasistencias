@@ -32,6 +32,24 @@ class Reporte extends Controllers
         echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
         die();
     }
+    public function getAsistenciasForAprendiz()
+    {
+
+        if (isset($_GET['idAprendiz'], $_GET['fechaInicio'], $_GET['fechaFin'])) {
+
+            $idAprendiz = intval($_GET['idAprendiz']);
+            $inicio = $_GET['fechaInicio'];
+            $fin = $_GET['fechaFin'];
+
+            $arrData = $this->model->selectForAprendiz($inicio, $fin, $idAprendiz);
+
+            echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
+        } else {
+
+            echo json_encode(["error" => "Faltan parámetros"], JSON_UNESCAPED_UNICODE);
+        }
+        die();
+    }
 
 
 }

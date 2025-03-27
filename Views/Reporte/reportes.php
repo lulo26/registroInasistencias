@@ -21,8 +21,8 @@
         </div>
         <div class="col-3 text-right">
             <h5>Mes</h5>
-            <select class="form-select" aria-label="Default select example">
-                <option id="selectMes" selected>Seleccione el mes</option>
+            <select class="form-select" id="selectMes" aria-label="Default select example" required>
+                <option value="" selected>Seleccione el mes</option>
                 <option value=01>Enero</option>
                 <option value=02>Febrero</option>
                 <option value=03>Marzo</option>
@@ -39,8 +39,8 @@
         </div>
         <div class="col-3 text-right">
             <h5>Ficha</h5>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Seleccione la ficha</option>
+            <select class="form-select" id="selectFicha2" aria-label="Default select example" required>
+                <option value="" selected>Seleccione la ficha</option>
                 <div class="selectFicha" id="selectFicha"></div>
 
             </select>
@@ -59,17 +59,44 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" id="tablaReportes">
                             <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Id</th>
-                                    <th scope="col">Número de Documento</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Apellido</th>
-                                    <th scope="col">Género</th>
-                                    <th scope="col">Acciones</th>
-                                </tr>
+                                <tr id="cabeceraTabla"></tr>
                             </thead>
                             <tbody>
-                                <!-- Aquí se llenará la tabla dinámicamente -->
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>Mark</td>
+                                </tr>
+
                             </tbody>
                         </table>
                     </div>

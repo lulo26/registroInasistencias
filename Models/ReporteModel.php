@@ -10,19 +10,27 @@ class ReporteModel extends Mysql
 
     public function selectForAprendiz(string $fechaInicio, string $fechaFin, int $idAprendiz)
     {
-        $return = "";
+        // Convertir fechas a solo YYYY-MM-DD (elimina horas)
+        $fechaInicio = date('Y-m-d', strtotime($fechaInicio));
+        $fechaFin = date('Y-m-d', strtotime($fechaFin));
 
-        $this->fechaInicio = $fechaInicio;
-        $this->fechaFin = $fechaFin;
-        $this->idAprendiz = $idAprendiz;
+        $sql = "SELECT 
+            inasistencias.fecha_inasistencia,
+            inasistencias.estado_inasistencia,
+            inasistencias.hora_inasistencia,
+            inasistencias.retardos_inasistencia,
+            aprendices.nombre_aprendiz,
+            aprendices.apellido_aprendiz
+        FROM inasistencias
+        INNER JOIN aprendices ON aprendices.idaprendiz = inasistencias.aprendices_idusuario
+        WHERE inasistencias.aprendices_idusuario = ? 
+        AND DATE(inasistencias.fecha_inasistencia) BETWEEN ? AND ?";
 
-        $sql = "SELECT (inasistencias.fecha_inasistencia,inasistencias.estado_inasistencia,inasistencias.fecha_inasistencia,inasistencias.hora_inasistencia,inasistencias.retardos_inasistencia,aprendices.nombre_aprendiz,aprendices.apellido_aprendiz)
-        JOIN aprendices ON aprendices.idaprendiz=inasistencias.aprendices_idusuario 
-        WHERE idaprendiz=? and inasistencias.fecha_inasistencia BETWEEN ? AND ?";
-        $arrData = array($this->idAprendiz, $this->fechaInicio, $this->fechaFin);
-        $request = $this->select_all($sql, $arrData);
-        return $request;
+        $arrData = [$idAprendiz, $fechaInicio, $fechaFin];
+
+        return $this->select_all2($sql, $arrData);
     }
+
 
     public function selectForFicha(string $fechaInicio, string $fechaFin, int $idficha)
     {

@@ -44,6 +44,12 @@ class Mysql extends Conexion
         $data = $result->fetchall(PDO::FETCH_ASSOC);
         return $data;
     }
+    public function select_all2($query, $params = [])
+    {
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public function update(string $query, array $arrValues)
     {
