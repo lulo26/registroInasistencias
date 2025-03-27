@@ -15,6 +15,9 @@ const btnEquis = document.getElementById("btnEquis");
 
 function limpiarFormulario() {
   frmExcepciones.reset();
+  div_otro_motivo.hidden = true;
+  div_hora_entrada.hidden = true;
+  div_hora_salida.hidden = true;
 }
 
 btnCerrar.addEventListener("click", limpiarFormulario);
@@ -25,6 +28,10 @@ btnEquis.addEventListener("click", limpiarFormulario);
 ////////////////////////////////////////////////
 
 document.addEventListener("DOMContentLoaded", () => {
+  div_otro_motivo.hidden = true;
+  div_hora_entrada.hidden = true;
+  div_hora_salida.hidden = true;
+
   obtenerUsuario();
   /* if (rolUsuario === "INSTRUCTOR") {
   } else  */
@@ -95,8 +102,8 @@ function listarFichasPorFecha(fechaValidar) {
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
+      select_fichas.innerHTML = "<option selected disabled>Seleccione una ficha</option>";
       if (!data.status) {
-        select_fichas.innerHTML = "<option selected disabled>Seleccione una ficha</option>";
         if (rolUsuario === "COORDINADOR") {
           select_fichas.innerHTML += "<option value='0'>Excepcion general</option>";
         } else if (rolUsuario === "INSTRUCTOR") {
@@ -193,10 +200,35 @@ btnExcepcion.addEventListener("click", () => {
 
 frmExcepciones.addEventListener("submit", (e) => {
   e.preventDefault();
+
   if (select_fichas.value === "Seleccione una ficha") {
     Swal.fire({
       title: "¡Atencion!",
       text: "Por favor, seleccione una ficha.",
+      icon: "warning",
+    });
+  } else if (select_motivo.value === "Seleccione un motivo") {
+    Swal.fire({
+      title: "¡Atencion!",
+      text: "Por favor, seleccione un motivo.",
+      icon: "warning",
+    });
+  } else if (select_motivo.value === "Otro" && otro_motivo.value === "") {
+    Swal.fire({
+      title: "¡Atencion!",
+      text: "Por favor, indique el motivo de la excepción.",
+      icon: "warning",
+    });
+  } else if (select_motivo.value === "Entrada tarde" && hora_entrada.value === "") {
+    Swal.fire({
+      title: "¡Atencion!",
+      text: "Por favor, seleccione una hora.",
+      icon: "warning",
+    });
+  } else if (select_motivo.value === "Salida temprano" && hora_salida.value === "") {
+    Swal.fire({
+      title: "¡Atencion!",
+      text: "Por favor, seleccione una hora.",
       icon: "warning",
     });
   } else if (select_bloques.value === "Seleccione un bloque") {
@@ -206,15 +238,21 @@ frmExcepciones.addEventListener("submit", (e) => {
       icon: "warning",
     });
   } else {
-    console.log("ID del Usuario: " + idUsuario);
     frmData = new FormData(frmExcepciones);
     frmData.append("usuarios_idusuario", idUsuario);
-    console.log(frmData.get("idexcepcion"));
-    console.log(frmData.get("fecha_excep"));
-    console.log(frmData.get("motivo_excep"));
-    console.log(frmData.get("usuarios_idusuario"));
-    console.log(frmData.get("bloques_idbloque"));
-    console.log(frmData.get("fichas_idficha"));
+    console.log("ID Excepción: " + frmData.get("idexcepcion"));
+    console.log("Fecha: " + frmData.get("fecha_excep"));
+
+    /* console.log(frmData.get("motivo_excep")); */
+
+    console.log("ID del Usuario: " + frmData.get("usuarios_idusuario"));
+    console.log("ID Bloque: " + frmData.get("bloques_idbloque"));
+    console.log("ID Ficha: " + frmData.get("fichas_idficha"));
+
+    console.log("Motivo seleccionado: " + frmData.get("select_motivo"));
+    console.log("Otro motivo: " + frmData.get("otro_motivo"));
+    console.log("Hora entrada: " + frmData.get("hora_entrada"));
+    console.log("Hora salida: " + frmData.get("hora_salida"));
 
     fetch(base_url + "/excepciones/setExcepciones", {
       method: "POST",
@@ -222,17 +260,17 @@ frmExcepciones.addEventListener("submit", (e) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        /* 
-        console.log(data); */
+        /* console.log(data); */
         Swal.fire({
           title: data.status ? "¡Correcto!" : "¡Error!",
           text: data.msg,
           icon: data.status ? "success" : "error",
         });
         if (data.status) {
-          frmExcepciones.reset();
+          /* frmExcepciones.reset(); */
           $("#crearExcepModal").modal("hide");
-          /* listExcepciones(); */
+          limpiarFormulario();
+          listExcepciones();
         }
       });
   }
@@ -331,3 +369,65 @@ document.addEventListener("click", (e) => {
 function mayusInicial(word) {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+const select_motivo = document.getElementById("select_motivo");
+const otro_motivo = document.getElementById("otro_motivo");
+const div_otro_motivo = document.getElementById("div_otro_motivo");
+
+const hora_entrada = document.getElementById("hora_entrada");
+const div_hora_entrada = document.getElementById("div_hora_entrada");
+
+const hora_salida = document.getElementById("hora_salida");
+const div_hora_salida = document.getElementById("div_hora_salida");
+
+select_motivo.addEventListener("change", () => {
+  if (select_motivo.value === "Otro") {
+    console.log("Otro");
+    div_otro_motivo.hidden = false;
+    div_hora_entrada.hidden = true;
+    div_hora_salida.hidden = true;
+  } else if (select_motivo.value === "Entrada tarde") {
+    console.log("Entrada tarde");
+    div_hora_entrada.hidden = false;
+    div_otro_motivo.hidden = true;
+    div_hora_salida.hidden = true;
+  } else if (select_motivo.value === "Salida temprano") {
+    console.log("Salida temprano");
+    div_hora_salida.hidden = false;
+    div_otro_motivo.hidden = true;
+    div_hora_entrada.hidden = true;
+  }
+});
+
+/* if (select_motivo.value === "Otro") {
+  if (otro_motivo.value === "") {
+    Swal.fire({
+      title: "¡Atencion!",
+      text: "Por favor, indique el motivo de la excepción.",
+      icon: "warning",
+    });
+  } else {
+  }
+} else if (select_motivo.value === "Entrada tarde") {
+  if (hora_entrada.value === "") {
+    Swal.fire({
+      title: "¡Atencion!",
+      text: "Por favor, seleccione una hora.",
+      icon: "warning",
+    });
+  } else {
+  }
+} else if (select_motivo.value === "Salida temprano") {
+  if (hora_salida.value === "") {
+    Swal.fire({
+      title: "¡Atencion!",
+      text: "Por favor, seleccione una hora.",
+      icon: "warning",
+    });
+  } else {
+  }
+} */

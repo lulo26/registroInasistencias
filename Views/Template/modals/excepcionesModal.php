@@ -29,9 +29,33 @@
                             </div>
 
                             <div class="row mt-2">
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="motivo_excep">Motivo</label>
                                     <textarea class="form-control valid validText" rows="2" name="motivo_excep" id="motivo_excep" required></textarea>
+                                </div> -->
+                                <div class="form-group">
+                                    <label for="select_motivo">Motivo</label>
+                                    <select class="form-select" aria-label="Default select example" name="select_motivo" id="select_motivo">
+                                        <option disabled selected>Seleccione un motivo</option>
+                                        <option value="Entrada tarde">Entrada tarde</option>
+                                        <option value="Salida temprano">Salida temprano</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="form-group" id="div_otro_motivo">
+                                    <!-- <label for="otro_motivo">Motivo</label> -->
+                                    <textarea class="form-control valid validText" rows="2" name="otro_motivo" id="otro_motivo" placeholder="Motivo de la excepción"></textarea>
+                                </div>
+                                <div class="form-group" id="div_hora_entrada">
+                                    <label for="hora_entrada">Hora de entrada</label>
+                                    <input type="time" class="form-control valid validTime" id="hora_entrada" name="hora_entrada" autocomplete="off">
+                                </div>
+                                <div class="form-group" id="div_hora_salida">
+                                    <label for="hora_salida">Hora de salida</label>
+                                    <input type="time" class="form-control valid validTime" id="hora_salida" name="hora_salida" autocomplete="off">
                                 </div>
                             </div>
 

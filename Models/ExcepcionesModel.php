@@ -51,7 +51,29 @@ class ExcepcionesModel extends Mysql
         return $request;
     }
 
-    public function insertarExcepcion(string $fecha, string $motivo, int $idUsuario, int $idBloque, int $idFicha)
+    public function insertarExcepcion(string $fecha, string $motivo, int $idUsuario, int $idBloque, int $idFicha, string $horaEntrada, string $horaSalida)
+    {
+        $return = "";
+
+        $this->fecha = $fecha;
+        $this->motivo = $motivo;
+        $this->idUsuario = $idUsuario;
+        $this->idBloque = $idBloque;
+        $this->idFicha = $idFicha;
+        $this->horaEntrada = $horaEntrada;
+        $this->horaSalida = $horaSalida;
+
+        $query = "INSERT INTO excepciones (fecha, motivo_excepcion, usuarios_idusuario, bloques_idbloque, fichas_idficha, horaEntrada_Excepcion) 
+                  VALUES (?, ?, ?, ?, ?, ?)";
+
+        $arrData = array($this->fecha, $this->motivo, $this->idUsuario, $this->idBloque, $this->idFicha, $this->horaEntrada);
+        $request_insert = $this->insert($query, $arrData);
+        $return = $request_insert;
+
+        return $return;
+    }
+
+    /* public function insertarExcepcion(string $fecha, string $motivo, int $idUsuario, int $idBloque, int $idFicha)
     {
         $return = "";
 
@@ -69,7 +91,7 @@ class ExcepcionesModel extends Mysql
         $return = $request_insert;
 
         return $return;
-    }
+    } */
 
     public function editarExcepcion(string $fecha, string $motivo, int $idUsuario, int $idBloque, int $idExcepcion)
     {

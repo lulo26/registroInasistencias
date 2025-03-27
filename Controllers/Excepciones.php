@@ -159,14 +159,21 @@ class Excepciones extends Controllers
     public function setExcepciones()
     {
         $idExcepcion = strClean($_POST['idexcepcion']);
+
         $fecha = strClean($_POST['fecha_excep']);
-        $motivo = strClean($_POST['motivo_excep']);
+        $idFicha = strClean($_POST['fichas_idficha']);
+        /* $motivo = strClean($_POST['motivo_excep']); */
         $idUsuario = strClean($_POST['usuarios_idusuario']);
         $idBloque = strClean($_POST['bloques_idbloque']);
-        $idFicha = strClean($_POST['fichas_idficha']);
+
+        $selectMotivo = strClean($_POST['select_motivo']);
+        $otroMotivo = strClean($_POST['otro_motivo']);
+        $horaEntrada = strClean($_POST['hora_entrada']);
+        $horaSalida = strClean($_POST['hora_salida']);
+
         /* $horaEntrada_excepcion = strClean($_POST['horaEntrada_excepcion']); */
 
-        $arrPost = ['fecha_excep', 'motivo_excep', 'usuarios_idusuario', 'bloques_idbloque'];
+        $arrPost = ['fecha_excep', 'select_motivo', 'usuarios_idusuario', 'bloques_idbloque'];
 
         if (check_post($arrPost)) {
             if ($idExcepcion == 0 || $idExcepcion == "") {
@@ -185,7 +192,17 @@ class Excepciones extends Controllers
                 if ($idFicha === 0) {
                     $idFicha = null;
                 }
-                $requestModel = $this->model->insertarExcepcion($fecha, $motivo, $idUsuario, $idBloque, $idFicha);
+                if ($selectMotivo === "Otro") {
+                    $selectMotivo = $otroMotivo;
+                }
+                if ($otroMotivo === "" || $otroMotivo = null) {
+                    $otroMotivo = null;
+                } elseif ($horaEntrada === "" || $horaEntrada = null) {
+                    $horaEntrada = null;
+                } elseif ($horaSalida === "" || $horaSalida = null) {
+                    $horaSalida = null;
+                }
+                $requestModel = $this->model->insertarExcepcion($fecha, $selectMotivo, $idUsuario, $idBloque, $idFicha, $horaEntrada, $horaSalida);
                 if ($requestModel > 0) {
                     $arrRespuesta = array('status' => true, 'msg' => 'Excepción agregada correctamente.');
                 }
