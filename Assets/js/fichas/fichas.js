@@ -2,10 +2,8 @@ const btnFicha = document.querySelector("#btnFicha");
 const numero = document.querySelector("#numero_ficha");
 const tablaFichas = document.getElementById("tablaFichas");
 const selectCursos = document.getElementById("cursos_idcurso");
-const selectUsuarios = document.getElementById("usuarios");
 const btnCerrar = document.getElementById("btnCerrar");
 const btnCerrar2 = document.getElementById("btnCerrar2");
-
 /////////////////////////////////////////////////////LISTA FICHAS/////////////////////////////////////////////////////
 function listFichas() {
     tablaFichas.innerHTML = "";
@@ -41,26 +39,11 @@ function listarCursos() {
         });
 }
 
-/////////////////////////////////////////////////////LISTAR USUARIOS/////////////////////////////////////////////////////
-function listarUsuarios() {
-    fetch(base_url + "/fichas/getUsuarios")
-        .then((data) => data.json())
-        .then((data) => {
-            console.log(data);
-            selectUsuarios.innerHTML = "";
-            data.forEach((usuario) => {
-                selectUsuarios.innerHTML += `<option value="${usuario.idusuario}">${usuario.nombre_usuario}</option>`;
-            });
-        });
-}
-
 /////////////////////////////////////////////////////LIMPIAR FORMULARIO////////////////////////////////////////////////
 function limpiarFormulario() {
     frmFichas.reset();
     selectCursos.innerHTML = "<option value=''>Seleccione un curso</option>";
-    selectUsuarios.innerHTML = "";
     listarCursos();
-    listarUsuarios();
 }
 btnCerrar.addEventListener("click", limpiarFormulario);
 btnCerrar2.addEventListener("click", limpiarFormulario);
@@ -69,7 +52,6 @@ btnCerrar2.addEventListener("click", limpiarFormulario);
 window.addEventListener("DOMContentLoaded", (e) => {
     listFichas();
     listarCursos();
-    listarUsuarios();
 });
 
 /////////////////////////////////////////////////////ABRIR MODAL/////////////////////////////////////////////////////
@@ -174,7 +156,6 @@ document.addEventListener("click", (e) => {
                     document.querySelector("#fecha_fin").value = ficha.fecha_fin;
                     document.querySelector("#modalidad").value = ficha.modalidad;
                     listarCursos();
-                    listarUsuarios();
                 });
         }
     } catch (e) {}

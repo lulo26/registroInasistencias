@@ -3,6 +3,7 @@ class Fichas extends Controllers{
     public function __construct(){
         parent::__construct();
     }
+
     public function fichas()
     {
         $data['page_title'] = "Fichas";
@@ -11,6 +12,7 @@ class Fichas extends Controllers{
         $data['page_functions_js'] = "fichas/fichas.js";
         $this->views->getView($this,"fichas",$data);
     }
+
     public function getFichas()
     {
         $arrData = $this->model->selectFichas();
@@ -22,12 +24,14 @@ class Fichas extends Controllers{
         echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
         die();
     }
+
     public function getCursos()
     {
         $arrData = $this->model->selectCursos();
         echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
         die();
     }
+
     public function getFichaByID($idficha)
     {
         $intIdFicha = intval(strClean($idficha));
@@ -42,6 +46,7 @@ class Fichas extends Controllers{
         echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
         die();
     }
+
     public function eliminarFicha()
     {
         if ($_POST) {
@@ -58,6 +63,7 @@ class Fichas extends Controllers{
         }
         die();
     }
+
     public function setFichas() {
         $numero_ficha = strClean($_POST['numero_ficha']);
         $cursos_idcurso = strClean($_POST['cursos_idcurso']);
@@ -65,7 +71,6 @@ class Fichas extends Controllers{
         $fecha_fin = strClean($_POST['fecha_fin']);
         $modalidad = strClean($_POST['modalidad']);
         $idficha = strClean($_POST['idficha']);
-        $usuarios = isset($_POST['usuarios']) ? $_POST['usuarios'] : []; // IDs de usuarios seleccionados
 
         $arrPost = ['numero_ficha', 'cursos_idcurso', 'fecha_inicio', 'fecha_fin', 'modalidad'];
         if (check_post($arrPost)) {
@@ -74,7 +79,7 @@ class Fichas extends Controllers{
                 if ($validarFicha == "numfichaExiste") {
                     $arrRespuesta = array('status' => false, 'msg' => 'La ficha ya está registrada.');
                 } else {
-                    $requestModel = $this->model->insertarFicha($numero_ficha, $cursos_idcurso, $fecha_inicio, $fecha_fin, $modalidad, $usuarios);
+                    $requestModel = $this->model->insertarFicha($numero_ficha, $cursos_idcurso, $fecha_inicio, $fecha_fin, $modalidad);
                     if ($requestModel > 0) {
                         $arrRespuesta = array('status' => true, 'msg' => '¡Ficha agregada correctamente!.');
                     }
@@ -87,13 +92,6 @@ class Fichas extends Controllers{
             $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos.');
         }
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
-        die();
-    }
-
-    // Método para obtener los usuarios disponibles
-    public function getUsuarios() {
-        $arrData = $this->model->selectUsuarios();
-        echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
         die();
     }
 }

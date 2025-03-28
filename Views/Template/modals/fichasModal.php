@@ -14,12 +14,12 @@
               <div class="row">
                 <div class="form-group col-6">
                   <label for="numero_ficha">Ficha</label>
-                  <input type="text" class="form-control valid validText" id="numero_ficha" name="numero_ficha" autocomplete="off" required="">
+                  <input type="text" class="form-control valid validText" id="numero_ficha" name="numero_ficha" autocomplete="off" required>
                 </div>
                 <div class="form-group col-6">
                   <label for="cursos_idcurso" class="form-label mt-1">Curso</label>
-                  <select class="form-select" aria-label="Default select example" name="cursos_idcurso" id="cursos_idcurso">
-                    <!-- Opciones de curso aquí -->
+                  <select class="form-select" aria-label="Default select example" name="cursos_idcurso" id="cursos_idcurso" required>
+                    <option value="">Seleccione un curso</option>
                   </select>
                 </div>
               </div>
@@ -27,27 +27,18 @@
               <div class="row mt-2">
                 <div class="form-group col-6">
                   <label for="fecha_inicio">Fecha de inicio</label>
-                  <input type="date" class="form-control valid validNumber" id="fecha_inicio" name="fecha_inicio" autocomplete="off" required="">
+                  <input type="date" class="form-control valid validNumber" id="fecha_inicio" name="fecha_inicio" autocomplete="off" required>
                 </div>
                 <div class="form-group col-6">
                   <label for="fecha_fin">Fecha de Fin</label>
-                  <input type="date" class="form-control valid validNumber" id="fecha_fin" name="fecha_fin" autocomplete="off" required="">
+                  <input type="date" class="form-control valid validNumber" id="fecha_fin" name="fecha_fin" autocomplete="off" required>
                 </div>
               </div>
               <!-- Fila para Modalidad -->
               <div class="row mt-2">
                 <div class="form-group col-12">
                   <label for="modalidad">Modalidad</label>
-                  <input type="text" class="form-control valid validText" id="modalidad" name="modalidad" autocomplete="off">
-                </div>
-              </div>
-              <!-- Fila para Selección de Usuarios -->
-              <div class="row mt-2">
-                <div class="form-group col-12">
-                  <label for="usuarios">Usuarios</label>
-                  <select class="form-select" multiple="multiple" name="usuarios[]" id="usuarios">
-                    <!-- Opciones de usuarios aquí -->
-                  </select>
+                  <input type="text" class="form-control valid validText" id="modalidad" name="modalidad" autocomplete="off" required>
                 </div>
               </div>
             </div>
