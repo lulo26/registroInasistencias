@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-02-2025 a las 17:26:14
+-- Tiempo de generación: 20-03-2025 a las 23:06:12
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.1.25
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -116,6 +116,17 @@ CREATE TABLE `fichas` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `fichas_has_usuarios`
+--
+
+CREATE TABLE `fichas_has_usuarios` (
+  `fichas_idficha` int(11) NOT NULL,
+  `usuarios_idusuario` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `horarios`
 --
 
@@ -219,6 +230,14 @@ ALTER TABLE `fichas`
   ADD KEY `fk_fichas_cursos1_idx` (`cursos_idcurso`);
 
 --
+-- Indices de la tabla `fichas_has_usuarios`
+--
+ALTER TABLE `fichas_has_usuarios`
+  ADD PRIMARY KEY (`fichas_idficha`,`usuarios_idusuario`),
+  ADD KEY `fk_fichas_has_usuarios_usuarios1_idx` (`usuarios_idusuario`),
+  ADD KEY `fk_fichas_has_usuarios_fichas1_idx` (`fichas_idficha`);
+
+--
 -- Indices de la tabla `horarios`
 --
 ALTER TABLE `horarios`
@@ -249,7 +268,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `aprendices`
 --
 ALTER TABLE `aprendices`
-  MODIFY `idaprendiz` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `idaprendiz` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT de la tabla `bloques`
@@ -261,7 +280,7 @@ ALTER TABLE `bloques`
 -- AUTO_INCREMENT de la tabla `cursos`
 --
 ALTER TABLE `cursos`
-  MODIFY `idcurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idcurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `excepciones`
@@ -279,7 +298,7 @@ ALTER TABLE `excusas`
 -- AUTO_INCREMENT de la tabla `fichas`
 --
 ALTER TABLE `fichas`
-  MODIFY `idficha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idficha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `horarios`
@@ -291,13 +310,13 @@ ALTER TABLE `horarios`
 -- AUTO_INCREMENT de la tabla `inasistencias`
 --
 ALTER TABLE `inasistencias`
-  MODIFY `idregistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idregistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -322,6 +341,13 @@ ALTER TABLE `excusas`
 --
 ALTER TABLE `fichas`
   ADD CONSTRAINT `fk_fichas_cursos1` FOREIGN KEY (`cursos_idcurso`) REFERENCES `cursos` (`idcurso`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `fichas_has_usuarios`
+--
+ALTER TABLE `fichas_has_usuarios`
+  ADD CONSTRAINT `fk_fichas_has_usuarios_fichas1` FOREIGN KEY (`fichas_idficha`) REFERENCES `fichas` (`idficha`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fichas_has_usuarios_usuarios1` FOREIGN KEY (`usuarios_idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `horarios`
