@@ -106,5 +106,40 @@ class FichasModel extends Mysql {
         }
         return $return;
     }
+    // ASIGNACION DE USUARIOS
+    public function getUsuariosPorRol(string $rol) {
+        $sql = "SELECT idusuario, nombre_usuario, numdoc_usuarios 
+                FROM usuarios 
+                WHERE roles_usuarios = '{$rol}' 
+                ORDER BY nombre_usuario ASC";
+        return $this->select_all($sql);
+    }
+    
+    public function getUsuariosAsignados(int $idficha) {
+        $sql = "SELECT usuarios_idusuario FROM fichas_has_usuarios 
+                WHERE fichas_idficha = {$idficha}";
+        return $this->select_all($sql);
+    }
+    
+    public function asignarUsuarioFicha(int $idficha, int $idusuario) {
+        $query = "INSERT INTO fichas_has_usuarios (fichas_idficha, usuarios_idusuario) VALUES (?,?)";
+        $arrData = array($idficha, $idusuario);
+        return $this->insert($query, $arrData);
+    }
+    
+    public function eliminarAsignacionFicha(int $idficha, int $idusuario) {
+        $query = "DELETE FROM fichas_has_usuarios 
+                  WHERE fichas_idficha = ? AND usuarios_idusuario = ?";
+        $arrData = array($idficha, $idusuario);
+        return $this->delete($query, $arrData);
+    }
+    
+    public function verificarAprendizEnFicha(int $idusuario) {
+        $sql = "SELECT COUNT(*) as total FROM fichas_has_usuarios fhu
+                INNER JOIN usuarios u ON fhu.usuarios_idusuario = u.idusuario
+                WHERE u.idusuario = {$idusuario} AND u.roles_usuarios = 'aprendiz'";
+        $result = $this->select($sql);
+        return $result['total'] > 0;
+    }
 }
 ?>

@@ -94,5 +94,67 @@ class Fichas extends Controllers{
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();
     }
+    // ASIGNACION DE USUARIOS
+    public function getUsuariosParaAsignar() {
+        $instructores = $this->model->getUsuariosPorRol('instructor');
+        $aprendices = $this->model->getUsuariosPorRol('aprendiz');
+        $arrResponse = array(
+            'instructores' => $instructores,
+            'aprendices' => $aprendices
+        );
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+    public function getUsuariosAsignados($idficha) {
+        $intIdFicha = intval(strClean($idficha));
+        if($intIdFicha > 0) {
+            $arrData = $this->model->getUsuariosAsignados($intIdFicha);
+            $arrResponse = array('status' => true, 'data' => $arrData);
+        } else {
+            $arrResponse = array('status' => false, 'msg' => 'ID de ficha inválido');
+        }
+        echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+    public function gestionarAsignacionUsuarios() {
+        if($_POST) {
+            $idficha = intval($_POST['idficha']);
+            $usuarios = json_decode($_POST['usuarios'], true);
+            $accion = strClean($_POST['accion']); // 'asignar' o 'eliminar'
+            $errors = [];
+            $success = [];
+            foreach($usuarios as $idusuario) {
+                $idusuario = intval($idusuario);
+                if($accion == 'asignar') {
+                    // Validar si es aprendiz y ya está asignado
+                    $esAprendiz = $this->model->verificarAprendizEnFicha($idusuario);
+                    if($esAprendiz) {
+                        $errors[] = "El aprendiz ya está asignado a otra ficha";
+                        continue;
+                    }
+                    $request = $this->model->asignarUsuarioFicha($idficha, $idusuario);
+                } else {
+                    $request = $this->model->eliminarAsignacionFicha($idficha, $idusuario);
+                }
+                if($request > 0) {
+                    $success[] = $request;
+                } else {
+                    $errors[] = "Error al procesar el usuario ID: $idusuario";
+                }
+            }
+            if(empty($errors)) {
+                $arrResponse = array('status' => true, 'msg' => 'Asignaciones actualizadas correctamente');
+            } else {
+                $arrResponse = array(
+                    'status' => false,
+                    'msg' => 'Algunas asignaciones no se pudieron completar',
+                    'errors' => $errors,
+                    'success' => $success
+                );
+            }
+            echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        }
+        die();
+    }
 }
 ?>

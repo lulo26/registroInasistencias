@@ -24,12 +24,42 @@ getModal('fichasModal', $data);
             <th>Fecha de Inicio</th>
             <th>Fecha de Fin</th>
             <th>Modalidad</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tablaFichas">
           <tr></tr>
         </tbody>
       </table>
+    </div>
+  </div>
+  <!-- Modal para asignar usuarios -->
+  <div class="modal fade" id="modalAsignarUsuarios" tabindex="-1" aria-labelledby="modalAsignarUsuariosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAsignarUsuariosLabel">Asignar Usuarios</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="idFichaAsignacion">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Instructores</h6>
+              <select id="selectInstructores" class="form-select" multiple size="8"></select>
+            </div>
+            <div class="col-md-6">
+              <h6>Aprendices</h6>
+              <select id="selectAprendices" class="form-select" size="8"></select>
+              <small class="text-muted">* Solo puedes asignar un aprendiz por ficha</small>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnGuardarAsignaciones">Guardar Asignaciones</button>
+        </div>
+      </div>
     </div>
   </div>
   <?php footer_admin($data) ?>
