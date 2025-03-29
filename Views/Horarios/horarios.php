@@ -13,12 +13,13 @@ getModal('horariosModal', $data);?>
 <div class="card">
   <div class="card-body">
     <h5 class="card-title"><?= $data['page_title']?> 
-      <button type="button" class="btn btn-primary m-3" id="btnHorario">
-      <i class="bi bi-plus-circle"></i> Agregar horario
-    </button>
   </h5> 
   <input class="form-control" type="file" id="excel" name="horarioFile" accept=".xlsx">
   </div>
+
+  <div class="mb-3">
+
+</div>
 
   <div id="alertZone"></div>
 

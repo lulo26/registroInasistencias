@@ -5,8 +5,11 @@ class HorariosModel extends Mysql{
         parent::__construct();
     }
 
-    public function selectHorarios(){
-        $sql = "SELECT idhorario, fichas_idficha, usuarios_idusuario, fecha_horario, fecha_inicio, fecha_fin FROM horarios INNER JOIN usuarios ON idusuario = usuarios_idusuario INNER JOIN fichas ON idficha = fichas_idficha";
+    public function selectHorarios(int $ficha, string $fecha, string $horaInicio){
+        $this->intFicha = $ficha;
+        $this->strFecha = $fecha;
+        $this->strHoraInicio = $horaInicio;
+        $sql = "SELECT * FROM horarios WHERE fecha_horario = '{$this->strFecha}' AND fecha_inicio = '{$this->strHoraInicio}' AND ficha = {$this->intFicha}";
         $request = $this->select_all($sql);
         return $request;
     } 
@@ -72,10 +75,22 @@ class HorariosModel extends Mysql{
         return $return;
     }
 
-    public function selectFicha($ficha){
+    public function selectFicha(int $ficha){
         $this->intFicha = $ficha;
 
         $sql = "SELECT * FROM fichas WHERE numero_ficha = {$this->intFicha}";
+        $request = $this->select($sql);
+        return $request;
+    }
+
+    public function selectInstructorByName($nombreInstructor){
+        $this->nombreInstructor = $nombreInstructor;
+        $this->arrNombreCompleto = explode(' ', $this->nombreInstructor);
+        $this->nombre = $this->arrNombreCompleto[0];
+        $this->lastElement = count($this->arrNombreCompleto)-1;
+        $this->apellido = $this->arrNombreCompleto[$this->lastElement];
+
+        $sql = "SELECT idusuario FROM usuarios WHERE nombre_usuario like '{$this->nombre}%' AND apellido_usuario like '%{$this->apellido}' AND roles_idrol = 2;";
         $request = $this->select($sql);
         return $request;
     }

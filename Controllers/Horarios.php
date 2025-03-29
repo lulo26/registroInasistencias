@@ -55,7 +55,7 @@ class Horarios extends Controllers{
     }
 
     public function setHorarios(){
-        if ($_POST) {
+
             $statusLectura = true;
             $arrStatus = array();
             $insert = 0;
@@ -145,7 +145,7 @@ class Horarios extends Controllers{
 
 
             echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
-        }
+        
     }
 
     public function eliminarHorario(){

@@ -59,6 +59,15 @@ function dep($data)
     return $format;
 }
 
+function check_post_var($post){
+
+    $validState = true;
+    if (!isset($post) || empty(strClean($post))) {
+        $validState = false;
+    }
+    return $validState;
+}
+
 function getModal(string $nameModal, $data)
 {
     $view_modal = "Views/Template/Modals/{$nameModal}.php";

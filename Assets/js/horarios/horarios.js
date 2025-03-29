@@ -252,6 +252,7 @@ function printAlert(){
     Object.entries(horario).forEach(row => cantidadRegistros++)
     
     html = `
+    <p>${ficha}</p>
     <div class="alert alert-primary alert-dismissible fade show" role="alert">
         <button id="btnGuardarHorario" class="btn btn-primary">Guardar Todo</button> 
         <button type="button" class="btn btn-secondary" data-action="datosValidos">
@@ -330,6 +331,7 @@ function fntPrintHorario(){
 function sentData(){
     const frmHorario = document.querySelector('#frmHorario')
     let frmData = new FormData(frmHorario)
+    console.log(frmData)
 
     fetch(base_url + '/horarios/setHorarios',{
         method: "POST",
@@ -490,8 +492,7 @@ function printForms(){
     <form id="frmHorario">
         <input type="hidden" class="form-control" name="ficha" value="${ficha}">
     `
-    console.log(ficha);
-    
+    console.log(ficha)
 
     Object.entries(dataProcesada).forEach((data, index) => {
         data = data[1]
