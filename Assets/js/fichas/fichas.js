@@ -148,12 +148,8 @@ async function cargarUsuariosParaAsignar(idficha) {
         const selectInstructores = document.getElementById('selectInstructores');
         selectInstructores.innerHTML = '';
         usersData.instructores.forEach(instructor => {
-            const option = new Option(
-                `${instructor.nombre_usuario} (${instructor.numdoc_usuarios})`,
-                instructor.idusuario
-            );
+            const option = new Option(`${instructor.nombre_usuario} (${instructor.numdoc_usuarios})`, instructor.idusuario);
             selectInstructores.add(option);
-            
             // Marcar como seleccionado si ya está asignado
             if (assignedData.status && assignedData.data.some(u => u.usuarios_idusuario == instructor.idusuario)) {
                 option.selected = true;
@@ -163,10 +159,7 @@ async function cargarUsuariosParaAsignar(idficha) {
         const selectAprendices = document.getElementById('selectAprendices');
         selectAprendices.innerHTML = '';
         usersData.aprendices.forEach(aprendiz => {
-            const option = new Option(
-                `${aprendiz.nombre_usuario} (${aprendiz.numdoc_usuarios})`,
-                aprendiz.idusuario
-            );
+            const option = new Option(`${aprendiz.nombre_usuario} (${aprendiz.numdoc_usuarios})`, aprendiz.idusuario);
             selectAprendices.add(option);
             // Marcar como seleccionado si ya está asignado
             if (assignedData.status && assignedData.data.some(u => u.usuarios_idusuario == aprendiz.idusuario)) {

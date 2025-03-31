@@ -34,7 +34,7 @@ getModal('fichasModal', $data);
     </div>
   </div>
   <!-- Modal para asignar usuarios -->
-  <div class="modal fade" id="modalAsignarUsuarios" tabindex="-1" aria-labelledby="modalAsignarUsuariosLabel" aria-hidden="true">
+  <div class="modal fade" id="modalAsignarUsuarios" tabindex="-1" aria-labelledby="modalAsignarUsuariosLabel" >
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
