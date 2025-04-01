@@ -10,21 +10,35 @@ const tablaExcusas = document.getElementById("tablaExcusas");
 /* 
 const verMotivo = document.getElementById("verMotivo"); */
 
-/* fetch(base_url + `getUsuarioByID`)
-  .then((res) => res.json)
+fetch(base_url + "/excusas/getUsuarioByID")
+  .then((res) => res.json())
   .then((res) => {
-    let user = res.data[0];
-    if (user.rol === "INSTRUCTOR") {
+    if (res.status) {
+      usuario = res.data[0];
+      console.log(usuario);
+      if (usuario.rol_usuario === "INSTRUCTOR") {
+        console.log(usuario.rol_usuario);
+        let idInstructor = usuario.idusuario;
+        console.log(idInstructor);
+        listExcusas(idInstructor);
+      } else if (usuario.rol_usuario === "APRENDIZ") {
+        console.log(usuario.rol_usuario);
+        let idaprendiz = usuario.idaprendiz;
+        console.log(idaprendiz);
+        listInasistencias(idaprendiz);
+      }
+    } else {
+      console.log("Status: " + res.status + ". " + res.msg);
     }
-  }); */
+  });
 
 ////////////////////////////////////////////////
 // -------------- LISTAR EXCUSAS ---------------
 ////////////////////////////////////////////////
 
-function listExcusas() {
-  tablaExcusas.innerHTML = "";
-  let idInstructor = 11;
+function listExcusas(idInstructor) {
+  tablaExcusas.innerHTML = ""; /* 
+  let idInstructor = 1; */
   /* fetch(base_url + `/excusas/getExcusasPorInstructor/${idusuario}`, {
     method: "GET",
   }) */
@@ -33,20 +47,22 @@ function listExcusas() {
   })
     .then((res) => res.json())
     .then((res) => {
-      let excusas = res.data; /* 
-      console.log(res); */
+      let excusas = res.data;
 
       if (res.status === true) {
         excusas.forEach((excusa) => {
           let opciones = { year: "numeric", month: "long", day: "numeric" };
-          let fecha = new Date(excusa.fecha_excusa).toLocaleDateString("es", opciones);
+          let fecha_inasistencia = new Date(excusa.fecha_inasistencia).toLocaleDateString(
+            "es",
+            opciones
+          );
+          let fecha_excusa = new Date(excusa.fecha_excusa).toLocaleDateString("es", opciones);
           tablaExcusas.innerHTML += `
-                  <td>${fecha}</td>
+                  <td>${fecha_inasistencia}</td>
                   <td>${excusa.nombre_aprendiz}</td>
                   <td>${excusa.nombre_curso}</td>
                   <td>${excusa.numero_ficha}</td>
-                  <td>${fecha}</td>
-                  <td>${excusa.estado_excusa}</td>
+                  <td>${fecha_excusa}</td>
                   <td>${excusa.excusa}</td>
                   <td>${excusa.options}</td>`;
         });
@@ -58,7 +74,7 @@ function listExcusas() {
 }
 
 /////////////////////////////////////////////////////////////////
-// -------------- MOSTRAR/APROBAR/RECHAZAR EXCUSA ---------------
+// ------------- DESCARGAR/APROBAR/RECHAZAR EXCUSA --------------
 /////////////////////////////////////////////////////////////////
 
 document.addEventListener("click", (e) => {
@@ -114,10 +130,18 @@ document.addEventListener("click", (e) => {
 
     if (selected == "rechazar") {
       let idexcusa = e.target.closest("button").getAttribute("rel");
+
+      document.getElementById("RechazarModalLabel").textContent = "Rechazar Excusa";
+      document.getElementById("btnRechazar").style.display = "inline";
+
+      let txtMotivo = document.querySelector("#motivo_rechazo");
+      txtMotivo.readOnly = false;
+      txtMotivo.value = "";
+
       $("#rechazarExcusaModal").modal("show");
       document.querySelector("#idexcusa").value = idexcusa;
       console.log("Rechazar");
-      console.log(idexcusa);
+      console.log("ID excusa: " + idexcusa);
 
       /* idexcusa.value = e.target.closest("button").getAttribute("rel"); */
 
@@ -156,10 +180,10 @@ document.addEventListener("click", (e) => {
 // ------------ LISTAR INASISTENCIAS -------------
 //////////////////////////////////////////////////
 
-function listInasistencias() {
+function listInasistencias(idaprendiz) {
   tablaInasistencias.innerHTML = "";
 
-  fetch(base_url + "/excusas/getInasistencias")
+  fetch(base_url + `/excusas/getInasistencias/${idaprendiz}`)
     .then((data) => data.json())
     .then((data) => {
       /* 
@@ -195,16 +219,120 @@ function listInasistencias() {
 }
 
 ///////////////////////////////////////////////////////////
-// ---------- ADJUNTAR/EDITAR/ELIMINAR EXCUSA--------------
+// ------------ ADJUNTAR/EDITAR/ELIMINAR EXCUSA------------
 ///////////////////////////////////////////////////////////
 
 document.addEventListener("click", (e) => {
   try {
-    let verMotivo = document.getElementById("verMotivo");
+    // Busca el elemento más cercano que sea un <button> o un <a>
+    let selectedButton = e.target.closest("button");
+    let selectedLink = e.target.closest("a");
 
-    verMotivo.addEventListener("click", (e) => {
-      let idexcusa = verMotivo.getAttribute("data-idexcusa");
+    // Si el elemento más cercano es un botón, obtenemos el data-action-type
+    if (selectedButton) {
+      let action = selectedButton.getAttribute("data-action-type");
+      console.log(action);
+      if (action == "adjuntar") {
+        console.log("click");
+        /* 
+        document.getElementById("ExcusaModalLabel").innerHTML = "Agregar Usuario"; */
+        $("#subirExcusaModal").modal("show");
+      }
 
+      if (action == "update") {
+        /* 
+        console.log(idAprendiz.value); */
+        let idexcusa = e.target.closest("button").getAttribute("rel");
+        console.log(idexcusa);
+        $("#subirExcusaModal").modal("show");
+        document.getElementById("ExcusaModalLabel").innerHTML = "Actualizar Excusa";
+
+        fetch(base_url + `/excusas/getExcusaByID/${idexcusa}`, {
+          method: "GET",
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            let excusa = res.data[0];
+            console.log(excusa.idexcusa);
+            console.log(excusa.aprendices_idusuario);
+            console.log(excusa.registro_inasistencias_idregistro);
+
+            document.querySelector("#idexcusa").value = excusa.idexcusa;
+            document.querySelector("#idAprendiz").value = excusa.aprendices_idusuario;
+            document.querySelector("#idInasistencia").value =
+              excusa.registro_inasistencias_idregistro;
+          });
+      }
+
+      if (action == "delete") {
+        Swal.fire({
+          title: "Eliminar excusa",
+          text: "¿Desea eliminar esta excusa?",
+          icon: "warning",
+          showDenyButton: true,
+          confirmButtonText: "Sí",
+          denyButtonText: `Cancelar`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            let formData = new FormData();
+            formData.append("idExcusa", idExcusa);
+            console.log(formData);
+            fetch(base_url + "/excusas/deleteExcusa", {
+              method: "POST",
+              body: formData,
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                Swal.fire({
+                  title: data.status ? "¡Correcto!" : "¡Error!",
+                  text: data.msg,
+                  icon: data.status ? "success" : "error",
+                });
+                listUsuarios();
+              });
+          }
+        });
+      }
+    }
+    // Si el elemento más cercano es un enlace, también obtenemos el data-action-type
+    else if (selectedLink) {
+      let action = selectedLink.getAttribute("data-action-type");
+      console.log(action);
+
+      if (action == "verMotivo") {
+        let idexcusa = selectedLink.getAttribute("data-idexcusa");
+        if (idexcusa > 0) {
+          fetch(base_url + `/excusas/getMotivoRechazo/${idexcusa}`, {
+            method: "GET",
+          })
+            .then((res) => res.json())
+            .then((res) => {
+              let excusa = res.data[0];
+
+              if (res.status === true) {
+                console.log(excusa);
+
+                document.getElementById("RechazarModalLabel").textContent = "Excusada Rechazada";
+                document.getElementById("btnRechazar").style.display = "none";
+
+                $("#rechazarExcusaModal").modal("show");
+                let txtMotivo = document.querySelector("#motivo_rechazo");
+                txtMotivo.readOnly = true;
+                txtMotivo.value = excusa.motivo_rechazo;
+              } else {
+                console.log("Error al traer el motivo de rechazo de la excusa");
+              }
+            });
+        }
+      }
+    }
+
+    /* let verMotivo = document.getElementById("verMotivo"); */
+
+    /* verMotivo.addEventListener("click", (e) => { */
+    /* let idexcusa = verMotivo.getAttribute("data-idexcusa"); */
+
+    /* if (idexcusa > 0) {
       fetch(base_url + `/excusas/getMotivoRechazo/${idexcusa}`, {
         method: "GET",
       })
@@ -226,71 +354,9 @@ document.addEventListener("click", (e) => {
             console.log("Error al traer el motivo de rechazo de la excusa");
           }
         });
-    });
+    } */
 
-    let selected = e.target.closest("button").getAttribute("data-action-type"); /* 
-    let idusuario = e.target.closest("button").getAttribute("rel"); */
-
-    if (selected == "adjuntar") {
-      /* 
-      document.getElementById("ExcusaModalLabel").innerHTML = "Agregar Usuario"; */
-      $("#subirExcusaModal").modal("show");
-    }
-
-    if (selected == "update") {
-      /* 
-      console.log(idAprendiz.value); */
-      let idexcusa = e.target.closest("button").getAttribute("rel");
-      console.log(idexcusa);
-      $("#subirExcusaModal").modal("show");
-      document.getElementById("ExcusaModalLabel").innerHTML = "Actualizar Excusa";
-
-      fetch(base_url + `/excusas/getExcusaByID/${idexcusa}`, {
-        method: "GET",
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          let excusa = res.data[0];
-          console.log(excusa.idexcusa);
-          console.log(excusa.aprendices_idusuario);
-          console.log(excusa.registro_inasistencias_idregistro);
-
-          document.querySelector("#idexcusa").value = excusa.idexcusa;
-          document.querySelector("#idAprendiz").value = excusa.aprendices_idusuario;
-          document.querySelector("#idInasistencia").value =
-            excusa.registro_inasistencias_idregistro;
-        });
-    }
-
-    if (selected == "delete") {
-      Swal.fire({
-        title: "Eliminar excusa",
-        text: "¿Desea eliminar esta excusa?",
-        icon: "warning",
-        showDenyButton: true,
-        confirmButtonText: "Sí",
-        denyButtonText: `Cancelar`,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          let formData = new FormData();
-          formData.append("idExcusa", idExcusa);
-          console.log(formData);
-          fetch(base_url + "/excusas/deleteExcusa", {
-            method: "POST",
-            body: formData,
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              Swal.fire({
-                title: data.status ? "¡Correcto!" : "¡Error!",
-                text: data.msg,
-                icon: data.status ? "success" : "error",
-              });
-              listUsuarios();
-            });
-        }
-      });
-    }
+    /* }); */
   } catch (e) {}
 });
 
@@ -309,10 +375,10 @@ btnEquis.addEventListener("click", limpiarFormulario);
 // -------------- CARGAR DATOS ----------------
 ///////////////////////////////////////////////
 
-window.addEventListener("DOMContentLoaded", (e) => {
+/* window.addEventListener("DOMContentLoaded", (e) => {
   listInasistencias();
   listExcusas();
-});
+}); */
 
 ///////////////////////////////////////////////
 // ------------- ENVIO DE DATOS ---------------
@@ -320,11 +386,11 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 frmExcusas.addEventListener("submit", (e) => {
   e.preventDefault();
-  frmData = new FormData(frmExcusas); /* 
+  frmData = new FormData(frmExcusas);
   console.log(frmExcusas.idexcusa.value);
   console.log(frmExcusas.idAprendiz);
   console.log(frmExcusas.idInasistencia);
-  console.log(frmExcusas.excusa); */
+  console.log(frmExcusas.excusa);
 
   fetch(base_url + "/excusas/setExcusas", {
     method: "POST",

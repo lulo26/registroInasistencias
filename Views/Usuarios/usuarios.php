@@ -18,9 +18,15 @@ getModal('usuariosModal', $data);
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">Tabla usuarios
-        <button type="button" class="btn btn-primary m-3" id="btnUsuario">
-          <i class="bi bi-plus-circle"></i> Agregar usuario
-        </button>
+        <?php if ($_SESSION['userData']['rol_usuario'] === "COORDINADOR") { ?>
+          <button type="button" class="btn btn-primary m-3" id="btnUsuario">
+            <i class="bi bi-plus-circle"></i> Agregar usuario
+          </button>
+        <?php } else { ?>
+          <button hidden type="button" class="btn btn-primary m-3" id="btnUsuario">
+            <i class="bi bi-plus-circle"></i> Agregar usuario
+          </button>
+        <?php } ?>
       </h5>
       <table class="table datatable">
         <thead>
@@ -32,8 +38,8 @@ getModal('usuariosModal', $data);
             <th>Nombre</th>
             <th>Correo</th>
             <th>Telefono</th>
-            <th>Rol</th>
             <th>Codigo</th>
+            <th>Rol</th>
             <th>Opciones</th>
           </tr>
         </thead>

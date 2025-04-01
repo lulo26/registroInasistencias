@@ -42,14 +42,13 @@ getModal('rechazarExcusaModal', $data);
             <table class="table datatable">
                 <thead>
                     <tr>
-                        <th>Fecha Excusa</th>
+                        <th>Inasistencia</th>
                         <th>Aprendiz</th>
                         <th>Programa</th>
                         <th>Ficha</th>
-                        <th>Inasistencia</th>
-                        <th>Estado</th>
+                        <th>Fecha Excusa</th>
                         <th>Excusa</th>
-                        <th>Opciones</th>
+                        <th>Aprobar/Rechazar</th>
                     </tr>
                 </thead>
                 <tbody id="tablaExcusas">

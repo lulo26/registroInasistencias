@@ -35,17 +35,29 @@ class Login extends Controllers
                     $arrResponse = array('status' => false, 'msg' => 'El usuario o la contraseña es incorrecto');
                 } else {
                     $arrData = $requestUser;
+<<<<<<< HEAD
                         $_SESSION['idUser'] = $arrData['idusuario'];
                         $_SESSION['login'] = true;
                         $_SESSION['userData'] = $arrData;
 
                         $arrResponse = array('status' => true, 'msg' => 'ok');
                     
+=======
+                    $_SESSION['idUser'] = $arrData['idusuario'];
+                    $_SESSION['login'] = true;
+                    $_SESSION['userData'] = $arrData;
+
+                    $arrResponse = array('status' => true, 'msg' => 'ok');
+>>>>>>> 74c1f7b4aed38f7b588465482cfe895b5712c5f3
                 }
             }
             echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
         }
         die();
     }
+<<<<<<< HEAD
 
 }
+=======
+}
+>>>>>>> 74c1f7b4aed38f7b588465482cfe895b5712c5f3

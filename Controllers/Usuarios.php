@@ -5,15 +5,17 @@ class Usuarios extends Controllers
     public function __construct()
     {
         parent::__construct();
+        session_start();
+        if (empty($_SESSION['login'])) {
+            header('Location: ' . base_url() . '/login');
+        }
     }
 
     public function usuarios()
     {
-
         $data['page_title'] = "Usuarios";
         $data['page_id_name'] = "usuarios";
         $data['page_functions_js'] = "usuarios/usuarios.js";
-
         $this->views->getView($this, "usuarios", $data);
     }
 
@@ -22,10 +24,16 @@ class Usuarios extends Controllers
         $arrData = $this->model->selectUsuarios();
 
         for ($i = 0; $i < count($arrData); $i++) {
-            $btnEdit = "<button type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idusuario'] . "'>
-                            <i class='bi bi-pencil-square'></i>
-                        </button>";
-            $btnDelete = "<button type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idusuario'] . "'>
+            if ($_SESSION['idUser'] === $arrData[$i]['idusuario']) {
+                $btnEdit = "<button type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idusuario'] . "'>
+                                <i class='bi bi-pencil-square'></i>
+                            </button>";
+            } else {
+                $btnEdit = "<button disabled type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idusuario'] . "'>
+                                <i class='bi bi-pencil-square'></i>
+                            </button>";
+            }
+            $btnDelete = "<button disabled type='button' class='btn btn-danger rounded-pill' data-action-type='delete' rel='" . $arrData[$i]['idusuario'] . "'>
                             <i class='bi bi-trash-fill'></i>
                           </button>";
             $arrData[$i]['options'] =  $btnDelete . " " . " " . $btnEdit;
@@ -35,13 +43,13 @@ class Usuarios extends Controllers
         die();
     }
 
-    public function getRoles()
+    /* public function getRoles()
     {
         $arrData = $this->model->selectRoles();
 
         echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
         die();
-    }
+    } */
 
     public function getUsuarioByID($idusuario)
     {
@@ -64,12 +72,13 @@ class Usuarios extends Controllers
         $nombre_usuario = strClean($_POST['nombre_usuario']);
         $password_usuario = strClean($_POST['password_usuario']);
         $correo_usuario = strClean($_POST['correo_usuario']);
-        $telefono_usuario = strClean($_POST['telefono_usuario']);
-        $roles_idrol = strClean($_POST['roles_idrol']);
+        $telefono_usuario = strClean($_POST['telefono_usuario']);/* 
+        $roles_idrol = strClean($_POST['roles_idrol']); */
         $codigo_usuario = strClean($_POST['codigo_usuario']);
+        $rol_usuario = strClean($_POST['rol_usuario']);
         $idusuario = strClean($_POST['idusuario']);
 
-        $arrPost = ['numdoc_usuario', 'nombre_usuario', 'password_usuario', 'correo_usuario', 'telefono_usuario', 'roles_idrol', 'codigo_usuario'];
+        $arrPost = ['numdoc_usuario', 'nombre_usuario', 'password_usuario', 'correo_usuario', 'telefono_usuario', 'codigo_usuario', 'rol_usuario'];
 
         if (check_post($arrPost)) {
             if ($idusuario == 0 || $idusuario == "") {
@@ -85,7 +94,7 @@ class Usuarios extends Controllers
                 } elseif ($validarCodigo == "codigoExiste") {
                     $arrRespuesta = array('status' => false, 'msg' => 'Codigo no valido.');
                 } else {
-                    $requestModel = $this->model->insertarUsuario($numdoc_usuario, $nombre_usuario, $password_usuario, $correo_usuario, $telefono_usuario, $roles_idrol, $codigo_usuario);
+                    $requestModel = $this->model->insertarUsuario($numdoc_usuario, $nombre_usuario, $password_usuario, $correo_usuario, $telefono_usuario, $codigo_usuario, $rol_usuario);
                     if ($requestModel > 0) {
                         $arrRespuesta = array('status' => true, 'msg' => 'Usuario agregado correctamente.');
                     }
@@ -100,7 +109,7 @@ class Usuarios extends Controllers
                 } elseif ($validarCodigoEditar == "codigoExiste") {
                     $arrRespuesta = array('status' => false, 'msg' => 'Codigo no valido.');
                 } else {
-                    $requestModel = $this->model->editarUsuario($numdoc_usuario, $nombre_usuario, $password_usuario, $correo_usuario, $telefono_usuario, $roles_idrol, $codigo_usuario, $idusuario);
+                    $requestModel = $this->model->editarUsuario($numdoc_usuario, $nombre_usuario, $password_usuario, $correo_usuario, $telefono_usuario, $codigo_usuario, $rol_usuario, $idusuario);
                     $arrRespuesta = array('status' => true, 'msg' => 'Usuario actualizado correctamente.');
                 }
                 /* $option = 2; */
@@ -138,7 +147,7 @@ class Usuarios extends Controllers
             if ($requestDelete == 'empty') {
                 $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el usuario.');
             } else {
-                $arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el usuario.');
+                $arrResponse = array('status' => true, 'msg' => 'Usuario eliminado correctamente.');
             }
             echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
         } else {
