@@ -10,7 +10,7 @@ class ReporteModel extends Mysql
 
     public function selectForAprendiz(string $fechaInicio, string $fechaFin, int $idAprendiz)
     {
-        // Convertir fechas a solo YYYY-MM-DD (elimina horas)
+
         $fechaInicio = date('Y-m-d', strtotime($fechaInicio));
         $fechaFin = date('Y-m-d', strtotime($fechaFin));
 

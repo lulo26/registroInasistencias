@@ -7,7 +7,10 @@ let inputAprendiz = document.querySelector('#inputAprendiz');
 let selectMes = document.querySelector('#selectMes');
 let selectFicha2 = document.querySelector('#selectFicha2');
 
-// Listar aprendices en el select
+let idAprendizSeleccionado = null;
+
+
+// ======================================================Listar aprendices en el select,  con la loista desplegable de opciones==================================================
 function selectAprendices() {
     fetch(reportesUrl + "/getAprendices")
         .then((response) => response.json())
@@ -27,13 +30,16 @@ function selectAprendices() {
             document.getElementById('inputAprendiz').addEventListener('input', function () {
                 let selected = [...listAprendices.options].find(opt => opt.value === this.value);
                 if (selected) {
+                    idAprendizSeleccionado = selected.dataset.id;
                     console.log("ID del aprendiz seleccionado:", selected.dataset.id);
+                } else {
+                    idAprendizSeleccionado = null;
                 }
             });
         });
 }
 
-// Listar fichas en el select
+// ===========================================================Listar fichas en el select =======================================================================================
 function selectFichas() {
     fetch(reportesUrl + "/getFichas")
         .then((data) => data.json())
@@ -48,38 +54,56 @@ function selectFichas() {
         });
 }
 
+//==============================================================optione las asistencias por id del aprendiz ======================================================================
+
 function getAsistenciasForAprendiz(mes, idAprendiz) {
-
-    // Año actual
     let añoActual = new Date().getFullYear();
-
-    // Construye la fecha de inicio formato
     let fechaInicio = `${añoActual}-${String(mes).padStart(2, '0')}-01 00:00:00`;
-
-    // Obtiene el último día del mes 
-    let ultimoDia = new Date(añoActual, mes, 0).getDate(); // Obtiene el último día del mes
+    let ultimoDia = new Date(añoActual, mes, 0).getDate();
     let fechaFin = `${añoActual}-${String(mes).padStart(2, '0')}-${ultimoDia} 23:59:59`;
 
-    console.log(fechaInicio, fechaFin);
+    console.log(fechaInicio, fechaFin, idAprendiz);
 
     let url = `${reportesUrl}/getAsistenciasForAprendiz?idAprendiz=${idAprendiz}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`;
 
     fetch(url)
-        .then((data) => data.json())
-        .then((data) => {
+        .then(response => response.json())
+        .then(data => {
             console.log(data);
+            let tablaBody = document.querySelector('#tablaReportesBody');
 
-        });
+            obtenerDiasDelMes(selectMes.value);
 
+            tablaBody.innerHTML = '';
+
+            let fila = document.createElement('tr');
+
+            data.forEach((reporte) => {
+                let celda = document.createElement('td');
+                let badge = document.createElement('span');
+
+
+                if (reporte.estado_inasistencia === 'Activo') {
+
+                    badge.classList.add('badge', 'bg-success');
+                    badge.textContent = 'Asistió';
+                } else {
+                    badge.classList.add('badge', 'bg-danger');
+                    badge.textContent = 'No Asistió';
+                }
+
+                celda.appendChild(badge);
+                fila.appendChild(celda);
+            });
+
+            tablaBody.appendChild(fila);
+        })
+        .catch(error => console.error("Error al obtener los reportes:", error));
 }
 
 
-getAsistenciasForAprendiz(3, 91);
 
-
-selectFichas();
-
-selectAprendices();
+//====================================================Obtiene los dias del mes y los pone en el header de la tabla=================================================
 
 function obtenerDiasDelMes(mes) {
 
@@ -95,10 +119,6 @@ function obtenerDiasDelMes(mes) {
     let cabeceraTabla = document.getElementById('cabeceraTabla');
     cabeceraTabla.innerHTML = '';
 
-
-    let thVacio = document.createElement('th');
-    thVacio.textContent = "#";
-    cabeceraTabla.appendChild(thVacio);
 
     // Agregar los días del mes como encabezados de columna
 
@@ -117,7 +137,7 @@ obtenerDiasDelMes(mesActual);
 btnBuscar.addEventListener('click', () => {
     cabeceraTabla.innerHTML = '';
 
-    // ==================================== VALIDACIONES DE LOPS NULL O VACIOS ==================================
+    // ==================================== VALIDACIONES DE NULL O VACIOS PARA LA BUSQUEDA  ==================================
 
     //  Elimina mensajes de error de antes
     document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
@@ -155,14 +175,14 @@ btnBuscar.addEventListener('click', () => {
 
         return;
     }
-    // ====================================================================================================
+    // ============================================================= LLAMO LA FUNCION PARA REALIZAR LA CONSULTA DE BUSQUEDA SEGUN EL APRENDIZ=======================================
 
-    if (inputAprendiz.value == '' || inputAprendiz.value == null) {
-
-    } else {
-
-
-    }
-
+    console.log(selectMes.value, idAprendizSeleccionado);
+    getAsistenciasForAprendiz(selectMes.value, idAprendizSeleccionado);
 
 });
+
+
+selectFichas();
+
+selectAprendices();
