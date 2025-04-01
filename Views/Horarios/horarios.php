@@ -14,7 +14,7 @@ getModal('horariosModal', $data);?>
   <div class="card-body">
     <h5 class="card-title"><?= $data['page_title']?> 
   </h5> 
-  <input class="form-control" type="file" id="excel" name="horarioFile" accept=".xlsx">
+  <input class="form-control" type="file" id="excel" accept=".xlsx">
   </div>
 
   <div class="mb-3">
@@ -22,9 +22,15 @@ getModal('horariosModal', $data);?>
 </div>
 
   <div id="alertZone"></div>
+    <div class="card" >
+    <form id="frmHorario">
+    <input type="hidden" class="form-control" name="ficha" id="fichaInput" value="">
+      <div class="row row-cols-2" id="display">
 
-  <div id="display"></div>
+      </div>
+    </div>
+
 </div>
 
-<script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
+<script src="<?= media() ?>/vendor/read-excel-file/bundle/read-excel-file.min.js"></script>
 <?php footer_admin($data) ?> <!-- Carga todo el footer -->

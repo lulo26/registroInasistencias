@@ -38,29 +38,29 @@
       <div class="col-lg-6">
         <div class="mb-3 col-12">
           <label for="txtNombre" class="form-label">Fecha</label>
-          <input type="text" class="form-control" id="hFecha" name="hFecha" value="">
+          <input type="text" class="form-control" id="fecha" name="fecha" value="">
         </div>
 
         <div class="mb-3 col-12">
           <label for="txtNombre" class="form-label">Instructor</label>
-          <input type="text" class="form-control" id="hInstructor" name="hInstructor" value="">
+          <input type="text" class="form-control" id="hInstructor" name="instructor" value="">
         </div>
       </div>
 
       <div class="col-lg-6">
         <div class="mb-3 col-6">
           <label for="txtNombre" class="form-label">Hora Inicio</label>
-          <input type="text" class="form-control" id="hHoraInicio" name="hHoraInicio" value="">
+          <input type="text" class="form-control" id="hHoraInicio" name="horaInicio" value="">
       </div>
 
       <div class="mb-3 col-6">
         <label for="txtNombre" class="form-label">Hora Fin</label>
-        <input type="text" class="form-control" id="hHoraFin" name="hHoraFin" value="">
+        <input type="text" class="form-control" id="hHoraFin" name="horaFin" value="">
       </div>
 
       <div class="mb-3 col-6">
         <label for="txtNombre" class="form-label">Ficha</label>
-        <input type="text" class="form-control" id="hFicha" name="hFicha" value="">
+        <input type="text" class="form-control" id="hFicha" name="ficha" value="">
       </div>
 
       </div>

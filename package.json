@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "datatables.net-dt": "^2.2.2",
-    "read-excel-file": "^5.8.6",
+    "read-excel-file": "^5.8.7",
     "xlsx": "^0.18.5"
   }
 }

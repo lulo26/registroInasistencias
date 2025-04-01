@@ -252,16 +252,13 @@ function printAlert(){
     Object.entries(horario).forEach(row => cantidadRegistros++)
     
     html = `
-    <p>${ficha}</p>
+    
     <div class="alert alert-primary alert-dismissible fade show" role="alert">
+    <h5>Numero de ficha:  <span class="badge text-bg-secondary">${ficha}</span></h5>
+    <button type="button" class="btn btn-success" data-action="datosOrganizados">
+            Datos: <span class="badge text-bg-primary">${cantidadDatosFormateados}</span>
+        </button>
         <button id="btnGuardarHorario" class="btn btn-primary">Guardar Todo</button> 
-        <button type="button" class="btn btn-secondary" data-action="datosValidos">
-            Datos validados <span class="badge text-bg-primary">${cantidadRegistros}</span>
-        </button>
-        <button type="button" class="btn btn-secondary" data-action="datosOrganizados">
-            Datos organizados <span class="badge text-bg-primary">${cantidadDatosFormateados}</span>
-        </button>
-        Cantidad de celdas procesadas: <b>${cantidadCeldasProcesadas}</b>
     </div>
     `
     alertZone.innerHTML = html
@@ -488,9 +485,10 @@ function printProcesData(){
 }
 
 function printForms(){
+    const fichaInput = document.querySelector('#fichaInput')
+    fichaInput.value = ficha
     let html = `
-    <form id="frmHorario">
-        <input type="hidden" class="form-control" name="ficha" value="${ficha}">
+
     `
     console.log(ficha)
 
@@ -498,7 +496,7 @@ function printForms(){
         data = data[1]
 
         html += `
-
+        <div class="col">
         <div class="card" id="dataCard_${index}">
             <div class="card-body">
                 <div class="row">
@@ -532,6 +530,7 @@ function printForms(){
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         `;
         cantidadDatosFormateados++
