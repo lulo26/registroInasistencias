@@ -62,29 +62,39 @@ function getAsistenciasForAprendiz(mes, idAprendiz) {
     let ultimoDia = new Date(añoActual, mes, 0).getDate();
     let fechaFin = `${añoActual}-${String(mes).padStart(2, '0')}-${ultimoDia} 23:59:59`;
 
-    console.log(fechaInicio, fechaFin, idAprendiz);
+    console.log("Consultando asistencias desde:", fechaInicio, "hasta:", fechaFin, "para el aprendiz:", idAprendiz);
 
     let url = `${reportesUrl}/getAsistenciasForAprendiz?idAprendiz=${idAprendiz}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`;
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            console.log("Datos:", data);
+
             let tablaBody = document.querySelector('#tablaReportesBody');
 
-            obtenerDiasDelMes(selectMes.value);
+
+            obtenerDiasDelMes(selectMes.value); // Con esto es para sacar la cabecera segun el mes que elija
+
 
             tablaBody.innerHTML = '';
 
             let fila = document.createElement('tr');
 
+            // Crear un array con celdas vacías para todos los días del mes
+            let diasDelMes = new Array(ultimoDia).fill(null);
+
             data.forEach((reporte) => {
-                let celda = document.createElement('td');
+
+                // Convercion de erro de formato al hacer traer la fecha de la asistencia 
+
+                let fechaParts = reporte.fecha_inasistencia.split(" ")[0].split("-");
+                let diaRegistro = parseInt(fechaParts[2], 10);
+
+
                 let badge = document.createElement('span');
 
-
                 if (reporte.estado_inasistencia === 'Activo') {
-
                     badge.classList.add('badge', 'bg-success');
                     badge.textContent = 'Asistió';
                 } else {
@@ -92,9 +102,19 @@ function getAsistenciasForAprendiz(mes, idAprendiz) {
                     badge.textContent = 'No Asistió';
                 }
 
-                celda.appendChild(badge);
-                fila.appendChild(celda);
+                // Guardar el badge en la posición que es, segun el dia 
+                diasDelMes[diaRegistro - 1] = badge;
             });
+
+            // Pinta la tabla seguan los dias del mes, y deja en blanco los que no estan registrados aun
+
+            for (let i = 0; i < ultimoDia; i++) {
+                let celda = document.createElement('td');
+                if (diasDelMes[i]) {
+                    celda.appendChild(diasDelMes[i]);
+                }
+                fila.appendChild(celda);
+            }
 
             tablaBody.appendChild(fila);
         })
@@ -103,10 +123,10 @@ function getAsistenciasForAprendiz(mes, idAprendiz) {
 
 
 
+
 //====================================================Obtiene los dias del mes y los pone en el header de la tabla=================================================
 
 function obtenerDiasDelMes(mes) {
-
     const diasPorMes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
     // Verificar si es un año bisiesto para febrero
