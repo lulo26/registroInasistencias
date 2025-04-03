@@ -6,13 +6,8 @@ class Home extends Controllers
     {
         parent::__construct();
         session_start();
-<<<<<<< HEAD
-        if(empty($_SESSION['login'])){
-            header('Location: ' . base_url().'/login' );
-=======
         if (empty($_SESSION['login'])) {
             header('Location: ' . base_url() . '/login');
->>>>>>> 74c1f7b4aed38f7b588465482cfe895b5712c5f3
         }
     }
     public function home()

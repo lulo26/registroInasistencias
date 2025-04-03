@@ -1,12 +1,5 @@
 <?php
 
-<<<<<<< HEAD
-class ExcepcionesModel extends Mysql{
-    public function __construct(){
-        parent::__construct();
-    }
-}
-=======
 class ExcepcionesModel extends Mysql
 {
     public function __construct()
@@ -173,4 +166,3 @@ class ExcepcionesModel extends Mysql
         return $return;
     }
 }
->>>>>>> 74c1f7b4aed38f7b588465482cfe895b5712c5f3

@@ -9,7 +9,7 @@ class HorariosModel extends Mysql{
         $this->intFicha = $ficha;
         $this->strFecha = $fecha;
         $this->strHoraInicio = $horaInicio;
-        $sql = "SELECT * FROM horarios WHERE fecha_horario = '{$this->strFecha}' AND fecha_inicio = '{$this->strHoraInicio}' AND ficha = {$this->intFicha}";
+        $sql = "SELECT * FROM horarios WHERE fecha_horario = '{$this->strFecha}' AND hora_entrada = '{$this->strHoraInicio}' AND ficha = {$this->intFicha}";
         $request = $this->select_all($sql);
         return $request;
     } 
@@ -28,7 +28,7 @@ class HorariosModel extends Mysql{
         $this->fechaFin = $fechaFin;
         $this->fecha = $fecha;
 
-        $sql = "INSERT INTO horarios (fichas_idficha, usuarios_idusuario, fecha_inicio, fecha_fin, fecha_horario) VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO horarios (fichas_idficha, usuarios_idusuario, hora_entrada, hora_salida, fecha_horario) VALUES (?,?,?,?,?)";
         $arrData = array($this->ficha, $this->usuario, $this->fechaIni, $this->fechaFin, $this->fecha);
         return $this->insert($sql, $arrData);
     }
@@ -47,7 +47,7 @@ class HorariosModel extends Mysql{
         $request = $this->select_all($sql);
 
         if(!empty($request)){
-            $query = "UPDATE horarios SET fichas_idficha = ?, usuarios_idusuario = ?, fecha_inicio = ?, fecha_fin = ?, fecha_horario = ?  WHERE idhorario = ?";
+            $query = "UPDATE horarios SET fichas_idficha = ?, usuarios_idusuario = ?, hora_entrada = ?, hora_salida = ?, fecha_horario = ?  WHERE idhorario = ?";
             $arrData = array($this->ficha, $this->usuario, $this->fechaIni, $this->fechaFin, $this->fecha, $this->id);
             $request_insert = $this->insert($query, $arrData);
             $return = $request_insert;
@@ -90,7 +90,7 @@ class HorariosModel extends Mysql{
         $this->lastElement = count($this->arrNombreCompleto)-1;
         $this->apellido = $this->arrNombreCompleto[$this->lastElement];
 
-        $sql = "SELECT idusuario FROM usuarios WHERE nombre_usuario like '{$this->nombre}%' AND apellido_usuario like '%{$this->apellido}' AND roles_idrol = 2;";
+        $sql = "SELECT idusuario FROM usuarios WHERE nombre_usuario like '{$this->nombre}%' AND apellido_usuario like '%{$this->apellido}' AND roles_usuarios = 'instructor';";
         $request = $this->select($sql);
         return $request;
     }

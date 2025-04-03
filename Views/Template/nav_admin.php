@@ -19,10 +19,6 @@
     </li><!-- End Profile Page Nav -->
 
     <li class="nav-item">
-<<<<<<< HEAD
-      <a class="nav-link collapsed" href="<?= base_url() ?>/aprendiz">
-        <i class="bx bxs-book-reader"></i>
-=======
       <a class="nav-link collapsed" href="<?= base_url() ?>/excusas">
         <i class="bi bi-file-earmark-text"></i>
         <span>Excusas</span>
@@ -39,7 +35,6 @@
     <li class="nav-item">
       <a class="nav-link collapsed" href="<?= base_url() ?>/aprendices">
         <i class="bi bi-question-circle"></i>
->>>>>>> 74c1f7b4aed38f7b588465482cfe895b5712c5f3
         <span>Aprendices</span>
       </a>
     </li><!-- End F.A.Q Page Nav -->
@@ -65,15 +60,9 @@
     </li><!-- End Register Page Nav -->
 
     <li class="nav-item">
-<<<<<<< HEAD
-      <a class="nav-link collapsed" href="<?= base_url() ?>/horarios">
-        <i class="bi bi-calendar-plus"></i>
-        <span>Horarios</span>
-=======
       <a class="nav-link collapsed" href="<?= base_url() ?>/logout">
         <i class="bi bi-box-arrow-in-right"></i>
         <span>Cerrar Sesión</span>
->>>>>>> 74c1f7b4aed38f7b588465482cfe895b5712c5f3
       </a>
     </li>
 
