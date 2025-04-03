@@ -513,7 +513,7 @@ function printForms(){
 
                         <div class="mb-3 col-12">
                             <label for="txtNombre" class="form-label">Instructor</label>
-                            <input type="text" class="form-control" name="usuario[]" value="${data.instructor}">
+                            <input type="text" class="form-control" name="usuario[]" value="Juan Camilo Vanegas González">
                         </div>
                     </div>
 

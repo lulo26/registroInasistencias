@@ -98,8 +98,8 @@ class Horarios extends Controllers{
                                 $idInstructor = $this->model->selectInstructorByName($instructor);
     
                                 if (!empty($idInstructor)) {
-                                    $idInstructor = $idInstructor['idUsuarios'];
-                                    $insert = $this->model->insertHorario($ficha, $strFechaFormateada, $horaInicioConvertida, $horaFinConvertida, $idInstructor);
+                                    $idInstructor = $idInstructor['idusuario'];
+                                    $insert = $this->model->insertarHorario($ficha, $strFechaFormateada, $horaInicioConvertida, $horaFinConvertida, $idInstructor);
         
                                     if (intval($insert) > 0) {
                                         $arrStatusMessage = array('index' => $i, 'status' => true, 'msg' => 'Registro insertado exitosamente');

@@ -38,11 +38,6 @@ getModal('fichasModal', $data);
       </tbody>
     </table>
   </div>
-<<<<<<< HEAD
-</div>
-
-<?php footer_admin($data) ?> 
-=======
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">Tabla Fichas<button type="button" class="btn btn-primary m-2" id="btnFicha"><i class="bi bi-plus-circle"></i> Añadir - Ficha</button></h5>
@@ -94,4 +89,3 @@ getModal('fichasModal', $data);
     </div>
   </div>
   <?php footer_admin($data) ?>
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5

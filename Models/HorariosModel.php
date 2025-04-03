@@ -20,7 +20,7 @@ class HorariosModel extends Mysql{
         return $request;
     }
 
-    public function insertarHorario(int $ficha, int $usuario, string $fechaIni, string $fechaFin, string $fecha){
+    public function insertarHorario(int $ficha, string $fecha, string $fechaIni, string $fechaFin, string $usuario){
 
         $this->ficha = $ficha;
         $this->usuario = $usuario;
@@ -28,8 +28,8 @@ class HorariosModel extends Mysql{
         $this->fechaFin = $fechaFin;
         $this->fecha = $fecha;
 
-        $sql = "INSERT INTO horarios (fichas_idficha, usuarios_idusuario, hora_entrada, hora_salida, fecha_horario) VALUES (?,?,?,?,?)";
-        $arrData = array($this->ficha, $this->usuario, $this->fechaIni, $this->fechaFin, $this->fecha);
+        $sql = "INSERT INTO horarios (ficha, fecha_horario, hora_entrada, hora_salida, usuarios_idusuario, fichas_idficha) VALUES (?,?,?,?,?,12)";
+        $arrData = array($this->ficha, $this->fecha, $this->fechaIni, $this->fechaFin, $this->usuario);
         return $this->insert($sql, $arrData);
     }
 

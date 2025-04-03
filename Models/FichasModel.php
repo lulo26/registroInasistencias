@@ -5,55 +5,13 @@ class FichasModel extends Mysql{
         parent::__construct();
     }
 
-<<<<<<< HEAD
-    public function selectFichas(){
-        $sql = "SELECT idficha, numero_ficha, cursos_idcurso, fecha_inicio, fecha_fin, modalidad, nombre_curso FROM fichas INNER JOIN cursos ON idcurso = cursos_idcurso";
-        $request = $this->select_all($sql);
-        return $request;
-    } 
-
-    public function selectFichaID(int $id){
-        $sql = "SELECT idficha, numero_ficha, cursos_idcurso, fecha_inicio, fecha_fin, modalidad, nombre_curso FROM fichas INNER JOIN cursos ON idcurso = cursos_idcurso WHERE idficha = {$id}";
-=======
     public function selectFichas()
     {
         $sql = "SELECT idficha, numero_ficha, numero_ficha, cursos.nombre_curso AS id_curso, fecha_inicio, fecha_fin, modalidad FROM fichas INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso ORDER BY idficha ASC";
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
         $request = $this->select_all($sql);
         return $request;
     }
 
-<<<<<<< HEAD
-    public function insertarFicha(int $ficha, int $idCurso, string $fechaIni, string $fechaFin, string $modalidad){
-
-        $this->ficha = $ficha;
-        $this->idCurso = $idCurso;
-        $this->fechaIni = $fechaIni;
-        $this->fechaFin = $fechaFin;
-        $this->modalidad = $modalidad;
-
-        $sql = "INSERT INTO fichas (numero_ficha, cursos_idcurso, fecha_inicio, fecha_fin, modalidad) VALUES (?,?,?,?,?)";
-        $arrData = array($this->ficha, $this->idCurso, $this->fechaIni, $this->fechaFin, $this->modalidad);
-        return $this->insert($sql, $arrData);
-    }
-
-    public function editarFicha(int $ficha, int $idCurso, string $fechaIni, string $fechaFin, string $modalidad, int $id){
-        $return = "";
-
-        $this->ficha = $ficha;
-        $this->idCurso = $idCurso;
-        $this->fechaIni = $fechaIni;
-        $this->fechaFin = $fechaFin;
-        $this->modalidad = $modalidad;
-        $this->id = $id;
-
-        $sql = "SELECT idficha FROM fichas WHERE idficha = '{$this->id}'";
-        $request = $this->select_all($sql);
-
-        if(!empty($request)){
-            $query = "UPDATE fichas SET numero_ficha = ?, cursos_idcurso = ?, fecha_inicio = ?, fecha_fin = ?, modalidad = ?  WHERE idficha = ?";
-            $arrData = array($this->ficha, $this->idCurso, $this->fechaIni, $this->fechaFin, $this->modalidad, $this->id);
-=======
     public function selectFichaID(int $id)
     {
         $sql = "SELECT idficha, numero_ficha, numero_ficha, cursos.idcurso AS id_curso, fecha_inicio, fecha_fin, modalidad FROM fichas INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso WHERE idficha = {$id}";
@@ -82,7 +40,6 @@ class FichasModel extends Mysql{
         if (empty($request)) {
             $query = "INSERT INTO fichas (numero_ficha, cursos_idcurso, fecha_inicio, fecha_fin, modalidad) VALUES (?,?,?,?,?)";
             $arrData = array($this->numficha, $this->idCurso, $this->fechaInicio, $this->fechaFin, $this->modalidad);
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
             $request_insert = $this->insert($query, $arrData);
             $return = $request_insert;
         } else {
@@ -91,12 +48,8 @@ class FichasModel extends Mysql{
         return $return;
     }
 
-<<<<<<< HEAD
-    public function eliminarFicha(int $id){
-=======
     public function eliminarFicha(int $id)
     {
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
         $return = "";
 
         $this->id = $id;
@@ -113,9 +66,6 @@ class FichasModel extends Mysql{
         }
         return $return;
     }
-<<<<<<< HEAD
-}
-=======
 
     public function editarFicha(int $numero_ficha, int $cursos_idcurso, string $fecha_inicio, string $fecha_fin, string $modalidad, int $idficha)
 {
@@ -196,4 +146,3 @@ class FichasModel extends Mysql{
     }
 }
 ?>
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5

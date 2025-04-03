@@ -292,11 +292,7 @@ ALTER TABLE `bloques`
 -- AUTO_INCREMENT de la tabla `cursos`
 --
 ALTER TABLE `cursos`
-<<<<<<< HEAD
-  MODIFY `idcurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-=======
   MODIFY `idcurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
 
 --
 -- AUTO_INCREMENT de la tabla `excepciones`
@@ -314,11 +310,7 @@ ALTER TABLE `excusas`
 -- AUTO_INCREMENT de la tabla `fichas`
 --
 ALTER TABLE `fichas`
-<<<<<<< HEAD
-  MODIFY `idficha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-=======
   MODIFY `idficha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
 
 --
 -- AUTO_INCREMENT de la tabla `horarios`
@@ -330,21 +322,13 @@ ALTER TABLE `horarios`
 -- AUTO_INCREMENT de la tabla `inasistencias`
 --
 ALTER TABLE `inasistencias`
-<<<<<<< HEAD
-  MODIFY `idregistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-=======
   MODIFY `idregistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-<<<<<<< HEAD
-  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-=======
   MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
 
 --
 -- Restricciones para tablas volcadas

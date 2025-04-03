@@ -13,12 +13,8 @@ class Fichas extends Controllers{
         $this->views->getView($this,"fichas",$data);
     }
 
-<<<<<<< HEAD
-    public function getFichas(){
-=======
     public function getFichas()
     {
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
         $arrData = $this->model->selectFichas();
 
         for ($i=0; $i < count($arrData); $i++) { 
@@ -34,12 +30,6 @@ class Fichas extends Controllers{
 
         echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
         die();
-<<<<<<< HEAD
-    } 
-
-    public function getFichaByID($idficha){
-
-=======
     }
 
     public function getCursos()
@@ -51,7 +41,6 @@ class Fichas extends Controllers{
 
     public function getFichaByID($idficha)
     {
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
         $intIdFicha = intval(strClean($idficha));
 
         if($intIdFicha > 0){
@@ -68,47 +57,8 @@ class Fichas extends Controllers{
         die();
     }
 
-<<<<<<< HEAD
-    public function setFichas(){
-        $numFicha = intval($_POST['numFicha']);
-        $curso = intval($_POST['curso']);
-        $fechaIni = strClean($_POST['fechaIni']);
-        $fechaFin = strClean($_POST['fechaFin']);
-        $modalidad = strClean($_POST['modalidad']);
-        $idficha = intval(strClean($_POST['idficha']));
-
-        $arrPost = ['numFicha','curso','fechaIni', 'fechaFin', 'modalidad'];
-        if (check_post($arrPost)) {
-            if ($idficha == 0 || $idficha == ""){
-                $requestModel = $this->model->insertarFicha($numFicha, $curso, $fechaIni, $fechaFin, $modalidad);
-                $option = 1;
-            } else {
-                $requestModel = $this->model->editarFicha($numFicha, $curso, $fechaIni, $fechaFin, $modalidad, $idficha);
-                $option = 2;
-            }
-            if($requestModel > 0) {
-                if($option === 1){
-                $arrRespuesta = array('status' => true, 'msg' => 'ficha agregada correctamente.');
-            }
-            }elseif ($requestModel === 'exists'){
-                $arrRespuesta = array('status' => false, 'msg' => 'Esta ficha ya existe');
-            }
-            
-            else{
-                $arrRespuesta = array('status' => true, 'msg' => 'ficha actualizada correctamente.');
-                }
-        }else{
-            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
-        }
-        echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
-        die();
-    }
-
-    public function eliminarFicha(){
-=======
     public function eliminarFicha()
     {
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
         if ($_POST) {
             $idficha = intval($_POST['idficha']);
             $requestDelete = $this->model->eliminarFicha($idficha);
@@ -123,9 +73,6 @@ class Fichas extends Controllers{
         }
         die();
     }
-<<<<<<< HEAD
-}
-=======
 
     public function setFichas() {
         $numero_ficha = strClean($_POST['numero_ficha']);
@@ -221,4 +168,3 @@ class Fichas extends Controllers{
     }
 }
 ?>
->>>>>>> ea755394c9ad5ea4248448d75abc1cf027e2c0d5
