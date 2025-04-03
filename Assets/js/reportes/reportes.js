@@ -39,7 +39,7 @@ function selectAprendices() {
         });
 }
 
-// ===========================================================Listar fichas en el select =======================================================================================
+// ===========================================================Listar fichas en el select ==================================================================================================
 function selectFichas() {
     fetch(reportesUrl + "/getFichas")
         .then((data) => data.json())
@@ -54,15 +54,14 @@ function selectFichas() {
         });
 }
 
-//==============================================================optione las asistencias por id del aprendiz ======================================================================
+//==============================================================CONSULTA QUE TRAE ASISTENCIAS POR ID APRENDIZ Y MES================================================================================
 
 function getAsistenciasForAprendiz(mes, idAprendiz) {
+
     let añoActual = new Date().getFullYear();
     let fechaInicio = `${añoActual}-${String(mes).padStart(2, '0')}-01 00:00:00`;
     let ultimoDia = new Date(añoActual, mes, 0).getDate();
     let fechaFin = `${añoActual}-${String(mes).padStart(2, '0')}-${ultimoDia} 23:59:59`;
-
-    console.log("Consultando asistencias desde:", fechaInicio, "hasta:", fechaFin, "para el aprendiz:", idAprendiz);
 
     let url = `${reportesUrl}/getAsistenciasForAprendiz?idAprendiz=${idAprendiz}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`;
 
@@ -73,9 +72,7 @@ function getAsistenciasForAprendiz(mes, idAprendiz) {
 
             let tablaBody = document.querySelector('#tablaReportesBody');
 
-
             obtenerDiasDelMes(selectMes.value); // Con esto es para sacar la cabecera segun el mes que elija
-
 
             tablaBody.innerHTML = '';
 
@@ -120,11 +117,73 @@ function getAsistenciasForAprendiz(mes, idAprendiz) {
         })
         .catch(error => console.error("Error al obtener los reportes:", error));
 }
+//==============================================================CONSULTA QUE TRAE ASISTENCIAS POR FICHA Y MES ==========================================================================
+
+function getAsistenciasForFicha(mes, idFicha) {
+    let añoActual = new Date().getFullYear();
+    let fechaInicio = `${añoActual}-${String(mes).padStart(2, '0')}-01 00:00:00`;
+    let ultimoDia = new Date(añoActual, mes, 0).getDate();
+    let fechaFin = `${añoActual}-${String(mes).padStart(2, '0')}-${ultimoDia} 23:59:59`;
+
+    let url = `${reportesUrl}/getAsistenciasForFicha?idFicha=${idFicha}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Datos:", data);
+
+            let tablaBody = document.querySelector('#tablaReportesBody');
+            obtenerDiasDelMes2(selectMes.value);
+            tablaBody.innerHTML = '';
+
+            // Agrupar asistencias por aprendiz
+            let asistenciasPorAprendiz = {};
+            data.forEach(reporte => {
+                let aprendizKey = `${reporte.nombre_aprendiz} ${reporte.apellido_aprendiz}`;
+                if (!asistenciasPorAprendiz[aprendizKey]) {
+                    asistenciasPorAprendiz[aprendizKey] = new Array(ultimoDia).fill(null);
+                }
+                let fechaParts = reporte.fecha_inasistencia.split(" ")[0].split("-");
+                let diaRegistro = parseInt(fechaParts[2], 10);
+
+                let badge = document.createElement('span');
+                if (reporte.estado_inasistencia === 'Activo') {
+                    badge.classList.add('badge', 'bg-success');
+                    badge.textContent = 'Asistió';
+                } else {
+                    badge.classList.add('badge', 'bg-danger');
+                    badge.textContent = 'No Asistió';
+                }
+
+                asistenciasPorAprendiz[aprendizKey][diaRegistro - 1] = badge;
+            });
+
+            // Crear una fila por cada aprendiz
+            Object.keys(asistenciasPorAprendiz).forEach(aprendizKey => {
+                let fila = document.createElement('tr');
+
+                // Agregar el nombre del aprendiz en la primera celda
+                let celdaNombre = document.createElement('td');
+                celdaNombre.textContent = aprendizKey;
+                fila.appendChild(celdaNombre);
+
+                // Agregar las asistencias en las celdas de los días
+                asistenciasPorAprendiz[aprendizKey].forEach(badge => {
+                    let celda = document.createElement('td');
+                    if (badge) {
+                        celda.appendChild(badge);
+                    }
+                    fila.appendChild(celda);
+                });
+
+                tablaBody.appendChild(fila);
+            });
+        })
+        .catch(error => console.error("Error al obtener los reportes:", error));
+}
 
 
-
-
-//====================================================Obtiene los dias del mes y los pone en el header de la tabla=================================================
+//====================================================Obtiene los dias del mes y los pone en el header de la tabla======================================================================
 
 function obtenerDiasDelMes(mes) {
     const diasPorMes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -148,6 +207,32 @@ function obtenerDiasDelMes(mes) {
         cabeceraTabla.appendChild(th);
     }
 }
+//==================================================================================
+function obtenerDiasDelMes2(mes) {
+    const diasPorMes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    // Verificar si es un año bisiesto para febrero
+    const año = new Date().getFullYear();
+    if (mes === 2 && ((año % 4 === 0 && año % 100 !== 0) || (año % 400 === 0))) {
+        diasPorMes[1] = 29;
+    }
+
+
+    let cabeceraTabla = document.getElementById('cabeceraTabla');
+    cabeceraTabla.innerHTML = '';
+
+    let thNombre = document.createElement('th');
+    thNombre.textContent = "Nombre del Aprendiz";
+    cabeceraTabla.appendChild(thNombre);
+
+    // Agregar los días del mes como encabezados de columna
+
+    for (let i = 1; i <= diasPorMes[mes - 1]; i++) {
+        let th = document.createElement('th');
+        th.textContent = i;
+        cabeceraTabla.appendChild(th);
+    }
+}
 
 let mesActual = new Date().getMonth() + 1;
 obtenerDiasDelMes(mesActual);
@@ -157,7 +242,7 @@ obtenerDiasDelMes(mesActual);
 btnBuscar.addEventListener('click', () => {
     cabeceraTabla.innerHTML = '';
 
-    // ==================================== VALIDACIONES DE NULL O VACIOS PARA LA BUSQUEDA  ==================================
+    // ==================================== VALIDACIONES DE NULL O VACIOS PARA LA BUSQUEDA  ==============================================================================================
 
     //  Elimina mensajes de error de antes
     document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
@@ -197,12 +282,13 @@ btnBuscar.addEventListener('click', () => {
     }
     // ============================================================= LLAMO LA FUNCION PARA REALIZAR LA CONSULTA DE BUSQUEDA SEGUN EL APRENDIZ=======================================
 
-    console.log(selectMes.value, idAprendizSeleccionado);
+    //console.log(selectMes.value, idAprendizSeleccionado);
     getAsistenciasForAprendiz(selectMes.value, idAprendizSeleccionado);
+    console.log(selectMes.value, selectFicha2.value)
+    getAsistenciasForFicha(selectMes.value, selectFicha2.value);
 
 });
 
 
 selectFichas();
-
 selectAprendices();

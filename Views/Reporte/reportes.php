@@ -59,7 +59,8 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" id="tablaReportes">
                             <thead class="thead-light">
-                                <tr id="cabeceraTabla"></tr>
+                                <tr id="cabeceraTabla">
+                                </tr>
                             </thead>
                             <tbody id="tablaReportesBody">
 

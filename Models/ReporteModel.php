@@ -11,9 +11,6 @@ class ReporteModel extends Mysql
     public function selectForAprendiz(string $fechaInicio, string $fechaFin, int $idAprendiz)
     {
 
-        $fechaInicio = date('Y-m-d', strtotime($fechaInicio));
-        $fechaFin = date('Y-m-d', strtotime($fechaFin));
-
         $sql = "SELECT 
             inasistencias.fecha_inasistencia,
             inasistencias.estado_inasistencia,
@@ -24,7 +21,7 @@ class ReporteModel extends Mysql
         FROM inasistencias
         INNER JOIN aprendices ON aprendices.idaprendiz = inasistencias.aprendices_idusuario
         WHERE inasistencias.aprendices_idusuario = ? 
-        AND DATE(inasistencias.fecha_inasistencia) BETWEEN ? AND ?";
+        AND inasistencias.fecha_inasistencia BETWEEN ? AND ?";
 
         $arrData = [$idAprendiz, $fechaInicio, $fechaFin];
 
@@ -34,17 +31,22 @@ class ReporteModel extends Mysql
 
     public function selectForFicha(string $fechaInicio, string $fechaFin, int $idficha)
     {
-        $return = "";
+        $sql = "SELECT 
+        inasistencias.fecha_inasistencia,
+        inasistencias.estado_inasistencia,
+        inasistencias.hora_inasistencia,
+        inasistencias.retardos_inasistencia,
+        aprendices.nombre_aprendiz,
+        aprendices.apellido_aprendiz
+        FROM inasistencias
+        JOIN aprendices ON aprendices.idaprendiz=inasistencias.aprendices_idusuario
+        JOIN fichas ON fichas.idficha=inasistencias.fichas_idficha
+        WHERE fichas.idficha = ? 
+        AND inasistencias.fecha_inasistencia BETWEEN ? AND ?";
 
-        $this->fechaInicio = $fechaInicio;
-        $this->fechaFin = $fechaFin;
-        $this->idficha = $idficha;
+        $arrData = [$idficha, $fechaInicio, $fechaFin];
 
-        $sql = "SELECT (inasistencias.fecha_inasistencia,inasistencias.estado_inasistencia,inasistencias.fecha_inasistencia,inasistencias.hora_inasistencia,inasistencias.retardos_inasistencia,aprendices.nombre_aprendiz,aprendices.apellido_aprendiz)
-        JOIN aprendices ON aprendices.idaprendiz=inasistencias.aprendices_idusuario 
-        WHERE inasistencias.fecha_inasistencia BETWEEN ? AND ?";
-        $request = $this->select_all($sql, );
-        return $request;
+        return $this->select_all2($sql, $arrData);
     }
 
     public function getAprendices()

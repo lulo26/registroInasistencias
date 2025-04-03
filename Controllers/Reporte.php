@@ -50,6 +50,24 @@ class Reporte extends Controllers
         }
         die();
     }
+    public function getAsistenciasForFicha()
+    {
+
+        if (isset($_GET['idFicha'], $_GET['fechaInicio'], $_GET['fechaFin'])) {
+
+            $idFicha = intval($_GET['idFicha']);
+            $inicio = $_GET['fechaInicio'];
+            $fin = $_GET['fechaFin'];
+
+            $arrData = $this->model->selectForFicha($inicio, $fin, $idFicha);
+
+            echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
+        } else {
+
+            echo json_encode(["error" => "Faltan parámetros"], JSON_UNESCAPED_UNICODE);
+        }
+        die();
+    }
 
 
 }
