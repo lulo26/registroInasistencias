@@ -33,7 +33,7 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="<?= base_url() ?>/aprendices">
+      <a class="nav-link collapsed" href="<?= base_url() ?>/aprendiz">
         <i class="bx bxs-book-reader"></i>
         <span>Aprendices</span>
       </a>
@@ -65,6 +65,13 @@
         <span>Reportes</span>
       </a>
     </li><!-- End Register Page Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="<?= base_url() ?>/horarios">
+        <i class="bi bi-calendar-plus"></i>
+        <span>Horarios</span>
+      </a>
+    </li>
 
     <li class="nav-item">
       <a class="nav-link collapsed" href="<?= base_url() ?>/login">
