@@ -60,9 +60,22 @@
     </li>
 
     <li class="nav-item">
+<<<<<<< HEAD
       <a class="nav-link collapsed" href="<?= base_url() ?>/horarios">
         <i class="bi bi-calendar-plus"></i>
         <span>Horarios</span>
+=======
+      <a class="nav-link collapsed" href="<?= base_url() ?>/reporte">
+        <i class="bi bi-card-list"></i>
+        <span>Reportes</span>
+      </a>
+    </li><!-- End Register Page Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="<?= base_url() ?>/login">
+        <i class="bi bi-box-arrow-in-right"></i>
+        <span>Login</span>
+>>>>>>> 68afbb0dfb5306d998551d19caba4c02e78669ef
       </a>
     </li>
 

@@ -73,21 +73,21 @@ class Aprendiz extends Controllers
 
     public function updateAprendices()
     {
-        $idAprendiz = strClean($_POST['idaprendiz']);
-        $numeroDocumentoAprendiz = strClean($_POST['numeroDocumentoAprendiz']);
-        $nombreAprendiz = strClean($_POST['nombreAprendiz']);
-        $apellidoAprendiz = strClean($_POST['apellidoAprendiz']);
-        $codigoAprendiz = strClean($_POST['codigoAprendiz']);
-        $generoAprendiz = $_POST['generoAprendiz'];
+        $idAprendiz = strClean($_POST['idaprendiz1']);
+        $numeroDocumentoAprendiz = strClean($_POST['numeroDocumentoAprendiz1']);
+        $nombreAprendiz = strClean($_POST['nombreAprendiz1']);
+        $apellidoAprendiz = strClean($_POST['apellidoAprendiz1']);
+        $codigoAprendiz = strClean($_POST['codigoAprendiz1']);
+        $generoAprendiz = $_POST['generoAprendiz1'];
 
-        $arrPost = ['idaprendiz', 'numeroDocumentoAprendiz', 'nombreAprendiz', 'apellidoAprendiz', 'generoAprendiz', 'codigoAprendiz'];
+        $arrPost = ['idaprendiz1', 'numeroDocumentoAprendiz1', 'nombreAprendiz1', 'apellidoAprendiz1', 'generoAprendiz1'];
         if (check_post($arrPost)) {
             $requestModel = $this->model->editarAprendices($idAprendiz, $nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz, $codigoAprendiz);
             $option = 2;
 
             if ($requestModel > 0) {
                 if ($option === 1) {
-                    $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz agregado correctamente.');
+                    $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
                 }
             } elseif ($requestModel === 'exists') {
                 $arrRespuesta = array('status' => false, 'msg' => 'Este aprendiz ya existe');
@@ -95,7 +95,7 @@ class Aprendiz extends Controllers
                 $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
             }
         } else {
-            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
+            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datoss');
         }
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();

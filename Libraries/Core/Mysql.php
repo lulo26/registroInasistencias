@@ -44,6 +44,13 @@ class Mysql extends Conexion
         $data = $result->fetchall(PDO::FETCH_ASSOC);
         return $data;
     }
+    public function select_all2($query, $params = [])
+    {
+        $stmt = $this->conexion->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
     public function update(string $query, array $arrValues)
     {
@@ -61,22 +68,22 @@ class Mysql extends Conexion
                 throw new Exception("Error en la preparación de la consulta: " . $this->conexion->errorInfo());
             }
 
-            // Vincular parámetros (para PDO usamos bindValue o bindParam)
+
             if ($parametros) {
-                // Si tienes parámetros, necesitas usar bindValue (PDO no usa bind_param)
+
                 $i = 0;
                 foreach ($parametros as $parametro) {
-                    $stmt->bindValue(++$i, $parametro, PDO::PARAM_STR); // Puedes cambiar el tipo según sea necesario
+                    $stmt->bindValue(++$i, $parametro, PDO::PARAM_STR);
                 }
             }
 
             $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC); // Para obtener todos los resultados en un array asociativo
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if ($resultado) {
                 return $resultado;
             } else {
-                return $stmt->rowCount(); // Para consultas que no devuelven un conjunto de resultados
+                return $stmt->rowCount();
             }
         } catch (Exception $e) {
             die("Excepción capturada: " . $e->getMessage());

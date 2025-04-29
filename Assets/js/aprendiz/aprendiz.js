@@ -1,219 +1,151 @@
-
 const frmAprendiz = document.querySelector("#frmAprendiz");
+const frmActualizarAprendiz = document.querySelector("#frmActualizarAprendiz");
 const aprendicesUrl = "http://localhost/registroInasistencias/aprendiz/";
-let idAprendiz = document.querySelector("#idAprendiz");
 let btnCrearAprendiz = document.querySelector("#btnCrearAprendiz");
-let nombreAprendiz = document.querySelector("#nombreAprendiz");
-let apellidoAprendiz = document.querySelector("#apellidoAprendiz");
-let generoAprendiz = document.querySelector("#generoAprendiz");
-let codigoAprendiz = document.querySelector("#codigoAprendiz");
 
-let inputUser = document.querySelector('#usuario');
-let inputPass = document.querySelector('#contra');
+let idAprendizSeleccionado = null;
 
-
-/*
-import DataTable from 'datatables.net-dt';
-import 'datatables.net-responsive-dt';
-
-let table = new DataTable('#tablaAprendiz', {
-  responsive: true
-});
-*/
-
-let numeroDocumentoAprendiz = document.querySelector(
-  "#numeroDocumentoAprendiz"
-);
-let accion = "";
-
+// Abrir modal de creación
 btnCrearAprendiz.addEventListener("click", () => {
+  frmAprendiz.reset();
   $("#crearAprendizModal").modal("show");
 });
 
-
+// Cargar la lista de aprendices
 function listAprendices() {
-
-  fetch(aprendicesUrl + "/getAprendices")
+  fetch(aprendicesUrl + "getAprendices")
     .then((data) => data.json())
     .then((data) => {
-      console.log(data);
+      let tabla = document.querySelector("#tablaAprendiz tbody");
+      tabla.innerHTML = "";
+
       data.forEach((aprendiz) => {
-        document.getElementById("tablaAprendiz").innerHTML += `
-            <tr>
+        tabla.innerHTML += `
+          <tr>
             <td>${aprendiz.idaprendiz}</td>
             <td>${aprendiz.numdoc}</td>
             <td>${aprendiz.nombre_aprendiz}</td>
             <td>${aprendiz.apellido_aprendiz}</td>
             <td>${aprendiz.generos_idgenero}</td>
-            <td>${aprendiz.actions}</td>
-            <tr/>`;
+            <td>
+              <button class="btn btn-warning btn-sm btn-editar" data-id="${aprendiz.idaprendiz}">Editar</button>
+              <button class="btn btn-danger btn-sm btn-eliminar" data-id="${aprendiz.idaprendiz}">Eliminar</button>
+            </td>
+          </tr>`;
+      });
+
+      // Agregar eventos 
+      document.querySelectorAll(".btn-editar").forEach((btn) => {
+        btn.addEventListener("click", (e) => editarAprendiz(e.target.dataset.id));
+      });
+
+      document.querySelectorAll(".btn-eliminar").forEach((btn) => {
+        btn.addEventListener("click", (e) => eliminarAprendiz(e.target.dataset.id));
       });
     });
 }
 
 
+function editarAprendiz(idAprendiz) {
+  idAprendizSeleccionado = idAprendiz;
+  $("#actualizarAprendizModal").modal("show");
 
-//Insertar
+  fetch(aprendicesUrl + `getAprendizByID/${idAprendiz}`)
+    .then((res) => res.json())
+    .then((res) => {
+      let aprendiz = res.data[0];
+
+      document.querySelector("#idAprendiz1").value = aprendiz.idaprendiz;
+      document.querySelector("#numeroDocumentoAprendiz1").value = aprendiz.numdoc;
+      document.querySelector("#nombreAprendiz1").value = aprendiz.nombre_aprendiz;
+      document.querySelector("#apellidoAprendiz1").value = aprendiz.apellido_aprendiz;
+      document.querySelector("#generoAprendiz1").value = aprendiz.generos_idgenero;
+      document.querySelector("#codigoAprendiz1").value = aprendiz.codigo_aprendiz;
+    });
+}
+
+// Función para eliminar aprendiz
+function eliminarAprendiz(idAprendiz) {
+  Swal.fire({
+    title: "Eliminar aprendiz",
+    text: "¿Está seguro de eliminar el aprendiz?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let formData = new FormData();
+      formData.append("idAprendiz", idAprendiz);
+
+      fetch(aprendicesUrl + "eliminarAprendiz/", { method: "POST", body: formData })
+        .then((res) => res.json())
+        .then((data) => {
+          Swal.fire({
+            title: data.status ? "Correcto" : "Error",
+            text: data.msg,
+            icon: data.status ? "success" : "error",
+          }).then(() => {
+            if (data.status) listAprendices();
+          });
+        });
+    }
+  });
+}
+
 
 frmAprendiz.addEventListener("submit", (e) => {
   e.preventDefault();
-  frmData = new FormData(frmAprendiz);
-  console.log(frmData);
 
-  fetch(aprendicesUrl + "/setAprendices", {
-    method: "POST",
-    body: frmData,
-  })
+  let frmData = new FormData(frmAprendiz);
+
+  fetch(aprendicesUrl + "setAprendices", { method: "POST", body: frmData })
     .then((res) => res.json())
     .then((data) => {
-      // Mostramos el SweetAlert
       Swal.fire({
         title: data.status ? "Correcto" : "Error",
         text: data.msg,
         icon: data.status ? "success" : "error",
       }).then(() => {
-        // Solo después de que el usuario haya cerrado el SweetAlert
         if (data.status) {
-          frmAprendiz.reset();  // Reseteamos el formulario
-          $("#crearAprendizModal").modal("hide");  // Cerramos el modal
+          frmAprendiz.reset();
+          $("#crearAprendizModal").modal("hide");
+          listAprendices();
         }
-        // Recargamos la página después de cerrar el SweetAlert
-        window.location.reload();
       });
     });
 });
 
-
-
-
-window.addEventListener("DOMContentLoaded", (e) => {
-  listAprendices();
-});
-
-/* frmAprendiz.addEventListener("submit", (e) => {
+frmActualizarAprendiz.addEventListener("submit", (e) => {
   e.preventDefault();
-  frmData = new FormData(frmAprendiz);
-  console.log(frmData);
-  fetch(aprendicesUrl + "/setAprendices", {
-    method: "POST",
-    body: frmData,
-  })
+
+  let frmData = new FormData(frmActualizarAprendiz);
+  frmData.append("idAprendiz1", idAprendizSeleccionado);
+
+  // Verificar los datos antes de enviarlos
+  console.log("Datos enviados:");
+  frmData.forEach((value, key) => {
+    console.log(`${key}: ${value}`);
+  });
+
+  fetch(aprendicesUrl + "updateAprendices", { method: "POST", body: frmData })
     .then((res) => res.json())
     .then((data) => {
+      console.log("Respuesta del servidor:", data);
       Swal.fire({
         title: data.status ? "Correcto" : "Error",
         text: data.msg,
         icon: data.status ? "success" : "error",
-      });
-      if (data.status) {
-        frmAprendiz.reset();
-        $("#crearAprendizModal").modal("hide");
-        listAprendices();
-      }
-    });
-}); */
-
-
-
-document.addEventListener("click", (e) => {
-  try {
-    let selected = e.target.closest("button").getAttribute("data-action-type");
-    let idAprendiz = e.target.closest("button").getAttribute("rel");
-
-    if (selected == "delete") {
-      Swal.fire({
-        title: "Eliminar aprendiz",
-        text: "¿Está seguro de eliminar el aprendiz?",
-        icon: "warning",
-        showDenyButton: true,
-        confirmButtonText: "Sí",
-        denyButtonText: `Cancelar`,
-
-      }).then((result) => {
-        if (result.isConfirmed) {
-          let formData = new FormData();
-          formData.append("idAprendiz", idAprendiz);
-          fetch(aprendicesUrl + "eliminarAprendiz/", {
-            method: "POST",
-            body: formData,
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              Swal.fire({
-                title: data.status ? "Correcto" : "Error",
-                text: data.msg,
-                icon: data.status ? "success" : "error",
-              }).then(() => {
-                if (data.status) {
-                  window.location.reload();  // Recargar la página
-                }
-              })
-            });
+      }).then(() => {
+        if (data.status) {
+          frmActualizarAprendiz.reset();
+          $("#actualizarAprendizModal").modal("hide");
+          listAprendices();
         }
       });
-
-    }
-
-    if (selected == "update") {
-      accion = "update";
-      $("#crearAprendizModal").modal("show");
-      document.getElementById("crearAprendizModalLabel").innerHTML =
-        "Actualizar Aprendiz";
-
-      fetch(aprendicesUrl + `getAprendizByID/` + idAprendiz, {
-        method: "GET",
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          aprendiz = res.data[0];
-          console.log(aprendiz);
-
-          document.querySelector("#numeroDocumentoAprendiz").value =
-            aprendiz.numdoc;
-          document.querySelector("#nombreAprendiz").value =
-            aprendiz.nombre_aprendiz;
-          document.querySelector("#apellidoAprendiz").value =
-            aprendiz.apellido_aprendiz;
-          document.querySelector("#generoAprendiz").value =
-            aprendiz.generos_idgenero;
-          document.querySelector("#codigoAprendiz").value =
-            aprendiz.codigo_aprendiz;
-          container2.style.display = "none";
-          /*  document.querySelector(
-            "#generoAprendiz"
-          ).innerHTML = `<option selected hidden value="${aprendiz.generos_idgenero}">${aprendiz.generos_idgenero}</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Femenino">Femenino</option>
-          <option value="Otros">Otros..</option>`; */
-        });
-    }
-
-  } catch { }
+    });
 });
 
-//Actualizar
 
-if (accion == "update") {
-  frmAprendiz.addEventListener("submit", (e) => {
-    e.preventDefault();
-    frmData = new FormData(frmAprendiz);
-    console.log(frmData);
-    fetch(aprendicesUrl + "/updateAprendices", {
-      method: "POST",
-      body: frmData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        Swal.fire({
-          title: data.status ? "Correcto" : "Error",
-          text: data.msg,
-          icon: data.status ? "success" : "error",
-        });
-        if (data.status) {
-          frmAprendiz.reset();
-          $("#crearAprendizModal").modal("hide");
-          window.location.reload();
-        }
-      });
-  });
-}
+
+window.addEventListener("DOMContentLoaded", listAprendices);
