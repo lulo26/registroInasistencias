@@ -24,7 +24,7 @@ class Usuarios extends Controllers
         $arrData = $this->model->selectUsuarios();
 
         for ($i = 0; $i < count($arrData); $i++) {
-            if ($_SESSION['idUser'] === $arrData[$i]['idusuario']) {
+            if ($_SESSION['idUser'] === $arrData[$i]['idusuario'] || $_SESSION['userData']['rol_usuario'] === "COORDINADOR") {
                 $btnEdit = "<button type='button' class='btn btn-primary rounded-pill' data-action-type='update' rel='" . $arrData[$i]['idusuario'] . "'>
                                 <i class='bi bi-pencil-square'></i>
                             </button>";
@@ -42,14 +42,6 @@ class Usuarios extends Controllers
         echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
         die();
     }
-
-    /* public function getRoles()
-    {
-        $arrData = $this->model->selectRoles();
-
-        echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
-        die();
-    } */
 
     public function getUsuarioByID($idusuario)
     {
@@ -71,14 +63,14 @@ class Usuarios extends Controllers
         $numdoc_usuario = strClean($_POST['numdoc_usuario']);
         $nombre_usuario = strClean($_POST['nombre_usuario']);
         $password_usuario = strClean($_POST['password_usuario']);
+        /* $password_usuario = hash('SHA256', strClean($_POST['password_usuario'])); */
         $correo_usuario = strClean($_POST['correo_usuario']);
-        $telefono_usuario = strClean($_POST['telefono_usuario']);/* 
-        $roles_idrol = strClean($_POST['roles_idrol']); */
+        $telefono_usuario = strClean($_POST['telefono_usuario']);
         $codigo_usuario = strClean($_POST['codigo_usuario']);
         $rol_usuario = strClean($_POST['rol_usuario']);
         $idusuario = strClean($_POST['idusuario']);
 
-        $arrPost = ['numdoc_usuario', 'nombre_usuario', 'password_usuario', 'correo_usuario', 'telefono_usuario', 'codigo_usuario', 'rol_usuario'];
+        $arrPost = ['numdoc_usuario', 'nombre_usuario', 'correo_usuario', 'telefono_usuario', 'codigo_usuario', 'rol_usuario'];
 
         if (check_post($arrPost)) {
             if ($idusuario == 0 || $idusuario == "") {
@@ -93,12 +85,22 @@ class Usuarios extends Controllers
                     $arrRespuesta = array('status' => false, 'msg' => 'Correo ya registrado.');
                 } elseif ($validarCodigo == "codigoExiste") {
                     $arrRespuesta = array('status' => false, 'msg' => 'Codigo no valido.');
+                } elseif (trim($password_usuario) === "" || empty($password_usuario)) {
+                    $arrRespuesta = array('status' => false, 'msg' => 'Por favor, ingrese una contraseña.');
                 } else {
-                    $requestModel = $this->model->insertarUsuario($numdoc_usuario, $nombre_usuario, $password_usuario, $correo_usuario, $telefono_usuario, $codigo_usuario, $rol_usuario);
+                    $password_usuario_hash = hash('SHA256', $password_usuario);
+                    $requestModel = $this->model->insertarUsuario(
+                        $numdoc_usuario,
+                        $nombre_usuario,
+                        $password_usuario_hash,
+                        $correo_usuario,
+                        $telefono_usuario,
+                        $codigo_usuario,
+                        $rol_usuario
+                    );
                     if ($requestModel > 0) {
                         $arrRespuesta = array('status' => true, 'msg' => 'Usuario agregado correctamente.');
                     }
-                    /* $option = 1; */
                 }
             } else {
                 $validarCorreoEditar = $this->model->validarEmail($correo_usuario, $idusuario);
@@ -109,28 +111,38 @@ class Usuarios extends Controllers
                 } elseif ($validarCodigoEditar == "codigoExiste") {
                     $arrRespuesta = array('status' => false, 'msg' => 'Codigo no valido.');
                 } else {
-                    $requestModel = $this->model->editarUsuario($numdoc_usuario, $nombre_usuario, $password_usuario, $correo_usuario, $telefono_usuario, $codigo_usuario, $rol_usuario, $idusuario);
-                    $arrRespuesta = array('status' => true, 'msg' => 'Usuario actualizado correctamente.');
+
+                    if (empty($password_usuario)) {
+                        $password_usuario = null;
+                        // Actualizar sin cambiar contraseña
+                        $requestModel = $this->model->editarUsuario(
+                            $numdoc_usuario,
+                            $nombre_usuario,
+                            $password_usuario,
+                            $correo_usuario,
+                            $telefono_usuario,
+                            $codigo_usuario,
+                            $rol_usuario,
+                            $idusuario
+                        );
+                    } else {
+                        // Hashear la nueva contraseña y actualizarla
+                        $password_usuario_hash = hash('SHA256', $password_usuario);
+                        $requestModel = $this->model->editarUsuario(
+                            $numdoc_usuario,
+                            $nombre_usuario,
+                            $password_usuario_hash,
+                            $correo_usuario,
+                            $telefono_usuario,
+                            $codigo_usuario,
+                            $rol_usuario,
+                            $idusuario
+                        );
+                    }
+
+                    $arrRespuesta = ['status' => true, 'msg' => 'Usuario actualizado correctamente.'];
                 }
-                /* $option = 2; */
-                /* $validarCorreo = $this->model->validarEmail($correo_usuario);
-                if ($validarCorreo === "correoExiste") {
-                    $arrRespuesta = array('status' => false, 'msg' => 'Correo ya registrado.');
-                } else {
-                    $requestModel = $this->model->editarUsuario($numdoc_usuario, $nombre_usuario, $password_usuario, $correo_usuario, $telefono_usuario, $roles_idrol, $codigo_usuario, $idusuario);
-                    $option = 2;
-                } */
             }
-            // echo($option);
-            /* if ($requestModel > 0) {
-                if ($option === 1) {
-                    $arrRespuesta = array('status' => true, 'msg' => 'Usuario agregado correctamente.');
-                }
-            } elseif ($requestModel === 'exists') {
-                $arrRespuesta = array('status' => false, 'msg' => 'Este usuario ya existe.');
-            } else {
-                $arrRespuesta = array('status' => true, 'msg' => 'Usuario actualizado correctamente.');
-            } */
         } else {
             $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos.');
         }
@@ -155,38 +167,4 @@ class Usuarios extends Controllers
         }
         die();
     }
-
-    /* public function validarIdentificacion()
-    {
-        if ($_POST) {
-            $idusuario = intval($_POST['idusuario']);
-            $requestDelete = $this->model->eliminarUsuario($idusuario);
-            if ($requestDelete == 'empty') {
-                $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el usuario.');
-            } else {
-                $arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el usuario.');
-            }
-            echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
-        } else {
-            print_r($_POST);
-        }
-        die();
-    } */
-
-    /* public function validarEmail()
-    {
-        if ($_POST) {
-            $idusuario = intval($_POST['idusuario']);
-            $requestDelete = $this->model->eliminarUsuario($idusuario);
-            if ($requestDelete == 'empty') {
-                $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el usuario.');
-            } else {
-                $arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el usuario.');
-            }
-            echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
-        } else {
-            print_r($_POST);
-        }
-        die();
-    } */
 }

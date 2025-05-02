@@ -13,57 +13,57 @@
         <!-- aquí va el contenido del modal -->
 
         <form id="frmUsuarios" method="POST">
-            <input type="hidden" id="idUsuario" name="idUsuario" value="0">
-            <span>Todos los campos son obligatorios</span>
+          <input type="hidden" id="idUsuario" name="idUsuario" value="0">
+          <span>Todos los campos son obligatorios</span>
 
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="txtIdentificacion">Identificacion</label>
-                <input type="text" class="form-control valid validNumber" id="txtIdentificacion" name="txtIdentificacion" autocomplete="off" required="">
-              </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="txtIdentificacion">Identificacion</label>
+              <input type="text" class="form-control valid validNumber" id="txtIdentificacion" name="txtIdentificacion" autocomplete="off" required="">
             </div>
+          </div>
 
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="txtNombres">Nombres</label>
-                <input type="text" class="form-control valid validText" id="txtNombres" name="txtNombres" autocomplete="off" required="">
-              </div>
-              <div class="form-group col-md-6">
-                <label for="txtApellidos">Apellidos</label>
-                <input type="text" class="form-control valid validText" id="txtApellidos" name="txtApellidos" autocomplete="off" required="">
-              </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="txtNombres">Nombres</label>
+              <input type="text" class="form-control valid validText" id="txtNombres" name="txtNombres" autocomplete="off" required="">
             </div>
+            <div class="form-group col-md-6">
+              <label for="txtApellidos">Apellidos</label>
+              <input type="text" class="form-control valid validText" id="txtApellidos" name="txtApellidos" autocomplete="off" required="">
+            </div>
+          </div>
 
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="txtTelefono">Teléfono</label>
-                <input type="text" class="form-control valid validNumber" id="txtTelefono" name="txtTelefono" autocomplete="off" required="" onkeypress="return controlTag(event);">
-              </div>
-              <div class="form-group col-md-6">
-                <label for="txtEmail">Email</label>
-                <input type="email" class="form-control valid validEmail" id="txtEmail" name="txtEmail" autocomplete="off" required="">
-              </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="txtTelefono">Teléfono</label>
+              <input type="text" class="form-control valid validNumber" id="txtTelefono" name="txtTelefono" autocomplete="off" required="" onkeypress="return controlTag(event);">
             </div>
+            <div class="form-group col-md-6">
+              <label for="txtEmail">Email</label>
+              <input type="email" class="form-control valid validEmail" id="txtEmail" name="txtEmail" autocomplete="off" required="">
+            </div>
+          </div>
 
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="listRolId">Tipo usuario</label>
-                <select name="listRolId" id="listRolId" class="form-control">
-                </select>
-              </div>
-              <div class="form-group col-md-6">
-                <label for="listStatus">Status</label>
-                <select name="listStatus" id="listStatus" class="form-control" required>
-                  <option value="1">Activo</option>
-                  <option value="2">Inactivo</option>
-                </select>
-              </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="listRolId">Tipo usuario</label>
+              <select name="listRolId" id="listRolId" class="form-control">
+              </select>
             </div>
+            <div class="form-group col-md-6">
+              <label for="listStatus">Status</label>
+              <select name="listStatus" id="listStatus" class="form-control" required>
+                <option value="1">Activo</option>
+                <option value="2">Inactivo</option>
+              </select>
+            </div>
+          </div>
 
-            <div class="form-row">
-              <label for="txtPassword">Contraseña</label>
-              <input type="password" class="form-control" id="txtPassword" name="txtPassword" autocomplete="off">
-            </div>
+          <div class="form-row">
+            <label for="txtPassword">Contraseña</label>
+            <input type="password" class="form-control" id="txtPassword" name="txtPassword" autocomplete="off">
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -88,7 +88,7 @@
 
         <table class="table table-bordered" width="100%" cellspacing="0">
           <tbody>
-            
+
             <tr>
               <th>Identificacion</th>
               <td id="celIdentificacion"></td>
@@ -135,7 +135,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div>
-        
+
       </div>
     </div>
   </div>

@@ -54,6 +54,7 @@ function listUsuarios() {
 
 function limpiarFormulario() {
   frmUsuarios.reset();
+  document.querySelector("#idusuario").value = 0;
 }
 
 btnCerrar.addEventListener("click", limpiarFormulario);
@@ -103,7 +104,9 @@ frmUsuarios.addEventListener("submit", (e) => {
     });
   } else {
     frmData = new FormData(frmUsuarios);
-    console.log(frmData);
+    for (const [key, value] of frmData.entries()) {
+      console.log(key, value);
+    }
     fetch(base_url + "/usuarios/setUsuarios", {
       method: "POST",
       body: frmData,
@@ -186,7 +189,7 @@ document.addEventListener("click", (e) => {
           document.querySelector("#correo_usuario").value = usuario.correo_usuario;
           document.querySelector("#telefono_usuario").value = usuario.telefono_usuario;
           document.querySelector("#codigo_usuario").value = usuario.codigo_usuario;
-          document.querySelector("#password_usuario").value = usuario.password_usuario;
+          document.querySelector("#password_usuario").value = "";
 
           const roles = ["INSTRUCTOR", "COORDINADOR"];
           select_rol.innerHTML = "";

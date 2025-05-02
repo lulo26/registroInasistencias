@@ -189,17 +189,17 @@ class Excepciones extends Controllers
                 } elseif ($validarCodigo == "codigoExiste") {
                     $arrRespuesta = array('status' => false, 'msg' => 'Codigo no valido.');
                 } else { */
-                if ($idFicha === 0) {
-                    $idFicha = null;
-                }
+                $idFicha = ($idFicha === "" || $idFicha == 0) ? null : $idFicha;
                 if ($selectMotivo === "Otro") {
                     $selectMotivo = $otroMotivo;
                 }
                 if ($otroMotivo === "" || $otroMotivo = null) {
                     $otroMotivo = null;
-                } elseif ($horaEntrada === "" || $horaEntrada = null) {
+                }
+                if ($horaEntrada === "" || $horaEntrada = null) {
                     $horaEntrada = null;
-                } elseif ($horaSalida === "" || $horaSalida = null) {
+                }
+                if ($horaSalida === "" || $horaSalida = null) {
                     $horaSalida = null;
                 }
                 $requestModel = $this->model->insertarExcepcion($fecha, $selectMotivo, $idUsuario, $idBloque, $idFicha, $horaEntrada, $horaSalida);

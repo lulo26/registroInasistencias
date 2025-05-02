@@ -173,7 +173,7 @@ function listExcepciones(idUsuario) {
                     <td>${mayusInicial(excepcion.rol_usuario)}</td>
                     <td>${excepcion.bloques_idbloque}</td>
                     <td>${excepcion.hora_bloque}</td>
-                    <td>${excepcion.ficha}</td>
+                    <td>${excepcion.ficha ? excepcion.ficha : "Excepcion general"}</td>
                     <td>${excepcion.options}</td>`;
           });
         } else {

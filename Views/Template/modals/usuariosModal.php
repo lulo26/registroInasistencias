@@ -43,8 +43,8 @@
                   <input type="text" class="form-control valid validText" id="codigo_usuario" name="codigo_usuario" autocomplete="off">
                 </div>
                 <div class="form-group col-6">
-                  <label for="password_usuario">Contraseña</label>
-                  <input type="password" class="form-control valid validPassword" id="password_usuario" name="password_usuario" autocomplete="off" required="">
+                  <label for="password_usuario" id="lbl_password">Contraseña</label>
+                  <input type="password" class="form-control valid validPassword" id="password_usuario" name="password_usuario" autocomplete="off">
                 </div>
               </div>
 

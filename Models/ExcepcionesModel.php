@@ -18,12 +18,18 @@ class ExcepcionesModel extends Mysql
 
     public function selectExcepciones()
     {
-        $sql = "SELECT idexcepcion, fecha, motivo_excepcion, usuarios.idusuario, usuarios.nombre_usuario, usuarios.rol_usuario, bloques_idbloque, bloques.hora_bloque, horaEntrada_excepcion, CONCAT(fichas.numero_ficha, ' - ', cursos.nombre_curso) AS ficha
+        /* $sql = "SELECT idexcepcion, fecha, motivo_excepcion, usuarios.idusuario, usuarios.nombre_usuario, usuarios.rol_usuario, bloques_idbloque, bloques.hora_bloque, horaEntrada_excepcion, CONCAT(fichas.numero_ficha, ' - ', cursos.nombre_curso) AS ficha
                 FROM excepciones
                 INNER JOIN usuarios ON usuarios.idusuario = excepciones.usuarios_idusuario
                 INNER JOIN bloques ON bloques.idbloque = excepciones.bloques_idbloque
                 INNER JOIN fichas ON fichas.idficha = excepciones.fichas_idficha
-                INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso";
+                INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso"; */
+        $sql = "SELECT idexcepcion, fecha, motivo_excepcion, usuarios.idusuario, usuarios.nombre_usuario, usuarios.rol_usuario, bloques_idbloque, bloques.hora_bloque, horaEntrada_excepcion, CONCAT(fichas.numero_ficha, ' - ', cursos.nombre_curso) AS ficha
+                FROM excepciones
+                INNER JOIN usuarios ON usuarios.idusuario = excepciones.usuarios_idusuario
+                INNER JOIN bloques ON bloques.idbloque = excepciones.bloques_idbloque
+                LEFT JOIN fichas ON fichas.idficha = excepciones.fichas_idficha
+                LEFT JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso";
         $request = $this->select_all($sql);
         return $request;
     }
@@ -38,6 +44,13 @@ class ExcepcionesModel extends Mysql
                 INNER JOIN fichas ON fichas.idficha = excepciones.fichas_idficha
                 INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso
                 WHERE idusuario = {$id}";
+        $sql = "SELECT idexcepcion, fecha, motivo_excepcion, usuarios.nombre_usuario, usuarios.rol_usuario, bloques_idbloque, bloques.hora_bloque, horaEntrada_excepcion, CONCAT(fichas.numero_ficha, ' - ', cursos.nombre_curso) AS ficha
+                FROM excepciones
+                INNER JOIN usuarios ON usuarios.idusuario = excepciones.usuarios_idusuario
+                INNER JOIN bloques ON bloques.idbloque = excepciones.bloques_idbloque
+                INNER JOIN fichas ON fichas.idficha = excepciones.fichas_idficha
+                INNER JOIN cursos ON cursos.idcurso = fichas.cursos_idcurso
+                WHERE idusuario = 3 OR usuarios.rol_usuario = 'COORDINADOR'";
         $request = $this->select_all($sql);
         return $request;
     }
@@ -51,7 +64,7 @@ class ExcepcionesModel extends Mysql
         return $request;
     }
 
-    public function insertarExcepcion(string $fecha, string $motivo, int $idUsuario, int $idBloque, int $idFicha, string $horaEntrada, string $horaSalida)
+    public function insertarExcepcion(string $fecha, string $motivo, int $idUsuario, int $idBloque, ?int $idFicha, ?string $horaEntrada, ?string $horaSalida)
     {
         $return = "";
 
