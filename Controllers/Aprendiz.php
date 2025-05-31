@@ -73,30 +73,38 @@ class Aprendiz extends Controllers
 
     public function updateAprendices()
     {
-        $idAprendiz = strClean($_POST['idaprendiz1']);
+        $idAprendiz = strClean($_POST['idAprendiz1']);
         $numeroDocumentoAprendiz = strClean($_POST['numeroDocumentoAprendiz1']);
         $nombreAprendiz = strClean($_POST['nombreAprendiz1']);
         $apellidoAprendiz = strClean($_POST['apellidoAprendiz1']);
         $codigoAprendiz = strClean($_POST['codigoAprendiz1']);
         $generoAprendiz = $_POST['generoAprendiz1'];
 
-        $arrPost = ['idaprendiz1', 'numeroDocumentoAprendiz1', 'nombreAprendiz1', 'apellidoAprendiz1', 'generoAprendiz1'];
+        $arrPost = ['idAprendiz1', 'numeroDocumentoAprendiz1', 'nombreAprendiz1', 'apellidoAprendiz1', 'generoAprendiz1'];
         if (check_post($arrPost)) {
-            $requestModel = $this->model->editarAprendices($idAprendiz, $nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz, $codigoAprendiz);
+            $requestModel = $this->model->editarAprendices(
+                $idAprendiz,
+                $nombreAprendiz,
+                $apellidoAprendiz,
+                $generoAprendiz,
+                $numeroDocumentoAprendiz,
+                $codigoAprendiz
+            );
+
             $option = 2;
 
             if ($requestModel > 0) {
-                if ($option === 1) {
-                    $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
-                }
+                // Puedes personalizar el mensaje según la opción si es necesario
+                $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
             } elseif ($requestModel === 'exists') {
                 $arrRespuesta = array('status' => false, 'msg' => 'Este aprendiz ya existe');
             } else {
-                $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
+                $arrRespuesta = array('status' => false, 'msg' => 'No se pudo actualizar el aprendiz.');
             }
         } else {
-            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datoss');
+            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
         }
+
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();
     }
