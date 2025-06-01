@@ -280,15 +280,21 @@ btnBuscar.addEventListener('click', () => {
 
         return;
     }
-    // ============================================================= LLAMO LA FUNCION PARA REALIZAR LA CONSULTA DE BUSQUEDA SEGUN EL APRENDIZ=======================================
 
-    //console.log(selectMes.value, idAprendizSeleccionado);
-    getAsistenciasForAprendiz(selectMes.value, idAprendizSeleccionado);
-    console.log(selectMes.value, selectFicha2.value)
-    getAsistenciasForFicha(selectMes.value, selectFicha2.value);
+    // ============================================================= LLAMO LA FUNCION PARA REALIZAR LA CONSULTA DE BUSQUEDA SEGUN EL APRENDIZ O LA FICHA =======================================
 
+    //  Si se selecciona ficha, se consulta por ficha
+    if (selectFicha2.value) {
+        getAsistenciasForFicha(selectMes.value, selectFicha2.value);
+    }
+    //  Si se selecciona aprendiz, se consulta por aprendiz
+    else if (idAprendizSeleccionado) {
+        getAsistenciasForAprendiz(selectMes.value, idAprendizSeleccionado);
+    }
 });
-
 
 selectFichas();
 selectAprendices();
+
+
+

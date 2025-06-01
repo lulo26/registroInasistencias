@@ -49,5 +49,7 @@ getModal('aprendizModal', $data);
 
 </main>
 
+
+
 <?php footer_admin($data) ?>
 <script src="<?= media() ?>/js/aprendiz/aprendiz.js"></script>

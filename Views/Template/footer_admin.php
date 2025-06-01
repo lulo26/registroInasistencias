@@ -11,7 +11,8 @@
   </div>
 </footer><!-- End Footer -->
 
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
 
 <script>
   const base_url = "<?= base_url() ?>";
@@ -25,7 +26,8 @@
 <script src="<?= media() ?>/vendor/quill/quill.min.js"></script>
 <script src="<?= media() ?>/vendor/simple-datatables/simple-datatables.js"></script>
 <script src="<?= media() ?>/vendor/tinymce/tinymce.min.js"></script>
-
+<!-- Primero carga jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Charts -->
 <script src="<?= media() ?>/vendor/apexcharts/apexcharts.min.js"></script>
 <script src="<?= media() ?>/vendor/chart.js/chart.umd.js"></script>

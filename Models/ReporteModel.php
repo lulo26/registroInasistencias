@@ -39,8 +39,8 @@ class ReporteModel extends Mysql
         aprendices.nombre_aprendiz,
         aprendices.apellido_aprendiz
         FROM inasistencias
-        JOIN aprendices ON aprendices.idaprendiz=inasistencias.aprendices_idusuario
-        JOIN fichas ON fichas.idficha=inasistencias.fichas_idficha
+        left JOIN aprendices ON aprendices.idaprendiz=inasistencias.aprendices_idusuario
+        left JOIN fichas ON fichas.idficha=inasistencias.fichas_idficha
         WHERE fichas.idficha = ? 
         AND inasistencias.fecha_inasistencia BETWEEN ? AND ?";
 

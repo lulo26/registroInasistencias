@@ -54,7 +54,7 @@
     <div class="row mt-3">
         <div class="col-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" id="reportePdf">
                     <h5 class="card-title">Lista de Aprendices</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" id="tablaReportes">
@@ -73,7 +73,82 @@
         </div>
     </div>
 
-</main>
+    <button type="button" class="btn btn-info" onclick="generarPDF()">Descargar PDF</button>
+    <script>
+        async function generarPDF() {
+            const elemento = document.getElementById("reportePdf");
 
+            if (!elemento) {
+                alert("No se encontró el contenido para generar el PDF.");
+                return;
+            }
+
+            // Obtener los valores de los inputs
+            const aprendiz = document.getElementById("inputAprendiz").value || "Todos los aprendices";
+            const ficha = document.getElementById("selectFicha2").value || "Todas las fichas";
+            const mesSelect = document.getElementById("selectMes");
+            const mes = mesSelect.options[mesSelect.selectedIndex]?.text || "Mes no seleccionado";
+
+            // Capturar contenido como imagen
+            const canvas = await html2canvas(elemento, {
+                scale: 2,
+                useCORS: true,
+            });
+
+            const imgData = canvas.toDataURL("image/png");
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF("p", "mm", "a4");
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pageWidth - 20; // Margen lateral
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            let y = 10; // posición inicial
+
+            // Encabezado personalizado
+            pdf.setFontSize(12);
+            pdf.text(`Reporte de Asistencia`, pageWidth / 2, y, { align: "center" });
+            y += 7;
+            pdf.setFontSize(10);
+            pdf.text(`Aprendiz: ${aprendiz}`, 10, y);
+            y += 5;
+            pdf.text(`Ficha: ${ficha}`, 10, y);
+            y += 5;
+            pdf.text(`Mes: ${mes}`, 10, y);
+            y += 10;
+
+            // Agregar la imagen debajo del encabezado
+            if (pdfHeight + y <= pageHeight) {
+                pdf.addImage(imgData, "PNG", 10, y, pdfWidth, pdfHeight);
+            } else {
+                let position = y;
+                let heightLeft = pdfHeight;
+
+                while (heightLeft > 0) {
+                    pdf.addImage(imgData, "PNG", 10, position, pdfWidth, pdfHeight);
+                    heightLeft -= (pageHeight - y);
+                    position -= (pageHeight - y);
+
+                    if (heightLeft > 0) {
+                        pdf.addPage();
+                        y = 10;
+                        position = y;
+                    }
+                }
+            }
+
+            pdf.save("reporte_aprendices.pdf");
+        }
+
+
+    </script>
+
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <?php footer_admin($data) ?>
 <script src="<?= media() ?>/js/reportes/reportes.js"></script>
