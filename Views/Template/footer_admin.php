@@ -28,6 +28,8 @@
 <script src="<?= media() ?>/vendor/tinymce/tinymce.min.js"></script>
 <!-- Primero carga jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 <!-- Charts -->
 <script src="<?= media() ?>/vendor/apexcharts/apexcharts.min.js"></script>
 <script src="<?= media() ?>/vendor/chart.js/chart.umd.js"></script>

@@ -28,22 +28,35 @@ function listAprendices() {
             <td>${aprendiz.apellido_aprendiz}</td>
             <td>${aprendiz.generos_idgenero}</td>
             <td>
-              <button class="btn btn-warning btn-sm btn-editar" data-id="${aprendiz.idaprendiz}">Editar</button>
-              <button class="btn btn-danger btn-sm btn-eliminar" data-id="${aprendiz.idaprendiz}">Eliminar</button>
+              <button class="btn btn-primary btn-sm rounded-pill btn-editar" data-id="${aprendiz.idaprendiz}"><i class='bi bi-pencil-square'></i></button>
+              <button class="btn btn-danger btn-sm rounded-pill btn-eliminar" data-id="${aprendiz.idaprendiz}">  <i class='bi bi-trash-fill'></i></button>
             </td>
           </tr>`;
       });
 
       // Agregar eventos 
       document.querySelectorAll(".btn-editar").forEach((btn) => {
-        btn.addEventListener("click", (e) => editarAprendiz(e.target.dataset.id));
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.id;
+          editarAprendiz(id);
+        });
+
       });
 
       document.querySelectorAll(".btn-eliminar").forEach((btn) => {
-        btn.addEventListener("click", (e) => eliminarAprendiz(e.target.dataset.id));
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.id;
+          eliminarAprendiz(id);
+        });
+
       });
     });
 }
+
+$('#actualizarAprendizModal').on('hidden.bs.modal', function () {
+  frmActualizarAprendiz.reset();
+  idAprendizSeleccionado = null; // Opcional: limpiar variable
+});
 
 
 function editarAprendiz(idAprendiz) {
