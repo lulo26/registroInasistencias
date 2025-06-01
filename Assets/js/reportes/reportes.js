@@ -93,10 +93,10 @@ function getAsistenciasForAprendiz(mes, idAprendiz) {
 
                 if (reporte.estado_inasistencia === 'Activo') {
                     badge.classList.add('badge', 'bg-success');
-                    badge.textContent = 'Asistió';
+                    badge.textContent = 'A';
                 } else {
                     badge.classList.add('badge', 'bg-danger');
-                    badge.textContent = 'No Asistió';
+                    badge.textContent = 'F';
                 }
 
                 // Guardar el badge en la posición que es, segun el dia 
@@ -107,9 +107,22 @@ function getAsistenciasForAprendiz(mes, idAprendiz) {
 
             for (let i = 0; i < ultimoDia; i++) {
                 let celda = document.createElement('td');
+
                 if (diasDelMes[i]) {
                     celda.appendChild(diasDelMes[i]);
+                } else {
+                    // Verificar si la fecha ya pasó
+                    const hoy = new Date();
+                    const fechaCelda = new Date(hoy.getFullYear(), selectMes.value - 1, i + 1); // i+1 porque empieza en 0
+
+                    if (fechaCelda < hoy.setHours(0, 0, 0, 0)) {
+                        let faltaBadge = document.createElement('span');
+                        faltaBadge.classList.add('badge', 'bg-danger');
+                        faltaBadge.textContent = 'F';
+                        celda.appendChild(faltaBadge);
+                    }
                 }
+
                 fila.appendChild(celda);
             }
 
@@ -149,10 +162,10 @@ function getAsistenciasForFicha(mes, idFicha) {
                 let badge = document.createElement('span');
                 if (reporte.estado_inasistencia === 'Activo') {
                     badge.classList.add('badge', 'bg-success');
-                    badge.textContent = 'Asistió';
+                    badge.textContent = 'A';
                 } else {
                     badge.classList.add('badge', 'bg-danger');
-                    badge.textContent = 'No Asistió';
+                    badge.textContent = 'F';
                 }
 
                 asistenciasPorAprendiz[aprendizKey][diaRegistro - 1] = badge;
@@ -168,11 +181,24 @@ function getAsistenciasForFicha(mes, idFicha) {
                 fila.appendChild(celdaNombre);
 
                 // Agregar las asistencias en las celdas de los días
-                asistenciasPorAprendiz[aprendizKey].forEach(badge => {
+                asistenciasPorAprendiz[aprendizKey].forEach((badge, index) => {
                     let celda = document.createElement('td');
+
                     if (badge) {
                         celda.appendChild(badge);
+                    } else {
+                        // Verificar si el día ya pasó
+                        const hoy = new Date();
+                        const fechaCelda = new Date(hoy.getFullYear(), selectMes.value - 1, index + 1);
+
+                        if (fechaCelda < hoy.setHours(0, 0, 0, 0)) {
+                            let faltaBadge = document.createElement('span');
+                            faltaBadge.classList.add('badge', 'bg-danger');
+                            faltaBadge.textContent = 'F';
+                            celda.appendChild(faltaBadge);
+                        }
                     }
+
                     fila.appendChild(celda);
                 });
 
