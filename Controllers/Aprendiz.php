@@ -126,15 +126,23 @@ class Aprendiz extends Controllers
             $codigoAprendiz
         );
 
+        // Manejo de errores según las validaciones del modelo
         if ($requestModel === "empty") {
             $arrRespuesta = ['status' => false, 'msg' => 'No se encontró el aprendiz para actualizar.'];
-        } else {
+        } elseif ($requestModel === "documento_existente") {
+            $arrRespuesta = ['status' => false, 'msg' => 'El número de documento ya está registrado en otro aprendiz.'];
+        } elseif ($requestModel === "codigo_existente") {
+            $arrRespuesta = ['status' => false, 'msg' => 'El código del aprendiz ya está registrado en otro aprendiz.'];
+        } elseif ($requestModel > 0) {
             $arrRespuesta = ['status' => true, 'msg' => 'Aprendiz actualizado correctamente.'];
+        } else {
+            $arrRespuesta = ['status' => false, 'msg' => 'Hubo un problema al actualizar el aprendiz.'];
         }
 
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();
     }
+
 
 
     public function getAprendiz($idAprendiz)

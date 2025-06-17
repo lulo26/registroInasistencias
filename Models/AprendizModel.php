@@ -83,27 +83,47 @@ class AprendizModel extends Mysql
         $this->genero = $generoAprendiz;
         $this->numeroDocumento = $numeroDocumentoAprendiz;
 
+        // Validar duplicados en numdoc y codigo_aprendiz para otros registros
+        $sql = "SELECT * FROM aprendices 
+            WHERE (numdoc = ? OR codigo_aprendiz = ?) 
+            AND idAprendiz != ?";
+        $arrCheck = [$this->numeroDocumento, $this->codigo, $this->id];
+        $request_check = $this->select_all2($sql, $arrCheck);
+
+        if (!empty($request_check)) {
+            foreach ($request_check as $fila) {
+                if ($fila['numdoc'] === $this->numeroDocumento) {
+                    return "documento_existente";
+                }
+                if ($fila['codigo_aprendiz'] === $this->codigo) {
+                    return "codigo_existente";
+                }
+            }
+        }
+
+        // Verificar si existe el aprendiz
         $sql = "SELECT idAprendiz FROM aprendices WHERE idAprendiz = ?";
         $request = $this->select_all2($sql, [$this->id]);
 
         if (!empty($request)) {
             $query = "UPDATE aprendices 
-                      SET nombre_aprendiz = ?, apellido_aprendiz = ?, generos_idgenero = ?, numdoc = ?, codigo_aprendiz = ? 
-                      WHERE idAprendiz = ?";
-            $arrData = array(
+                  SET nombre_aprendiz = ?, apellido_aprendiz = ?, generos_idgenero = ?, numdoc = ?, codigo_aprendiz = ? 
+                  WHERE idAprendiz = ?";
+            $arrData = [
                 $this->nombre,
                 $this->apellido,
                 $this->genero,
                 $this->numeroDocumento,
                 $this->codigo,
                 $this->id
-            );
-            $request_insert = $this->update($query, $arrData);
-            return $request_insert;
+            ];
+            $request_update = $this->update($query, $arrData);
+            return $request_update;
         } else {
             return "empty";
         }
     }
+
 
     public function eliminarAprendiz(int $id)
     {
