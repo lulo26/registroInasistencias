@@ -84,8 +84,7 @@
 
             <!-- Footer con botones -->
             <div class="modal-footer d-flex justify-content-between">
-                <button type="button" id="btnCancelarModal" class="btn btn-secondary"
-                    data-dismiss="modal">Cancelar</button>
+
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </div>
             </form>
@@ -166,8 +165,7 @@
 
                     <!-- Footer con botones -->
                     <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                            id="btnCancelarActualizarModal">Cancelar</button>
+
                         <button type="submit" class="btn btn-primary">Actualizar</button>
                     </div>
                 </form>
