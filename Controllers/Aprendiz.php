@@ -36,7 +36,6 @@ class Aprendiz extends Controllers
 
     public function setAprendices()
     {
-        $idAprendiz = strClean($_POST['idAprendiz']);
         $numeroDocumentoAprendiz = strClean($_POST['numeroDocumentoAprendiz']);
         $nombreAprendiz = strClean($_POST['nombreAprendiz']);
         $apellidoAprendiz = strClean($_POST['apellidoAprendiz']);
@@ -45,28 +44,58 @@ class Aprendiz extends Controllers
         $usuarioAprendiz = $_POST['usuarioAprendiz'];
         $contraAprendiz = $_POST['contraAprendiz'];
 
-        $arrPost = ['numeroDocumentoAprendiz', 'nombreAprendiz', 'apellidoAprendiz', 'codigoAprendiz', 'generoAprendiz', 'usuarioAprendiz', 'contraAprendiz'];
+        $arrPost = [
+            'numeroDocumentoAprendiz',
+            'nombreAprendiz',
+            'apellidoAprendiz',
+            'codigoAprendiz',
+            'generoAprendiz',
+            'usuarioAprendiz',
+            'contraAprendiz'
+        ];
 
-        if (check_post($arrPost)) {
-            if ($idAprendiz == 0 || $idAprendiz == "") {
-                $requestModel = $this->model->insertarAprendices($nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz, $codigoAprendiz, $usuarioAprendiz, $contraAprendiz);
-                $option = 1;
-            } else {
-                $requestModel = $this->model->editarAprendices($idAprendiz, $nombreAprendiz, $apellidoAprendiz, $generoAprendiz, $numeroDocumentoAprendiz, $codigoAprendiz);
-                $option = 2;
-            }
-            if ($requestModel > 0) {
-                if ($option === 1) {
-                    $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz agregado correctamente.');
-                }
-            } elseif ($requestModel === 'exists') {
-                $arrRespuesta = array('status' => false, 'msg' => 'Este aprendiz ya existe');
-            } else {
-                $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
-            }
-        } else {
-            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
+        if (!check_post($arrPost)) {
+            $arrRespuesta = ['status' => false, 'msg' => 'Debe ingresar todos los datos'];
+            echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
+            die();
         }
+
+        // Validaciones
+        if ($this->model->existeDocumento($numeroDocumentoAprendiz)) {
+            $arrRespuesta = ['status' => false, 'msg' => 'El número de documento ya está registrado.'];
+            echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
+            die();
+        }
+
+        if ($this->model->existeCodigo($codigoAprendiz)) {
+            $arrRespuesta = ['status' => false, 'msg' => 'El código del aprendiz ya existe.'];
+            echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
+            die();
+        }
+
+        if ($this->model->existeUsuario($usuarioAprendiz)) {
+            $arrRespuesta = ['status' => false, 'msg' => 'El nombre de usuario ya está en uso.'];
+            echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
+            die();
+        }
+
+        // Insertar aprendiz
+        $requestModel = $this->model->insertarAprendices(
+            $nombreAprendiz,
+            $apellidoAprendiz,
+            $generoAprendiz,
+            $numeroDocumentoAprendiz,
+            $codigoAprendiz,
+            $usuarioAprendiz,
+            $contraAprendiz
+        );
+
+        if ($requestModel > 0) {
+            $arrRespuesta = ['status' => true, 'msg' => 'Aprendiz agregado correctamente.'];
+        } else {
+            $arrRespuesta = ['status' => false, 'msg' => 'No se pudo registrar el aprendiz.'];
+        }
+
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();
     }
@@ -80,29 +109,27 @@ class Aprendiz extends Controllers
         $codigoAprendiz = strClean($_POST['codigoAprendiz1']);
         $generoAprendiz = $_POST['generoAprendiz1'];
 
-        $arrPost = ['idAprendiz1', 'numeroDocumentoAprendiz1', 'nombreAprendiz1', 'apellidoAprendiz1', 'generoAprendiz1'];
-        if (check_post($arrPost)) {
-            $requestModel = $this->model->editarAprendices(
-                $idAprendiz,
-                $nombreAprendiz,
-                $apellidoAprendiz,
-                $generoAprendiz,
-                $numeroDocumentoAprendiz,
-                $codigoAprendiz
-            );
+        $arrPost = ['idAprendiz1', 'numeroDocumentoAprendiz1', 'nombreAprendiz1', 'apellidoAprendiz1', 'codigoAprendiz1', 'generoAprendiz1'];
 
-            $option = 2;
+        if (!check_post($arrPost)) {
+            $arrRespuesta = ['status' => false, 'msg' => 'Debe ingresar todos los datos'];
+            echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
+            die();
+        }
 
-            if ($requestModel > 0) {
-                // Puedes personalizar el mensaje según la opción si es necesario
-                $arrRespuesta = array('status' => true, 'msg' => 'Aprendiz actualizado correctamente.');
-            } elseif ($requestModel === 'exists') {
-                $arrRespuesta = array('status' => false, 'msg' => 'Este aprendiz ya existe');
-            } else {
-                $arrRespuesta = array('status' => false, 'msg' => 'No se pudo actualizar el aprendiz.');
-            }
+        $requestModel = $this->model->editarAprendices(
+            $idAprendiz,
+            $nombreAprendiz,
+            $apellidoAprendiz,
+            $generoAprendiz,
+            $numeroDocumentoAprendiz,
+            $codigoAprendiz
+        );
+
+        if ($requestModel === "empty") {
+            $arrRespuesta = ['status' => false, 'msg' => 'No se encontró el aprendiz para actualizar.'];
         } else {
-            $arrRespuesta = array('status' => false, 'msg' => 'Debe ingresar todos los datos');
+            $arrRespuesta = ['status' => true, 'msg' => 'Aprendiz actualizado correctamente.'];
         }
 
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);

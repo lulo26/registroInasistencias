@@ -4,8 +4,10 @@ class Inasistencias extends Controllers
 {
     public function __construct()
     {
+        session_start(); // <- Asegura que $_SESSION esté disponible
         parent::__construct();
     }
+
 
     public function inasistencias()
     {
@@ -56,8 +58,14 @@ class Inasistencias extends Controllers
 
     public function setInasistencias()
     {
+        if (isset($_SESSION['userData']['idusuario'])) {
+            $idUsuario = $_SESSION['userData']['idusuario'];
+        } else {
+            $arrRespuesta = ['status' => false, 'msg' => 'Sesión no iniciada.'];
+            echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
+            die();
+        }
 
-        $idUsuario = 7;
         $codigoInasistencia = strClean($_POST['codigoInasistencia']);
         $numeroFicha = strClean($_POST['numeroFicha']);
 
@@ -80,5 +88,7 @@ class Inasistencias extends Controllers
         echo json_encode($arrRespuesta, JSON_UNESCAPED_UNICODE);
         die();
     }
+
+
 
 }

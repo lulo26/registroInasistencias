@@ -1,6 +1,5 @@
 <?php
 
-// la clase se debe llamar exactamente a como se llama el archivo .php del modelo, incluyendo mayusculas
 class AprendizModel extends Mysql
 {
     public function __construct()
@@ -8,20 +7,22 @@ class AprendizModel extends Mysql
         parent::__construct();
     }
 
-    //ejemplos:
-
-    // ejemplo select
-
     public function selectAprendiz()
     {
-        $sql = "SELECT * FROM aprendices where estado_aprendiz=1";
+        $sql = "SELECT * FROM aprendices WHERE estado_aprendiz = 1";
         $request = $this->select_all($sql);
         return $request;
     }
 
-    // ejemplo insertar
-    public function insertarAprendices(string $nombreAprendiz, string $apellidoAprendiz, string $generoAprendiz, string $numeroDocumentoAprendiz, string $codigoAprendiz, string $usuarioAprendiz, string $passAprendiz)
-    {
+    public function insertarAprendices(
+        string $nombreAprendiz,
+        string $apellidoAprendiz,
+        string $generoAprendiz,
+        string $numeroDocumentoAprendiz,
+        string $codigoAprendiz,
+        string $usuarioAprendiz,
+        string $passAprendiz
+    ) {
         $this->nombre = $nombreAprendiz;
         $this->apellido = $apellidoAprendiz;
         $this->codigo = $codigoAprendiz;
@@ -30,17 +31,51 @@ class AprendizModel extends Mysql
         $this->usuario = $usuarioAprendiz;
         $this->pass = $passAprendiz;
 
-        $sql = "INSERT INTO aprendices (aprendices.nombre_aprendiz,aprendices.apellido_aprendiz,aprendices.generos_idgenero,aprendices.numdoc,aprendices.estado_aprendiz,aprendices.codigo_aprendiz,aprendices.usuario_aprendiz,aprendices.contra_aprendiz) 
-        VALUES (?,?,?,?,1,?,?,?)";
-        $arrData = array($this->nombre, $this->apellido, $this->genero, $this->numeroDocumento, $this->codigo, $this->usuario, $this->pass);
+        // Validación de duplicados
+        $sql = "SELECT * FROM aprendices 
+                WHERE numdoc = ? OR codigo_aprendiz = ? OR usuario_aprendiz = ?";
+        $arrCheck = array($this->numeroDocumento, $this->codigo, $this->usuario);
+        $request_check = $this->select_all2($sql, $arrCheck);
+
+        if (!empty($request_check)) {
+            foreach ($request_check as $fila) {
+                if ($fila['numdoc'] === $this->numeroDocumento) {
+                    return "documento_existente";
+                }
+                if ($fila['codigo_aprendiz'] === $this->codigo) {
+                    return "codigo_existente";
+                }
+                if ($fila['usuario_aprendiz'] === $this->usuario) {
+                    return "usuario_existente";
+                }
+            }
+        }
+
+        // Inserción
+        $sql = "INSERT INTO aprendices 
+                (nombre_aprendiz, apellido_aprendiz, generos_idgenero, numdoc, estado_aprendiz, codigo_aprendiz, usuario_aprendiz, contra_aprendiz) 
+                VALUES (?, ?, ?, ?, 1, ?, ?, ?)";
+        $arrData = array(
+            $this->nombre,
+            $this->apellido,
+            $this->genero,
+            $this->numeroDocumento,
+            $this->codigo,
+            $this->usuario,
+            $this->pass
+        );
+
         return $this->insert($sql, $arrData);
     }
 
-    // ejemplo editar
-    public function editarAprendices(int $idAprendiz, string $nombreAprendiz, string $apellidoAprendiz, string $generoAprendiz, string $numeroDocumentoAprendiz, string $codigoAprendiz)
-    {
-        $return = "";
-
+    public function editarAprendices(
+        int $idAprendiz,
+        string $nombreAprendiz,
+        string $apellidoAprendiz,
+        string $generoAprendiz,
+        string $numeroDocumentoAprendiz,
+        string $codigoAprendiz
+    ) {
         $this->id = $idAprendiz;
         $this->nombre = $nombreAprendiz;
         $this->apellido = $apellidoAprendiz;
@@ -48,65 +83,78 @@ class AprendizModel extends Mysql
         $this->genero = $generoAprendiz;
         $this->numeroDocumento = $numeroDocumentoAprendiz;
 
-        $sql = "SELECT idAprendiz FROM aprendices WHERE idAprendiz = '{$this->id}'";
-        $request = $this->select_all($sql);
+        $sql = "SELECT idAprendiz FROM aprendices WHERE idAprendiz = ?";
+        $request = $this->select_all2($sql, [$this->id]);
 
         if (!empty($request)) {
-            $query = "UPDATE aprendices SET nombre_aprendiz = ?, apellido_aprendiz=?, generos_idgenero=?, numdoc=?, codigo_aprendiz=? WHERE idAprendiz = ?";
-            $arrData = array($this->nombre, $this->apellido, $this->genero, $this->numeroDocumento, $this->codigo, $this->id);
+            $query = "UPDATE aprendices 
+                      SET nombre_aprendiz = ?, apellido_aprendiz = ?, generos_idgenero = ?, numdoc = ?, codigo_aprendiz = ? 
+                      WHERE idAprendiz = ?";
+            $arrData = array(
+                $this->nombre,
+                $this->apellido,
+                $this->genero,
+                $this->numeroDocumento,
+                $this->codigo,
+                $this->id
+            );
             $request_insert = $this->update($query, $arrData);
-            $return = $request_insert;
+            return $request_insert;
         } else {
-            $return = "empty";
+            return "empty";
         }
-        return $return;
     }
 
-    // ejemplo eliminar
     public function eliminarAprendiz(int $id)
     {
-        $return = "";
-
-
         $this->id = $id;
 
-        $sql = "SELECT * FROM aprendices WHERE idaprendiz ='{$this->id}'";
-        $request = $this->select_all($sql);
+        $sql = "SELECT * FROM aprendices WHERE idaprendiz = ?";
+        $request = $this->select_all2($sql, [$this->id]);
 
         if (!empty($request)) {
             $query = "UPDATE aprendices SET estado_aprendiz = ? WHERE idaprendiz = ?";
             $arrData = [2, $this->id];
             $request_update = $this->update($query, $arrData);
-            $return = $request_update;
-        } else {
-            $return = "empty";
-        }
 
-        if ($request_update) {
-            $return = [
-                "status" => true,
-                "msg" => "Aprendiz eliminado correctamente."
-            ];
+            if ($request_update) {
+                return [
+                    "status" => true,
+                    "msg" => "Aprendiz eliminado correctamente."
+                ];
+            } else {
+                return [
+                    "status" => false,
+                    "msg" => "Hubo un problema al eliminar al aprendiz."
+                ];
+            }
         } else {
-            $return = [
-                "status" => false,
-                "msg" => "Hubo un problema al eliminar al aprendiz."
-            ];
+            return "empty";
         }
-
-        return $return;
     }
-
-
 
     public function getAprendizPorId(int $idAprendiz)
     {
-        $return = "";
-
-        $this->id = $idAprendiz;
-
-        $sql = "SELECT * FROM aprendices WHERE idaprendiz = '{$this->id}'";
-        $request = $this->select_all($sql);
+        $sql = "SELECT * FROM aprendices WHERE idaprendiz = ?";
+        $request = $this->select_all2($sql, [$idAprendiz]);
         return $request;
+    }
+
+    public function existeDocumento($documento)
+    {
+        $sql = "SELECT idAprendiz FROM aprendices WHERE numdoc = ? AND estado_aprendiz = 1";
+        return !empty($this->select_all2($sql, [$documento]));
+    }
+
+    public function existeCodigo($codigo)
+    {
+        $sql = "SELECT idAprendiz FROM aprendices WHERE codigo_aprendiz = ? AND estado_aprendiz = 1";
+        return !empty($this->select_all2($sql, [$codigo]));
+    }
+
+    public function existeUsuario($usuario)
+    {
+        $sql = "SELECT idAprendiz FROM aprendices WHERE usuario_aprendiz = ? AND estado_aprendiz = 1";
+        return !empty($this->select_all2($sql, [$usuario]));
     }
 }
