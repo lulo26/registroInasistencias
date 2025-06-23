@@ -72,14 +72,20 @@ class Inasistencias extends Controllers
         $arrPost = ['codigoInasistencia', 'numeroFicha'];
 
         if (check_post($arrPost)) {
-            $requestModel = $this->model->insertarInasistencia($codigoInasistencia, $idUsuario, $numeroFicha);
-
-            if ($requestModel === false) {
-                $arrRespuesta = ['status' => false, 'msg' => 'El aprendiz no fue encontrado.'];
-            } elseif ($requestModel > 0) {
-                $arrRespuesta = ['status' => true, 'msg' => 'Asistencia agregada correctamente.'];
+            // Validar si ya existe una inasistencia hoy
+            $existe = $this->model->existeInasistenciaHoy($codigoInasistencia);
+            if ($existe) {
+                $arrRespuesta = ['status' => false, 'msg' => 'Ya se registró la inasistencia para este aprendiz hoy.'];
             } else {
-                $arrRespuesta = ['status' => false, 'msg' => 'Error al registrar la inasistencia.'];
+                $requestModel = $this->model->insertarInasistencia($codigoInasistencia, $idUsuario, $numeroFicha);
+
+                if ($requestModel === false) {
+                    $arrRespuesta = ['status' => false, 'msg' => 'El aprendiz no fue encontrado.'];
+                } elseif ($requestModel > 0) {
+                    $arrRespuesta = ['status' => true, 'msg' => 'Asistencia agregada correctamente.'];
+                } else {
+                    $arrRespuesta = ['status' => false, 'msg' => 'Error al registrar la inasistencia.'];
+                }
             }
         } else {
             $arrRespuesta = ['status' => false, 'msg' => 'Debe ingresar todos los datos'];

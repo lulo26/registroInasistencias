@@ -122,4 +122,17 @@ class InasistenciasModel extends Mysql
         $request = $this->select_all($sql);
         return $request;
     }
+
+    public function existeInasistenciaHoy($codigoInasistencia)
+    {
+        $fechaHoy = date('Y-m-d');
+        $sql = "SELECT COUNT(*) as total FROM inasistencias 
+        JOIN aprendices ON aprendices.idaprendiz=inasistencias.aprendices_idusuario 
+        WHERE aprendices.codigo_aprendiz = ? AND DATE(inasistencias.fecha_inasistencia) = ?";
+        $arrData = [$codigoInasistencia, $fechaHoy];
+        $result = $this->select_all2($sql, $arrData);
+
+        // Corregido: acceder al primer elemento del array
+        return ($result && isset($result[0]['total']) && $result[0]['total'] > 0);
+    }
 }
